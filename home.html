@@ -1,16 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>UniX - Home</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <!-- Font Awesome -->
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
-  >
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
   <!-- Your CSS -->
   <link rel="stylesheet" href="style.css">
@@ -126,67 +124,68 @@
   </div>
 
 
-<script type="module">
-  import { auth } from "./firebase.js";
-  import { onAuthStateChanged, signOut } 
-  from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
+  <script type="module">
+    import { auth } from "./js/firebase.js";
+    import { onAuthStateChanged, signOut }
+      from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
 
-  const navRight = document.querySelector(".nav-right");
+    const navRight = document.querySelector(".nav-right");
 
-  // Navigation buttons (public state)
-  function attachPublicNav() {
-    document.getElementById("loginBtn")?.addEventListener("click", () => {
-      window.location.href = "login.html";
-    });
+    // Navigation buttons (public state)
+    function attachPublicNav() {
+      document.getElementById("loginBtn")?.addEventListener("click", () => {
+        window.location.href = "login.html";
+      });
 
-    document.getElementById("registerBtn")?.addEventListener("click", () => {
-      window.location.href = "signup.html";
-    });
-  }
+      document.getElementById("registerBtn")?.addEventListener("click", () => {
+        window.location.href = "signup.html";
+      });
+    }
 
- // Check auth state
-onAuthStateChanged(auth, (user) => {
-  const isHomePage = window.location.pathname.endsWith("home.html");
+    // Check auth state
+    onAuthStateChanged(auth, (user) => {
+      const isHomePage = window.location.pathname.endsWith("home.html");
 
-  if (user) {
-    if (isHomePage) {
-      // On home page, always show public nav
-      navRight.innerHTML = `
+      if (user) {
+        if (isHomePage) {
+          // On home page, always show public nav
+          navRight.innerHTML = `
         <button class="login-btn" id="loginBtn">Login</button>
         <button class="get-started-btn" id="registerBtn">Get Started</button>
       `;
-      attachPublicNav();
-    } else {
-      // On other pages, show email + logout
-      navRight.innerHTML = `
+          attachPublicNav();
+        } else {
+          // On other pages, show email + logout
+          navRight.innerHTML = `
         <span style="margin-right:15px; font-weight:600;">
           ${user.email}
         </span>
         <button class="login-btn" id="logoutBtn">Logout</button>
       `;
 
-      // Logout handler
-      document.getElementById("logoutBtn").addEventListener("click", () => {
-        signOut(auth)
-          .then(() => {
-            // Redirect only after Firebase confirms logout
-            window.location.href = "home.html";
-          })
-          .catch((error) => {
-            console.error("Logout error:", error);
+          // Logout handler
+          document.getElementById("logoutBtn").addEventListener("click", () => {
+            signOut(auth)
+              .then(() => {
+                // Redirect only after Firebase confirms logout
+                window.location.href = "home.html";
+              })
+              .catch((error) => {
+                console.error("Logout error:", error);
+              });
           });
-      });
-    }
-  } else {
-    // Public nav when no user is logged in
-    navRight.innerHTML = `
+        }
+      } else {
+        // Public nav when no user is logged in
+        navRight.innerHTML = `
       <button class="login-btn" id="loginBtn">Login</button>
       <button class="get-started-btn" id="registerBtn">Get Started</button>
     `;
-    attachPublicNav();
-  }
-});
-</script>
+        attachPublicNav();
+      }
+    });
+  </script>
 
 </body>
+
 </html>
