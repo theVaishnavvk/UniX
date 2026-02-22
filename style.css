@@ -719,19 +719,20 @@ body {
 
 
 .progress-bar {
-  height: 12px;
-  background: #e5e7eb; /* light gray background */
-  border-radius: 20px;
-  overflow: hidden;
-  margin-bottom: 8px;
   width: 100%;
+  height: 8px;
+  background: #e5e7eb;   /* light grey */
+  border-radius: 6px;
+  overflow: hidden;
+  margin-top: 10px;
 }
 
 .progress-fill {
   height: 100%;
-  background: linear-gradient(90deg, #6a5af9, #7c3aed); /* gradient */
-  border-radius: 20px;
-  transition: width 0.4s ease; /* smooth animation */
+  width: 0%;
+  background: linear-gradient(to right, #6d5dfc, #8f7bff);
+  border-radius: 6px;
+  transition: width 0.3s ease;
 }
 
 .stats-mini {
@@ -931,7 +932,7 @@ textarea {
   background: linear-gradient(135deg, #6a5af9, #7c3aed);
   color: white;
   border: none;
-  padding: 10px 24px;
+  padding: 10px 10px;
   border-radius: 30px;
   cursor: pointer;
   font-weight: 500;
@@ -1368,6 +1369,57 @@ textarea {
 }
 
 /* ===============================
+   MARKETPLACE GRID
+================================= */
+
+.marketplace-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
+}
+
+.marketplace-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 30px;
+}
+
+.product-card {
+  background: white;
+  padding: 20px;
+  border-radius: 20px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+  transition: 0.3s ease;
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+}
+
+.product-title {
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.product-price {
+  color: #6a5af9;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.product-meta {
+  font-size: 13px;
+  color: #6b7280;
+  margin-bottom: 15px;
+}
+
+.product-actions {
+  display: flex;
+  gap: 10px;
+}
+
+/* ===============================
    SIDEBAR
 ================================= */
 
@@ -1395,15 +1447,19 @@ textarea {
   text-decoration: none;
   color: #111827;
   font-weight: 500;
+    flex: 1;                 /* 🔥 take remaining space */
+  white-space: nowrap;     /* prevent wrapping */
+  overflow: hidden;        /* hide overflow */
+  text-overflow: ellipsis;
 }
 
 .leader-name:hover {
   color: #6a5af9;
 }
 .leader-item {
-  display: flex;
-  justify-content: space-between;
+ display: flex;
   align-items: center;
+  gap: 12px;
   background: #f9fafb;
   padding: 12px 16px;
   border-radius: 18px;
@@ -1437,6 +1493,8 @@ textarea {
   justify-content: center;
   font-weight: 600;
   color: white;
+   background: #6a5af9;
+   flex-shrink: 0;
 }
 
 .first .rank { background: gold; }
@@ -1446,6 +1504,7 @@ textarea {
 .points {
   color: #6a5af9;
   font-weight: 600;
+  flex-shrink: 0;  
 }
 
 /* BADGES */
@@ -1489,12 +1548,12 @@ textarea {
 }
 
 .xp-fill {
-  height: 100%;
-  background: linear-gradient(90deg, #6a5af9, #7c3aed); /* purple gradient */
-  border-radius: 20px;
-  transition: width 0.4s ease; /* smooth animation */
+  height: 8px;
+  background: linear-gradient(to right, #6d5dfc, #8f7bff);
+  border-radius: 6px;
+  width: 0%;
+  transition: width 0.3s ease;
 }
-
 
 .toast {
   position: fixed;
