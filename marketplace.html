@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UniX – Marketplace</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .marketplace-container {
+      max-width: 1350px;
+      margin: 0 auto;
+    }
+
+    .marketplace-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+    }
+
+    .search-filter-row {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 25px;
+      flex-wrap: wrap;
+    }
+
+    .marketplace-grid {
+      display: block;
+    }
+
+    .products-area {}
+
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 20px;
+    }
+
+    .product-card {
+      background: white;
+      border-radius: 18px;
+      padding: 20px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+      transition: 0.3s ease;
+      cursor: pointer;
+    }
+
+    .product-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 25px rgba(0, 0, 0, 0.1);
+    }
+
+    .product-icon {
+      width: 100%;
+      height: 140px;
+      background: #f3f4f6;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 36px;
+      color: #9ca3af;
+      margin-bottom: 15px;
+    }
+
+    .product-title {
+      font-weight: 700;
+      font-size: 16px;
+      margin-bottom: 6px;
+    }
+
+    .product-price {
+      color: #6a5af9;
+      font-weight: 700;
+      font-size: 18px;
+      margin-bottom: 8px;
+    }
+
+    .product-meta {
+      font-size: 12px;
+      color: #6b7280;
+      margin-bottom: 12px;
+    }
+
+    .product-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .contact-btn {
+      flex: 1;
+      background: linear-gradient(135deg, #6a5af9, #7c3aed);
+      color: white;
+      border: none;
+      padding: 9px 14px;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .condition-badge {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .badge-new {
+      background: #d1fae5;
+      color: #065f46;
+    }
+
+    .badge-used {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    /* AI Panel */
+    .ai-panel {
+      background: linear-gradient(160deg, #f5f3ff, #ede9fe);
+      border: 1px solid #c4b5fd;
+      border-radius: 20px;
+      padding: 22px 20px;
+      position: sticky;
+      top: 90px;
+    }
+
+    .ai-panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+
+    .ai-panel-header h4 {
+      font-size: 15px;
+      font-weight: 700;
+      color: #5b21b6;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .ai-refresh-btn {
+      background: #7c3aed;
+      color: white;
+      border: none;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 12px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: 0.2s;
+    }
+
+    .ai-refresh-btn:hover {
+      opacity: 0.85;
+    }
+
+    .ai-refresh-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .ai-response {
+      font-size: 13px;
+      color: #4c1d95;
+      line-height: 1.7;
+      min-height: 60px;
+    }
+
+    .ai-thinking {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #7c3aed;
+      font-size: 13px;
+    }
+
+    .ai-dot {
+      width: 8px;
+      height: 8px;
+      background: #7c3aed;
+      border-radius: 50%;
+      animation: pulse 1.2s ease-in-out infinite;
+    }
+
+    .ai-dot:nth-child(2) {
+      animation-delay: 0.3s;
+    }
+
+    .ai-dot:nth-child(3) {
+      animation-delay: 0.6s;
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        opacity: 0.2
+      }
+
+      50% {
+        opacity: 1
+      }
+    }
+
+    /* Modal styles */
+    .modal-box label {
+      margin-top: 12px;
+      display: block;
+      font-weight: 500;
+      font-size: 14px;
+      color: #374151;
+    }
+
+    .modal-box input,
+    .modal-box select,
+    .modal-box textarea {
+      width: 100%;
+      margin-top: 6px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      border: 1px solid #ddd;
+      font-size: 14px;
+    }
+
+    .modal-box textarea {
+      height: 80px;
+      resize: none;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .secondary-btn {
+      flex: 1;
+      padding: 10px;
+      border-radius: 20px;
+      border: 1.5px solid #e5e7eb;
+      background: white;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .secondary-btn:hover {
+      border-color: #6a5af9;
+      color: #6a5af9;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="layout">
+    <div id="navbar-container"></div>
+
+    <div class="page-content">
+      <div class="marketplace-container">
+        <div class="marketplace-header">
+          <div>
+            <h1>Marketplace</h1>
+            <p class="subtitle">Buy &amp; sell study materials, hostel items and more</p>
+          </div>
+          <button class="primary-btn" id="openPostModal">
+            <i class="fa-solid fa-plus"></i> Post Item
+          </button>
+        </div>
+
+        <div class="search-filter-row">
+          <input type="text" id="searchInput" class="search-input" placeholder="Search items…"
+            style="flex:1; min-width:200px;">
+          <select id="filterCategory" class="filter-select">
+            <option value="">All Categories</option>
+            <option value="Books">Books</option>
+            <option value="Electronics">Electronics</option>
+            <option value="Hostel">Hostel Items</option>
+            <option value="Stationery">Stationery</option>
+            <option value="Clothing">Clothing</option>
+            <option value="Other">Other</option>
+          </select>
+          <select id="filterCondition" class="filter-select">
+            <option value="">Any Condition</option>
+            <option value="new">New</option>
+            <option value="used">Used</option>
+          </select>
+        </div>
+
+        <div class="marketplace-grid">
+          <div id="productGrid" class="product-grid">
+            <p style="color:#9ca3af; padding:40px; grid-column:1/-1; text-align:center;">Loading listings…</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Post Item Modal -->
+  <div class="modal-overlay" id="postModal">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3>Post Item for Sale</h3>
+      </div>
+      <label>Title</label>
+      <input type="text" id="itemTitle" placeholder="e.g. Engineering Maths Textbook">
+      <label>Description</label>
+      <textarea id="itemDescription" placeholder="Describe the condition, edition, etc."></textarea>
+      <label>Price (₹)</label>
+      <input type="number" id="itemPrice" placeholder="0">
+      <label>Category</label>
+      <select id="itemCategory">
+        <option value="Books">Books</option>
+        <option value="Electronics">Electronics</option>
+        <option value="Hostel">Hostel Items</option>
+        <option value="Stationery">Stationery</option>
+        <option value="Clothing">Clothing</option>
+        <option value="Other">Other</option>
+      </select>
+      <label>Condition</label>
+      <select id="itemCondition">
+        <option value="new">New</option>
+        <option value="used">Used</option>
+      </select>
+      <div class="modal-actions">
+        <button class="primary-btn" id="submitItem" style="flex:2;">Post Listing</button>
+        <button class="secondary-btn" id="closePostModal">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { auth, db } from "./js/firebase.js";
+    import { askGemini } from "./js/ai.js";
+    import { collection, onSnapshot, query, orderBy, addDoc, serverTimestamp, getDocs, deleteDoc, doc, getDoc } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
+    import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
+
+    let allDocs = [];
+
+    // Navbar
+    fetch("navbar.html").then(r => r.text()).then(async html => {
+      document.getElementById("navbar-container").innerHTML = html;
+      document.querySelectorAll(".nav-links a").forEach(l => {
+        if (l.dataset.link === "marketplace") l.classList.add("active");
+      });
+      const logoutBtn = document.getElementById("logoutBtn");
+      if (logoutBtn) logoutBtn.addEventListener("click", async e => {
+        e.preventDefault(); await signOut(auth); window.location.href = "home.html";
+      });
+      onAuthStateChanged(auth, async user => {
+        if (user) {
+          const snap = await getDoc(doc(db, "users", user.uid));
+          if (snap.exists()) {
+            const d = snap.data();
+            if (document.getElementById("usernameValue")) document.getElementById("usernameValue").innerText = d.name || "User";
+            if (document.getElementById("navPointsValue")) document.getElementById("navPointsValue").innerText = d.points || 0;
+          }
+        }
+      });
+    });
+
+    // Auth check
+    onAuthStateChanged(auth, user => {
+      if (!user) { window.location.href = "login.html"; return; }
+      loadProducts();
+      setupModal(user);
+    });
+
+    function loadProducts() {
+      const q = query(collection(db, "marketplace"), orderBy("createdAt", "desc"));
+      onSnapshot(q, snap => {
+        allDocs = snap.docs;
+        renderProducts(allDocs);
+      });
+    }
+
+    function renderProducts(docs) {
+      const grid = document.getElementById("productGrid");
+      const search = document.getElementById("searchInput").value.toLowerCase();
+      const cat = document.getElementById("filterCategory").value;
+      const cond = document.getElementById("filterCondition").value;
+      const user = auth.currentUser;
+
+      let filtered = docs.filter(d => {
+        const data = d.data();
+        return (!search || data.title?.toLowerCase().includes(search) || data.description?.toLowerCase().includes(search))
+          && (!cat || data.category === cat)
+          && (!cond || data.condition === cond);
+      });
+
+      if (filtered.length === 0) {
+        grid.innerHTML = `<p style="color:#9ca3af; padding:40px; grid-column:1/-1; text-align:center;">No listings found.</p>`;
+        return;
+      }
+
+      grid.innerHTML = "";
+      filtered.forEach(docSnap => {
+        const data = docSnap.data();
+        const card = document.createElement("div");
+        card.className = "product-card";
+        const icon = data.category === "Electronics" ? "💻" :
+          data.category === "Books" ? "📚" :
+            data.category === "Hostel" ? "🏠" :
+              data.category === "Stationery" ? "✏️" : "📦";
+
+        card.innerHTML = `
+        <div class="product-icon">${icon}</div>
+        <div class="product-title">${data.title}</div>
+        <div class="product-price">₹ ${data.price}</div>
+        <div class="product-meta">
+          ${data.category || ""} •
+          <span class="condition-badge badge-${data.condition}">${data.condition}</span>
+        </div>
+        <p class="product-meta" style="min-height:36px;">${data.description || ""}</p>
+        <div class="product-actions">
+          ${data.sellerId !== user?.uid
+            ? `<button class="contact-btn" onclick="window.location.href='chat.html?uid=${data.sellerId}'"><i class="fa-solid fa-message"></i> Contact Seller</button>`
+            : `<button class="contact-btn" style="background:#ef4444;" onclick="deleteListing('${docSnap.id}')"><i class="fa-solid fa-trash"></i> Remove</button>`}
+        </div>`;
+        grid.appendChild(card);
+      });
+    }
+
+    // Filters
+    document.getElementById("searchInput").addEventListener("input", () => renderProducts(allDocs));
+    document.getElementById("filterCategory").addEventListener("change", () => renderProducts(allDocs));
+    document.getElementById("filterCondition").addEventListener("change", () => renderProducts(allDocs));
+
+    // Modal
+    function setupModal(user) {
+      const modal = document.getElementById("postModal");
+      document.getElementById("openPostModal").onclick = () => modal.style.display = "flex";
+      document.getElementById("closePostModal").onclick = () => modal.style.display = "none";
+      document.getElementById("submitItem").onclick = async () => {
+        const title = document.getElementById("itemTitle").value;
+        const description = document.getElementById("itemDescription").value;
+        const price = Number(document.getElementById("itemPrice").value);
+        const category = document.getElementById("itemCategory").value;
+        const condition = document.getElementById("itemCondition").value;
+        if (!title || !price) { alert("Title and Price are required."); return; }
+
+        await addDoc(collection(db, "marketplace"), {
+          title, description, price, category, condition,
+          status: "available", sellerId: user.uid,
+          sellerName: user.email, createdAt: serverTimestamp()
+        });
+        modal.style.display = "none";
+        document.getElementById("itemTitle").value = "";
+        document.getElementById("itemDescription").value = "";
+        document.getElementById("itemPrice").value = "";
+      };
+    }
+
+    window.deleteListing = async id => {
+      if (confirm("Remove this listing?")) await deleteDoc(doc(db, "marketplace", id));
+    };
+
+    // AI Recommendations
+    document.getElementById("aiRefreshBtn").addEventListener("click", async () => {
+      const btn = document.getElementById("aiRefreshBtn");
+      const responseEl = document.getElementById("aiResponse");
+      btn.disabled = true;
+      responseEl.innerHTML = `<div class="ai-thinking"><div class="ai-dot"></div><div class="ai-dot"></div><div class="ai-dot"></div> Analyzing listings…</div>`;
+
+      try {
+        const snap = await getDocs(query(collection(db, "marketplace"), orderBy("createdAt", "desc")));
+        const items = snap.docs.slice(0, 10).map(d => {
+          const data = d.data();
+          return `${data.title} (${data.category}, ${data.condition}) – ₹${data.price}`;
+        }).join("\n");
+
+        const prompt = `You are a smart campus marketplace assistant for UniX. Here are the current listings:\n\n${items || "No listings yet."}\n\nGive 2-3 short, helpful recommendations: pricing advice, what's in demand, or what to list. Be specific and campus-focused. Max 3 sentences.`;
+        const result = await askGemini(prompt);
+        responseEl.textContent = result;
+      } catch (e) {
+        responseEl.textContent = "AI recommendations unavailable right now.";
+      }
+      btn.disabled = false;
+    });
+  </script>
+</body>
+
+</html>

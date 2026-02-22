@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UniX - Profile</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <!-- Combined Styles -->
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .profile-container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .profile-header {
+            background: white;
+            padding: 40px;
+            border-radius: 24px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .profile-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #6a5af9, #7c3aed);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 50px;
+            box-shadow: 0 10px 20px rgba(106, 90, 249, 0.2);
+        }
+
+        .profile-info h1 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .profile-id {
+            color: #6b7280;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+
+        .profile-badges {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .ranking-badge {
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .badge-gold {
+            background: #fef3c7;
+            color: #92400e;
+            border: 1px solid #f59e0b;
+        }
+
+        .badge-silver {
+            background: #f3f4f6;
+            color: #374151;
+            border: 1px solid #9ca3af;
+        }
+
+        .badge-bronze {
+            background: #ffedd5;
+            color: #9a3412;
+            border: 1px solid #ea580c;
+        }
+
+        .badge-regular {
+            background: #e0e7ff;
+            color: #3730a3;
+            border: 1px solid #6366f1;
+        }
+
+        .profile-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        .profile-card {
+            background: white;
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+        }
+
+        .profile-card h3 {
+            margin-bottom: 20px;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        .detail-item:last-child {
+            border-bottom: none;
+        }
+
+        .detail-label {
+            color: #6b7280;
+            font-weight: 500;
+        }
+
+        .detail-value {
+            font-weight: 600;
+            color: #111827;
+        }
+
+        .skills-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .skill-tag {
+            background: #f3f4f6;
+            padding: 6px 14px;
+            border-radius: 12px;
+            font-size: 14px;
+            color: #4b5563;
+        }
+
+        .txn-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="layout">
+        <div id="navbar-container"></div>
+        <div class="page-content">
+            <div class="profile-container">
+                <div class="profile-header">
+                    <div class="profile-avatar" id="profileAvatar">
+                        <i class="fa-solid fa-user"></i>
+                    </div>
+                    <div class="profile-info">
+                        <h1 id="profileName">Loading...</h1>
+                        <p class="profile-id" id="profileEmail">...</p>
+                        <div class="profile-badges" id="profileBadges">
+                            <!-- Badges injected here -->
+                        </div>
+                    </div>
+                    <div style="margin-left: auto; text-align: right;">
+                        <p style="color:#6b7280; font-size:12px; font-weight:600; text-transform:uppercase;">Current
+                            Points</p>
+                        <h2 style="font-size:36px; color:#6a5af9;"><i class="fa-solid fa-coins"></i> <span
+                                id="profilePoints">0</span></h2>
+                    </div>
+                </div>
+
+                <div class="profile-grid">
+                    <div class="profile-card">
+                        <h3><i class="fa-solid fa-circle-info"></i> User Details</h3>
+                        <div class="detail-item">
+                            <span class="detail-label">Role</span>
+                            <span class="detail-value" id="profileRole">Student</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Reputation Rank</span>
+                            <span class="detail-value" id="profileRank">Silver Wizard</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Total Transactions</span>
+                            <span class="detail-value" id="profileTxnCount">0</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Member Since</span>
+                            <span class="detail-value" id="profileDate">Jan 2024</span>
+                        </div>
+                    </div>
+
+                    <div class="profile-card">
+                        <h3><i class="fa-solid fa-bolt"></i> Skills & Expertise</h3>
+                        <div class="skills-list" id="profileSkills">
+                            <span class="skill-tag">JavaScript</span>
+                            <span class="skill-tag">Graphic Design</span>
+                            <span class="skill-tag">Public Speaking</span>
+                        </div>
+                    </div>
+
+                    <div class="profile-card" style="grid-column: 1 / -1;">
+                        <h3><i class="fa-solid fa-clock-rotate-left"></i> Recent Transactions</h3>
+                        <div class="txn-list" id="profileTxnList">
+                            <p style="color:#6b7280; text-align:center; padding: 20px;">No transactions recorded.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { auth, db } from "./js/firebase.js";
+        import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
+        import { doc, getDoc, collection, getDocs, query, where, orderBy, limit } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
+
+        onAuthStateChanged(auth, (user) => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const targetUid = urlParams.get('uid') || (user ? user.uid : null);
+
+            if (!targetUid) {
+                window.location.href = "login.html";
+                return;
+            }
+
+            loadProfile(targetUid);
+            loadNavbar();
+        });
+
+        async function loadProfile(uid) {
+            try {
+                const userRef = doc(db, "users", uid);
+                const userSnap = await getDoc(userRef);
+
+                if (userSnap.exists()) {
+                    const data = userSnap.data();
+                    document.getElementById("profileName").innerText = data.name || "User";
+                    document.getElementById("profileEmail").innerText = data.email || "No Email";
+                    document.getElementById("profilePoints").innerText = data.points || 0;
+                    document.getElementById("profileRole").innerText = data.role || "Student";
+                    document.getElementById("profileAvatar").innerHTML = data.name ? data.name.charAt(0).toUpperCase() : '<i class="fa-solid fa-user"></i>';
+
+                    if (data.skills && Array.isArray(data.skills)) {
+                        const skillsContainer = document.getElementById("profileSkills");
+                        skillsContainer.innerHTML = "";
+                        data.skills.forEach(skill => {
+                            const span = document.createElement("span");
+                            span.className = "skill-tag";
+                            span.innerText = skill;
+                            skillsContainer.appendChild(span);
+                        });
+                    }
+
+                    // Ranking Badge Logic
+                    updateBadges(data.points || 0, uid);
+                }
+
+                // Load Transactions
+                loadTransactions(uid);
+            } catch (error) {
+                console.error("Error loading profile:", error);
+            }
+        }
+
+        async function updateBadges(points, uid) {
+            const badgesContainer = document.getElementById("profileBadges");
+            badgesContainer.innerHTML = "";
+
+            // Simple point-based badges for now
+            if (points >= 1000) {
+                badgesContainer.innerHTML += '<span class="ranking-badge badge-gold"><i class="fa-solid fa-trophy"></i> Top 1%</span>';
+            } else if (points >= 500) {
+                badgesContainer.innerHTML += '<span class="ranking-badge badge-silver"><i class="fa-solid fa-medal"></i> Elite Member</span>';
+            } else if (points >= 100) {
+                badgesContainer.innerHTML += '<span class="ranking-badge badge-bronze"><i class="fa-solid fa-award"></i> Rising Star</span>';
+            } else {
+                badgesContainer.innerHTML += '<span class="ranking-badge badge-regular">Newcomer</span>';
+            }
+
+            // Check if user is in top 3 overall
+            const q = query(collection(db, "users"), orderBy("points", "desc"), limit(3));
+            const snapshot = await getDocs(q);
+            let rank = 0;
+            snapshot.docs.forEach((docSnap, index) => {
+                if (docSnap.id === uid) rank = index + 1;
+            });
+
+            if (rank === 1) badgesContainer.innerHTML += '<span class="ranking-badge badge-gold">#1 Campus Leader</span>';
+            else if (rank === 2) badgesContainer.innerHTML += '<span class="ranking-badge badge-silver">#2 Top Peer</span>';
+            else if (rank === 3) badgesContainer.innerHTML += '<span class="ranking-badge badge-bronze">#3 Skill Master</span>';
+        }
+
+        async function loadTransactions(uid) {
+            const txnList = document.getElementById("profileTxnList");
+            const q = query(collection(db, "transactions"), where("userId", "==", uid), orderBy("createdAt", "desc"));
+            const snapshot = await getDocs(q);
+
+            document.getElementById("profileTxnCount").innerText = snapshot.size;
+
+            if (snapshot.empty) return;
+
+            txnList.innerHTML = "";
+            snapshot.forEach(docSnap => {
+                const txn = docSnap.data();
+                const div = document.createElement("div");
+                div.className = "txn-item";
+                div.innerHTML = `
+                    <div class="txn-left">
+                        <i class="fa-solid fa-arrow-right-arrow-left txn-icon ${txn.category === 'skill' ? 'purple' : (txn.category === 'marketplace' ? 'green' : 'yellow')}"></i>
+                        <span class="txn-title">${txn.title}</span>
+                    </div>
+                `;
+                txnList.appendChild(div);
+            });
+        }
+
+        function loadNavbar() {
+            fetch("navbar.html")
+                .then(res => res.text())
+                .then(data => {
+                    document.getElementById("navbar-container").innerHTML = data;
+                    const urlParams = new URLSearchParams(window.location.search);
+                    if (!urlParams.get('uid')) {
+                        // Only highlight if it's "My Profile"
+                        document.querySelectorAll(".nav-links a").forEach(link => {
+                            if (link.href.includes("profile.html")) {
+                                link.classList.add("active");
+                            }
+                        });
+                    }
+
+                    // Setup logout
+                    const logoutBtn = document.getElementById("logoutBtn");
+                    if (logoutBtn) {
+                        logoutBtn.addEventListener("click", async (e) => {
+                            e.preventDefault();
+                            await signOut(auth);
+                            window.location.href = "home.html";
+                        });
+                    }
+
+                    // Update points and name in navbar
+                    onAuthStateChanged(auth, async (user) => {
+                        if (user) {
+                            const userSnap = await getDoc(doc(db, "users", user.uid));
+                            if (userSnap.exists()) {
+                                const ud = userSnap.data();
+                                if (document.getElementById("usernameValue")) document.getElementById("usernameValue").innerText = ud.name || "User";
+                                if (document.getElementById("navPointsValue")) document.getElementById("navPointsValue").innerText = ud.points || 0;
+                            }
+                        }
+                    });
+                });
+        }
+    </script>
+</body>
+
+</html>
