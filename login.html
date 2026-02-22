@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>UniX - Login</title>
@@ -27,12 +28,7 @@
       <input type="email" id="email" placeholder="Enter your Email" required>
 
       <label>Password</label>
-      <input
-        type="password"
-        id="password"
-        placeholder="Enter your password"
-        required
-      >
+      <input type="password" id="password" placeholder="Enter your password" required>
 
       <button class="primary-btn" type="submit">
         Sign In
@@ -47,43 +43,44 @@
   </div>
 
   <script type="module">
-  import { auth } from "./firebase.js";
-  import { signInWithEmailAndPassword, onAuthStateChanged } 
-  from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
+    import { auth } from "./js/firebase.js";
+    import { signInWithEmailAndPassword, onAuthStateChanged }
+      from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
 
-  // If already logged in → go to dashboard
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      window.location.href = "dashboard.html";
-    }
-  });
-
-  const form = document.getElementById("loginForm");
-  const message = document.getElementById("message"); // optional <p id="message"></p>
-
-  if (form) {
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
-
-      const email = document.getElementById("email").value.trim();
-      const password = document.getElementById("password").value;
-
-      // Basic validation
-      if (!email || !password) {
-        if (message) message.innerText = "Please fill all fields.";
-        return;
-      }
-
-      try {
-        await signInWithEmailAndPassword(auth, email, password);
+    // If already logged in → go to dashboard
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
         window.location.href = "dashboard.html";
-      } 
-     catch (error) {
-        console.log(error.code);
-        message.innerText = "Invalid email or password.";
       }
     });
-  }
-</script>
+
+    const form = document.getElementById("loginForm");
+    const message = document.getElementById("message"); // optional <p id="message"></p>
+
+    if (form) {
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const email = document.getElementById("email").value.trim();
+        const password = document.getElementById("password").value;
+
+        // Basic validation
+        if (!email || !password) {
+          if (message) message.innerText = "Please fill all fields.";
+          return;
+        }
+
+        try {
+          await signInWithEmailAndPassword(auth, email, password);
+          window.location.href = "dashboard.html";
+        }
+        catch (error) {
+          console.log(error.code);
+          message.innerText = "Invalid email or password.";
+        }
+      });
+    }
+  </script>
 </body>
+
 </html>
