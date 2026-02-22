@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>UniX - Home</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+  >
+
+  <!-- Your CSS -->
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="public-navbar">
+    <div class="nav-left">
+      <div class="logo" onclick="goHome()">
+        <div class="logo-icon"></div>
+      </div>
+    </div>
+
+    <div class="nav-right">
+      <button class="login-btn" onclick="goLogin()">
+        Login
+      </button>
+
+      <button class="get-started-btn" onclick="goRegister()">
+        Get Started
+      </button>
+    </div>
+  </nav>
+
+
+  <div class="home">
+
+    <!-- HERO SECTION -->
+    <section class="hero">
+      <h1>Everything You Need in One Place</h1>
+      <p>
+        Stop juggling multiple platforms. UniX brings all campus activities together.
+      </p>
+    </section>
+
+
+    <!-- FEATURE CARDS -->
+    <section class="features-grid">
+
+      <div class="feature-card">
+        <div class="feature-icon purple">
+          <i class="fa-solid fa-user-group"></i>
+        </div>
+        <h3>Skill Exchange</h3>
+        <p>Connect with peers, offer help, earn points, and build your campus reputation.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon green">
+          <i class="fa-solid fa-shop"></i>
+        </div>
+        <h3>Marketplace</h3>
+        <p>Buy and sell second-hand items with trusted campus community members.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon yellow">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </div>
+        <h3>Lost & Found</h3>
+        <p>AI-powered matching helps reunite lost items with their owners quickly.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon blue">
+          <i class="fa-regular fa-message"></i>
+        </div>
+        <h3>Realtime Chat</h3>
+        <p>Seamless communication for requests, trades, and item returns.</p>
+      </div>
+
+    </section>
+
+
+    <!-- GRADIENT STRIP -->
+    <section class="gradient-strip">
+
+      <div class="strip-item">
+        <i class="fa-solid fa-arrow-trend-up"></i>
+        <h4>Earn While You Help</h4>
+        <p>Build your reputation and earn points by sharing your skills with peers.</p>
+      </div>
+
+      <div class="strip-item">
+        <i class="fa-solid fa-shield-halved"></i>
+        <h4>Campus-Only Access</h4>
+        <p>Verified @CEC.clg emails only. Trade and connect with trusted community.</p>
+      </div>
+
+      <div class="strip-item">
+        <i class="fa-solid fa-robot"></i>
+        <h4>AI-Powered Matching</h4>
+        <p>Smart recommendations for skills, items, and lost & found matching.</p>
+      </div>
+
+    </section>
+
+
+    <!-- CTA SECTION -->
+    <section class="cta-section">
+      <h2>Join Your Campus Community Today</h2>
+      <p>
+        Start exchanging skills, trading items, and helping your peers find lost belongings.
+      </p>
+
+      <button class="cta-btn" onclick="goRegister()">
+        Create Your Account
+      </button>
+    </section>
+
+  </div>
+
+
+<script type="module">
+  import { auth } from "./firebase.js";
+  import { onAuthStateChanged, signOut } 
+  from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
+
+  const navRight = document.querySelector(".nav-right");
+
+  // Navigation buttons (public state)
+  function attachPublicNav() {
+    document.getElementById("loginBtn")?.addEventListener("click", () => {
+      window.location.href = "login.html";
+    });
+
+    document.getElementById("registerBtn")?.addEventListener("click", () => {
+      window.location.href = "signup.html";
+    });
+  }
+
+ // Check auth state
+onAuthStateChanged(auth, (user) => {
+  const isHomePage = window.location.pathname.endsWith("home.html");
+
+  if (user) {
+    if (isHomePage) {
+      // On home page, always show public nav
+      navRight.innerHTML = `
+        <button class="login-btn" id="loginBtn">Login</button>
+        <button class="get-started-btn" id="registerBtn">Get Started</button>
+      `;
+      attachPublicNav();
+    } else {
+      // On other pages, show email + logout
+      navRight.innerHTML = `
+        <span style="margin-right:15px; font-weight:600;">
+          ${user.email}
+        </span>
+        <button class="login-btn" id="logoutBtn">Logout</button>
+      `;
+
+      // Logout handler
+      document.getElementById("logoutBtn").addEventListener("click", () => {
+        signOut(auth)
+          .then(() => {
+            // Redirect only after Firebase confirms logout
+            window.location.href = "home.html";
+          })
+          .catch((error) => {
+            console.error("Logout error:", error);
+          });
+      });
+    }
+  } else {
+    // Public nav when no user is logged in
+    navRight.innerHTML = `
+      <button class="login-btn" id="loginBtn">Login</button>
+      <button class="get-started-btn" id="registerBtn">Get Started</button>
+    `;
+    attachPublicNav();
+  }
+});
+</script>
+
+</body>
+</html>

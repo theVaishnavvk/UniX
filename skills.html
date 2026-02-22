@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UniX – Skills</title>
+
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+</head>
+
+<body>
+
+<div class="layout">
+  <div id="navbar-container"></div>
+
+  <div class="page-content skills-page">
+
+    <!-- 🏆 Skill Dashboard Header -->
+    <section class="skill-dashboard">
+
+      <div class="level-box">
+        <h2>Level 3 – Campus Pro</h2>
+        <div class="progress-bar">
+          <div class="progress-fill" style="width: 70%"></div>
+        </div>
+        <small>70% to Level 4</small>
+      </div>
+
+      <div class="stats-mini">
+        <div class="mini-card">
+          <i class="fa-solid fa-coins"></i>
+          <span>1000 Points</span>
+        </div>
+
+        <div class="mini-card">
+          🔥 3 Day Streak
+        </div>
+      </div>
+
+    </section>
+
+    <!-- 🎯 Action Row -->
+    <section class="action-row">
+
+      <div class="left-actions">
+        <input type="text" placeholder="Search skills..." class="search-input" />
+
+        <select class="filter-select">
+          <option>All</option>
+          <option>Open</option>
+          <option>In Progress</option>
+          <option>Completed</option>
+        </select>
+      </div>
+
+      <button class="primary-btn" id="openCreateModal">
+  <i class="fa-solid fa-plus"></i> Create Request
+</button>
+
+    </section>
+<div class="request-tabs">
+  <button class="tab-btn active" data-tab="available">Available</button>
+  <button class="tab-btn" data-tab="mine">My Requests</button>
+</div>
+    <!-- 📄 Main Content -->
+    <section class="skills-main">
+
+  <!-- LEFT COLUMN -->
+  <div class="requests-feed">
+
+
+   <div id="availableSection" class="tab-content active">
+  <!-- available cards -->
+    <h2 class="section-title">Available Requests</h2>
+
+ <div class="request-card">
+
+ <div class="request-header">
+
+  <!-- LEFT SIDE -->
+  <div class="left-section">
+    <h3>Help me build portfolio website</h3>
+
+    <p class="request-description">
+      Build a responsive portfolio using React and Tailwind.
+    </p>
+
+    <div class="request-tags">
+      <span class="badge category">Programming</span>
+      <span class="badge medium">Medium</span>
+      <span class="badge high">High</span>
+    </div>
+
+    <button class="apply-btn">Apply to Help</button>
+  </div>
+
+  <!-- RIGHT SIDE -->
+  <div class="right-section">
+    
+    <div class="creator-rating">
+      <a href="profile.html?uid=keerthana123" class="creator-name">
+        Keerthana
+      </a>
+
+      <div class="rating-inline" data-rating="4.8">
+        <i class="fa-solid fa-star"></i>
+        <span class="rating-number"></span>
+        <div class="rating-bar">
+          <div class="rating-fill"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="meta-bottom">
+      <div class="deadline">
+        <i class="fa-regular fa-calendar"></i>
+        Due: 25 July 2026
+      </div>
+
+      <div class="reward-box">
+        <span>Reward</span>
+        <strong>+40 pts</strong>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+</div>
+
+</div>
+
+<div id="mySection" class="tab-content">
+  <!-- my request cards -->
+    <h2 class="section-title my-section">My Requests</h2>
+
+ <div class="request-card my-request">
+
+  <div class="request-header">
+
+    <!-- LEFT -->
+    <div class="left-section">
+      <h3>Need help with Data Structures</h3>
+
+      <p class="request-description">
+        Looking for help understanding trees, graphs and recursion.
+      </p>
+
+      <div class="request-tags">
+        <span class="badge category">Programming</span>
+        <span class="badge medium">Medium</span>
+      </div>
+    </div>
+
+    <!-- RIGHT -->
+    <div class="right-section">
+
+      <div class="status-badge open">
+        Open
+      </div>
+
+      <div class="meta-bottom">
+        <div class="deadline">
+          <i class="fa-regular fa-calendar"></i>
+          Due: 30 July 2026
+        </div>
+
+        <!-- <div class="reward-box">
+          <span>Reward</span>
+          <strong>+60 pts</strong>
+        </div> -->
+      </div>
+
+      <!-- <div class="my-actions">
+        <button class="edit-btn">Edit</button>
+        <button class="delete-btn">Delete</button>
+      </div> -->
+
+    </div>
+
+  </div>
+<hr class="divider">
+
+<div class="request-footer">
+
+  <div class="my-actions">
+    <button class="edit-btn">Edit</button>
+    <button class="delete-btn">Delete</button>
+  </div>
+
+  <div class="reward-box">
+    <span>Reward</span>
+    <strong>+60 pts</strong>
+  </div>
+
+</div>
+  <hr class="divider">
+    
+
+    <!-- Applications Nested -->
+    <div class="applications-container">
+
+      <div class="application-row">
+        <div class="applicant-info">
+          <div class="applicant-left">
+  <a href="profile.html?uid=user1" class="applicant-name" data-rating="4.9">
+    User1
+  </a>
+   <div class="rating-inline" data-rating="4.8">
+  <i class="fa-solid fa-star"></i>
+  <span class="rating-number">4.8</span>
+  <div class="rating-bar">
+    <div class="rating-fill"></div>
+  </div>
+  </div>
+  
+</div>
+        </div>
+
+        <div class="application-actions">
+          <button class="accept-btn">Accept</button>
+          <button class="reject-btn">Reject</button>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+ 
+
+</div>
+  <!-- RIGHT COLUMN -->
+  <aside class="skills-sidebar">
+
+    <!-- Leaderboard -->
+    <div class="sidebar-card premium">
+      <div class="card-header">
+        <i class="fa-solid fa-trophy"></i>
+        <h4>Weekly Leaderboard</h4>
+      </div>
+<div class="leaderboard-list" id="leaderboardList">
+
+  <!-- Always visible top 3 -->
+  <div class="leader-item first"><span class="rank">1</span>
+      <a href="profile.html?uid=user4" class="leader-name">User1</a>
+      <span class="points">500 pts</span></div>
+  <div class="leader-item second"><span class="rank">2</span>
+      <a href="profile.html?uid=user4" class="leader-name">User2</a>
+      <span class="points">480 pts</span></div>
+  <div class="leader-item third"><span class="rank">3</span>
+      <a href="profile.html?uid=user4" class="leader-name">User3</a>
+      <span class="points">280 pts</span></div>
+
+  <!-- Hidden additional users -->
+  <div class="extra-leaders hidden">
+    <div class="leader-item">
+      <span class="rank">4</span>
+      <a href="profile.html?uid=user4" class="leader-name">User4</a>
+      <span class="points">180 pts</span>
+    </div>
+
+    <!-- Add up to 50 here dynamically -->
+  </div>
+
+</div>
+
+<button class="view-all-btn" id="toggleLeaderboard">
+  View All
+</button>
+    </div>
+
+    <!-- Badges -->
+    <div class="sidebar-card premium">
+      <div class="card-header">
+        <i class="fa-solid fa-medal"></i>
+        <h4>Your Badges</h4>
+      </div>
+
+      <div class="badge-grid">
+        <span class="badge-chip">⚡ Fast Helper</span>
+        <span class="badge-chip">💻 Tech Wizard</span>
+        <span class="badge-chip">🌟 Community Star</span>
+      </div>
+    </div>
+
+    <!-- XP -->
+    <div class="sidebar-card premium">
+      <div class="card-header">
+        <i class="fa-solid fa-chart-line"></i>
+        <h4>Weekly XP</h4>
+      </div>
+
+      <div class="xp-box">
+        <div class="xp-value">+120 XP</div>
+        <div class="xp-progress">
+          <div class="xp-fill" style="width:60%"></div>
+        </div>
+        <small>60% to next milestone</small>
+      </div>
+    </div>
+
+  </aside>
+
+</section>
+
+    <!-- CREATE REQUEST MODAL -->
+<div class="modal-overlay" id="createModal">
+
+  <div class="modal-box">
+
+    <div class="modal-header">
+      <h3>Create Help Request</h3>
+      <!-- <span class="close-modal" id="closeModal">&times;</span> -->
+    </div>
+
+    <label>Title</label>
+    <input type="text" id="requestTitle" placeholder="Need help with React project" />
+
+    <label>Description</label>
+    <textarea id="requestDesc" maxlength="300"
+      placeholder="Describe what you need help with..."></textarea>
+    <small id="charCount">0 / 300</small>
+
+    <div class="row-2">
+      <div>
+        <label>Category</label>
+        <select id="category">
+          <option>Programming</option>
+          <option>Design</option>
+          <option>Writing</option>
+          <option>Math</option>
+          <option>Science</option>
+          <option>Language</option>
+          <option>Music</option>
+          <option>Sports</option>
+          <option>Other</option>
+        </select>
+      </div>
+
+      <div>
+        <label>Difficulty</label>
+        <select id="difficulty">
+          <option value="easy">Easy</option>
+          <option value="medium">Medium</option>
+          <option value="hard">Hard</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="row-2">
+      <div>
+        <label>Urgency</label>
+        <select id="urgency">
+          <option value="low">Low</option>
+          <option value="medium">Medium</option>
+          <option value="high">High</option>
+        </select>
+      </div>
+
+      <div>
+        <label>Deadline</label>
+        <input type="date" id="deadline">
+      </div>
+    </div>
+
+    <label>Points to Offer</label>
+    <input type="range" id="pointsSlider" min="10" max="200" value="50">
+
+    <div class="reward-preview">
+      <p>Base Points: <span id="basePoints">50</span></p>
+      <p>Urgency Bonus: <span id="bonusPoints">0</span></p>
+      <hr>
+      <p><strong>Total Reward: <span id="totalPoints">50</span></strong></p>
+    </div>
+
+    <div class="modal-actions">
+      <button class="primary-btn" id="submitRequest">Create Request</button>
+      <button class="secondary-btn" id="cancelModal">Cancel</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">🎉 Request Created! +5 XP</div>
+
+  </div>
+</div>
+<script>
+fetch("navbar.html")
+  .then(res => res.text())
+  .then(data => {
+    document.getElementById("navbar-container").innerHTML = data;
+
+    // Highlight current page
+    const currentPage = window.location.pathname
+      .split("/")
+      .pop()
+      .replace(".html", "");
+
+    document.querySelectorAll("[data-link]").forEach(link => {
+      link.classList.remove("active");
+
+      if (link.dataset.link === currentPage) {
+        link.classList.add("active");
+      }
+    });
+
+    // ✅ Logout logic must be here
+    const logoutBtn = document.getElementById("logoutBtn");
+
+    if (logoutBtn) {
+      logoutBtn.addEventListener("click", function (e) {
+        e.preventDefault();
+
+        // If using Firebase:
+        // firebase.auth().signOut();
+
+        window.location.href = "home.html";
+      });
+    }
+  });
+
+document.addEventListener("DOMContentLoaded", function () {
+
+  /* ==============================
+     MODE FLAGS
+  =============================== */
+  let isEditMode = false;
+  let editingCard = null;
+
+  /* ==============================
+     MODAL LOGIC
+  =============================== */
+  const modal = document.getElementById("createModal");
+  const openBtn = document.getElementById("openCreateModal");
+  const closeBtn = document.getElementById("closeModal");
+  const cancelBtn = document.getElementById("cancelModal");
+  const submitBtn = document.getElementById("submitRequest");
+
+  if (closeBtn && modal) closeBtn.addEventListener("click", () => modal.style.display = "none");
+  if (cancelBtn && modal) cancelBtn.addEventListener("click", () => modal.style.display = "none");
+
+  // CREATE MODE
+  if (openBtn && modal) {
+    openBtn.addEventListener("click", () => {
+      isEditMode = false;
+      editingCard = null;
+
+      // Reset fields
+      document.getElementById("requestTitle").value = "";
+      document.getElementById("requestDesc").value = "";
+      document.getElementById("deadline").value = "";
+
+      // Reset button text
+      submitBtn.textContent = "Create Request";
+
+      modal.style.display = "flex";
+    });
+  }
+
+  /* ==============================
+     TAB SWITCHING
+  =============================== */
+  document.querySelectorAll(".tab-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+      document.querySelectorAll(".tab-content").forEach(c => c.classList.remove("active"));
+
+      btn.classList.add("active");
+      document.getElementById(
+        btn.dataset.tab === "available" ? "availableSection" : "mySection"
+      ).classList.add("active");
+    });
+  });
+
+  /* ==============================
+     RATING LOGIC
+  =============================== */
+  document.querySelectorAll(".rating-inline").forEach(ratingBlock => {
+    const rating = parseFloat(ratingBlock.dataset.rating);
+    const fill = ratingBlock.querySelector(".rating-fill");
+    const number = ratingBlock.querySelector(".rating-number");
+    const star = ratingBlock.querySelector("i");
+
+    number.textContent = rating.toFixed(1);
+    fill.style.width = (rating / 5) * 100 + "%";
+
+    if (rating >= 4.5) { star.style.color = fill.style.background = "#22c55e"; }
+    else if (rating >= 4) { star.style.color = fill.style.background = "#facc15"; }
+    else if (rating >= 3) { star.style.color = fill.style.background = "#fb923c"; }
+    else { star.style.color = fill.style.background = "#ef4444"; }
+  });
+
+  /* ==============================
+     DELETE REQUEST
+  =============================== */
+  document.querySelectorAll(".delete-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      if (!confirm("Are you sure you want to delete this request?")) return;
+      const card = btn.closest(".request-card");
+      card.style.opacity = "0";
+      card.style.transform = "scale(0.95)";
+      setTimeout(() => {
+        card.remove();
+        showToast("🗑 Request deleted.");
+      }, 300);
+    });
+  });
+
+  /* ==============================
+     EDIT REQUEST
+  =============================== */
+  document.querySelectorAll(".edit-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const card = btn.closest(".request-card");
+
+      isEditMode = true;
+      editingCard = card;
+
+      const title = card.querySelector("h3").textContent;
+      const desc = card.querySelector(".request-description").textContent;
+
+      document.getElementById("requestTitle").value = title;
+      document.getElementById("requestDesc").value = desc;
+
+      submitBtn.textContent = "Update Request";
+      modal.style.display = "flex";
+      showToast("✏ Editing request...");
+    });
+  });
+
+  /* ==============================
+     CHARACTER COUNTER
+  =============================== */
+  const desc = document.getElementById("requestDesc");
+  const charCount = document.getElementById("charCount");
+  if (desc && charCount) {
+    desc.addEventListener("input", () => {
+      charCount.textContent = desc.value.length + " / 300";
+    });
+  }
+
+  /* ==============================
+     REWARD CALCULATION
+  =============================== */
+  const slider = document.getElementById("pointsSlider");
+  const urgency = document.getElementById("urgency");
+  const difficulty = document.getElementById("difficulty");
+
+  function updateReward() {
+    if (!slider || !urgency || !difficulty) return;
+    let base = parseInt(slider.value);
+    let bonus = 0;
+    if (urgency.value === "high") bonus += Math.round(base * 0.1);
+    if (difficulty.value === "hard") bonus += Math.round(base * 0.2);
+    document.getElementById("basePoints").textContent = base;
+    document.getElementById("bonusPoints").textContent = bonus;
+    document.getElementById("totalPoints").textContent = base + bonus;
+  }
+  if (slider) slider.addEventListener("input", updateReward);
+  if (urgency) urgency.addEventListener("change", updateReward);
+  if (difficulty) difficulty.addEventListener("change", updateReward);
+  updateReward();
+
+ /* ==============================
+   APPLY BUTTON LOGIC (Single Toggle)
+=============================== */
+document.querySelectorAll(".request-card .apply-btn").forEach(button => {
+  button.addEventListener("click", () => {
+    // If already applied → cancel
+    if (button.classList.contains("applied")) {
+      button.textContent = "Apply to Help";
+      button.classList.remove("applied");
+      showToast("Application Cancelled");
+      return;
+    }
+
+    // If closed → do nothing
+    if (button.classList.contains("closed")) return;
+
+    // Otherwise apply
+    button.textContent = "Cancel Application";
+    button.classList.add("applied");
+    showToast("🎉 Applied Successfully! +2 XP");
+  });
+});
+
+
+  /* ==============================
+     SUBMIT REQUEST (CREATE vs EDIT)
+  =============================== */
+  if (submitBtn) {
+    submitBtn.addEventListener("click", function () {
+      const title = document.getElementById("requestTitle").value;
+      const desc = document.getElementById("requestDesc").value;
+
+      if (!desc || desc.length < 20) {
+        alert("Description must be at least 20 characters.");
+        return;
+      }
+
+      if (isEditMode && editingCard) {
+        // UPDATE existing card
+        editingCard.querySelector("h3").textContent = title;
+        editingCard.querySelector(".request-description").textContent = desc;
+        showToast("✏ Request Updated!");
+      } else {
+        // CREATE new request (UI only for now)
+        showToast("🎉 Request Created! +5 XP");
+        // 👉 If you want the new request to appear in the list,
+        // append a new card element here.
+      }
+
+      if (modal) modal.style.display = "none";
+    });
+  }
+
+  /* ==============================
+     TOAST
+  =============================== */
+  function showToast(message) {
+    const toast = document.getElementById("toast");
+    if (!toast) return;
+    toast.textContent = message;
+    toast.style.display = "block";
+    setTimeout(() => { toast.style.display = "none"; }, 2500);
+  }
+
+  /* ==============================
+     LEADERBOARD TOGGLE
+  =============================== */
+  const toggleBtn = document.getElementById("toggleLeaderboard");
+  const extraLeaders = document.querySelector(".extra-leaders");
+  if (toggleBtn && extraLeaders) {
+    toggleBtn.addEventListener("click", () => {
+      extraLeaders.classList.toggle("hidden");
+      toggleBtn.textContent = extraLeaders.classList.contains("hidden") ? "View All" : "Show Less";
+    });
+  }
+
+
+  /* ==============================
+     APPLICATION ROWS
+  =============================== */
+  document.querySelectorAll(".application-row").forEach(row => {
+    const acceptBtn = row.querySelector(".accept-btn");
+    const rejectBtn = row.querySelector(".reject-btn");
+
+    if (acceptBtn) {
+      acceptBtn.addEventListener("click", () => {
+        const applicantName = row.querySelector(".applicant-name")?.textContent || "User";
+        if (!confirm(`Accept ${applicantName}'s application?`)) return;
+        const container = row.closest(".applications-container");
+        if (container) {
+          container.querySelectorAll(".application-row").forEach(r => { if (r !== row) r.remove(); });
+        }
+        acceptBtn.remove();
+        if (rejectBtn) rejectBtn.remove();
+        const status = document.createElement("span");
+        status.textContent = "✔ In Progress";
+        status.style.color = "#10b981";
+        status.style.fontWeight = "600";
+        status.style.marginLeft = "10px";
+        row.appendChild(status);
+        const chatBtn = document.createElement("button");
+        chatBtn.textContent = "Chat";
+        chatBtn.className = "chat-btn";
+        chatBtn.style.marginLeft = "10px";
+        row.appendChild(chatBtn);
+        showToast(`🎉 ${applicantName} accepted!`);
+      });
+    }
+
+    if (rejectBtn) {
+      rejectBtn.addEventListener("click", () => {
+        const applicantName = row.querySelector(".applicant-name")?.textContent || "User";
+        if (!confirm(`Reject ${applicantName}'s application?`)) return;
+        row.remove();
+        showToast(`❌ ${applicantName} rejected.`);
+      });
+    }
+  });
+/* ==============================
+   LEVEL SYSTEM WITH PROGRESS BAR
+=============================== */
+const levelTitle = document.querySelector(".level-box h2");
+const progressFill = document.querySelector(".progress-fill");
+const progressText = document.querySelector(".level-box small");
+
+// Example user XP
+let currentXP = 1000;
+
+// XP thresholds for each level
+let levelThresholds = [0, 200, 500, 1000, 2000];
+let levelTitles = [
+  "Level 0 – Beginner",
+  "Level 1 – Explorer",
+  "Level 2 – Learner",
+  "Level 3 – Campus Pro",
+  "Level 4 – Mentor"
+];
+
+function updateLevel() {
+  let level = 0;
+  for (let i = 0; i < levelThresholds.length; i++) {
+    if (currentXP >= levelThresholds[i]) level = i;
+  }
+
+  let nextXP = levelThresholds[level + 1] || levelThresholds[level];
+  let progress = ((currentXP - levelThresholds[level]) / (nextXP - levelThresholds[level])) * 100;
+
+  // Update UI
+  levelTitle.textContent = levelTitles[level];
+  progressFill.style.width = progress + "%";
+  progressText.textContent = `${Math.round(progress)}% to ${levelTitles[level + 1] || "Max Level"}`;
+}
+
+// Call once on load
+updateLevel();
+
+/* ==============================
+   SEARCH & FILTER WITH NO RESULTS
+=============================== */
+const searchInput = document.querySelector(".search-input");
+const filterSelect = document.querySelector(".filter-select");
+
+// Create a reusable "no results" element
+const noResultsMsg = document.createElement("p");
+noResultsMsg.textContent = "No requests found.";
+noResultsMsg.className = "no-results";
+noResultsMsg.style.display = "none";
+
+// Append message to both sections
+const availableSection = document.getElementById("availableSection");
+const mySection = document.getElementById("mySection");
+if (availableSection) availableSection.appendChild(noResultsMsg.cloneNode(true));
+if (mySection) mySection.appendChild(noResultsMsg.cloneNode(true));
+
+function filterRequests() {
+  const keyword = searchInput.value.toLowerCase();
+  const filter = filterSelect.value.toLowerCase();
+
+  let anyVisible = false;
+
+  document.querySelectorAll(".request-card").forEach(card => {
+    const title = card.querySelector("h3")?.textContent.toLowerCase() || "";
+    const desc = card.querySelector(".request-description")?.textContent.toLowerCase() || "";
+    const status = card.querySelector(".status-badge")?.textContent.toLowerCase() || "open";
+
+    const matchesKeyword = title.includes(keyword) || desc.includes(keyword);
+    const matchesFilter = filter === "all" || status.includes(filter);
+
+    if (matchesKeyword && matchesFilter) {
+      card.style.display = "block";
+      anyVisible = true;
+    } else {
+      card.style.display = "none";
+    }
+  });
+
+  // Show/hide "No results" message in each section
+  [availableSection, mySection].forEach(section => {
+    if (!section) return;
+    const visibleCards = section.querySelectorAll(".request-card:not([style*='display: none'])");
+    const msg = section.querySelector(".no-results");
+    if (msg) msg.style.display = visibleCards.length === 0 ? "block" : "none";
+  });
+}
+
+if (searchInput) searchInput.addEventListener("input", filterRequests);
+if (filterSelect) filterSelect.addEventListener("change", filterRequests);
+
+/* ==============================
+   WEEKLY XP PROGRESS
+=============================== */
+const xpValue = document.querySelector(".xp-value");
+const xpFill = document.querySelector(".xp-fill");
+const xpText = document.querySelector(".skills-sidebar small");
+
+// Example weekly XP data
+let weeklyXP = 120;
+let weeklyGoal = 200; // milestone target
+
+function updateWeeklyXP() {
+  const progress = (weeklyXP / weeklyGoal) * 100;
+
+  xpValue.textContent = `+${weeklyXP} XP`;
+  xpFill.style.width = progress + "%";
+  xpText.textContent = `${Math.round(progress)}% to next milestone`;
+}
+
+// Call once on load
+updateWeeklyXP();
+
+});
+</script>
+</body>
+</html>

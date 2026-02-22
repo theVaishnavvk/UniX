@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>UniX - Login</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Inter Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <!-- Your Auth CSS -->
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="auth-page">
+
+  <div class="auth-container">
+
+    <div class="auth-logo"></div>
+
+    <h2>Welcome Back</h2>
+    <p class="auth-subtext">Sign in to your UniX account</p>
+
+    <form class="auth-card" id="loginForm">
+      <p id="message" style="color:red; margin-top:10px;"></p>
+      <label>Email</label>
+      <input type="email" id="email" placeholder="Enter your Email" required>
+
+      <label>Password</label>
+      <input
+        type="password"
+        id="password"
+        placeholder="Enter your password"
+        required
+      >
+
+      <button class="primary-btn" type="submit">
+        Sign In
+      </button>
+
+      <p class="auth-footer">
+        Don't have an account?
+        <a href="signup.html">Create one</a>
+      </p>
+
+    </form>
+  </div>
+
+  <script type="module">
+  import { auth } from "./firebase.js";
+  import { signInWithEmailAndPassword, onAuthStateChanged } 
+  from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
+
+  // If already logged in → go to dashboard
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      window.location.href = "dashboard.html";
+    }
+  });
+
+  const form = document.getElementById("loginForm");
+  const message = document.getElementById("message"); // optional <p id="message"></p>
+
+  if (form) {
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value;
+
+      // Basic validation
+      if (!email || !password) {
+        if (message) message.innerText = "Please fill all fields.";
+        return;
+      }
+
+      try {
+        await signInWithEmailAndPassword(auth, email, password);
+        window.location.href = "dashboard.html";
+      } 
+     catch (error) {
+        console.log(error.code);
+        message.innerText = "Invalid email or password.";
+      }
+    });
+  }
+</script>
+</body>
+</html>
