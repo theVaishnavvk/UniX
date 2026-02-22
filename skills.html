@@ -1,804 +1,1234 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>UniX – Skills</title>
 
   <link rel="stylesheet" href="style.css" />
-  <link rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 </head>
 
 <body>
 
-<div class="layout">
-  <div id="navbar-container"></div>
+  <div class="layout">
+    <div id="navbar-container"></div>
 
-  <div class="page-content skills-page">
+    <div class="page-content skills-page">
 
-    <!-- 🏆 Skill Dashboard Header -->
-    <section class="skill-dashboard">
+      <!-- 🏆 Skill Dashboard Header -->
+      <section class="skill-dashboard">
 
-      <div class="level-box">
-        <h2>Level 3 – Campus Pro</h2>
-        <div class="progress-bar">
-          <div class="progress-fill" style="width: 70%"></div>
-        </div>
-        <small>70% to Level 4</small>
-      </div>
+        <div class="level-box">
+          <h2>Level 0 – Beginner</h2>
 
-      <div class="stats-mini">
-        <div class="mini-card">
-          <i class="fa-solid fa-coins"></i>
-          <span>1000 Points</span>
+          <div class="progress-bar">
+            <div class="progress-fill"></div>
+          </div>
+
+          <small>0% to next level</small>
         </div>
 
-        <div class="mini-card">
-          🔥 3 Day Streak
-        </div>
-      </div>
+        <div class="stats-mini">
+          <div class="mini-card">
+            <i class="fa-solid fa-coins"></i>
+            <span id="dashboardPoints">0 Points</span>
+          </div>
 
-    </section>
-
-    <!-- 🎯 Action Row -->
-    <section class="action-row">
-
-      <div class="left-actions">
-        <input type="text" placeholder="Search skills..." class="search-input" />
-
-        <select class="filter-select">
-          <option>All</option>
-          <option>Open</option>
-          <option>In Progress</option>
-          <option>Completed</option>
-        </select>
-      </div>
-
-      <button class="primary-btn" id="openCreateModal">
-  <i class="fa-solid fa-plus"></i> Create Request
-</button>
-
-    </section>
-<div class="request-tabs">
-  <button class="tab-btn active" data-tab="available">Available</button>
-  <button class="tab-btn" data-tab="mine">My Requests</button>
-</div>
-    <!-- 📄 Main Content -->
-    <section class="skills-main">
-
-  <!-- LEFT COLUMN -->
-  <div class="requests-feed">
-
-
-   <div id="availableSection" class="tab-content active">
-  <!-- available cards -->
-    <h2 class="section-title">Available Requests</h2>
-
- <div class="request-card">
-
- <div class="request-header">
-
-  <!-- LEFT SIDE -->
-  <div class="left-section">
-    <h3>Help me build portfolio website</h3>
-
-    <p class="request-description">
-      Build a responsive portfolio using React and Tailwind.
-    </p>
-
-    <div class="request-tags">
-      <span class="badge category">Programming</span>
-      <span class="badge medium">Medium</span>
-      <span class="badge high">High</span>
-    </div>
-
-    <button class="apply-btn">Apply to Help</button>
-  </div>
-
-  <!-- RIGHT SIDE -->
-  <div class="right-section">
-    
-    <div class="creator-rating">
-      <a href="profile.html?uid=keerthana123" class="creator-name">
-        Keerthana
-      </a>
-
-      <div class="rating-inline" data-rating="4.8">
-        <i class="fa-solid fa-star"></i>
-        <span class="rating-number"></span>
-        <div class="rating-bar">
-          <div class="rating-fill"></div>
-        </div>
-      </div>
-    </div>
-
-    <div class="meta-bottom">
-      <div class="deadline">
-        <i class="fa-regular fa-calendar"></i>
-        Due: 25 July 2026
-      </div>
-
-      <div class="reward-box">
-        <span>Reward</span>
-        <strong>+40 pts</strong>
-      </div>
-    </div>
-
-  </div>
-
-</div>
-
-</div>
-
-</div>
-
-<div id="mySection" class="tab-content">
-  <!-- my request cards -->
-    <h2 class="section-title my-section">My Requests</h2>
-
- <div class="request-card my-request">
-
-  <div class="request-header">
-
-    <!-- LEFT -->
-    <div class="left-section">
-      <h3>Need help with Data Structures</h3>
-
-      <p class="request-description">
-        Looking for help understanding trees, graphs and recursion.
-      </p>
-
-      <div class="request-tags">
-        <span class="badge category">Programming</span>
-        <span class="badge medium">Medium</span>
-      </div>
-    </div>
-
-    <!-- RIGHT -->
-    <div class="right-section">
-
-      <div class="status-badge open">
-        Open
-      </div>
-
-      <div class="meta-bottom">
-        <div class="deadline">
-          <i class="fa-regular fa-calendar"></i>
-          Due: 30 July 2026
+          <div class="mini-card">
+            🔥 <span id="streakValue">0</span> Day Streak
+          </div>
         </div>
 
-        <!-- <div class="reward-box">
-          <span>Reward</span>
-          <strong>+60 pts</strong>
-        </div> -->
-      </div>
+      </section>
 
-      <!-- <div class="my-actions">
-        <button class="edit-btn">Edit</button>
-        <button class="delete-btn">Delete</button>
-      </div> -->
+      <!-- 🎯 Action Row -->
+      <section class="action-row">
 
-    </div>
+        <div class="left-actions">
+          <input type="text" placeholder="Search skills..." class="search-input" />
 
-  </div>
-<hr class="divider">
-
-<div class="request-footer">
-
-  <div class="my-actions">
-    <button class="edit-btn">Edit</button>
-    <button class="delete-btn">Delete</button>
-  </div>
-
-  <div class="reward-box">
-    <span>Reward</span>
-    <strong>+60 pts</strong>
-  </div>
-
-</div>
-  <hr class="divider">
-    
-
-    <!-- Applications Nested -->
-    <div class="applications-container">
-
-      <div class="application-row">
-        <div class="applicant-info">
-          <div class="applicant-left">
-  <a href="profile.html?uid=user1" class="applicant-name" data-rating="4.9">
-    User1
-  </a>
-   <div class="rating-inline" data-rating="4.8">
-  <i class="fa-solid fa-star"></i>
-  <span class="rating-number">4.8</span>
-  <div class="rating-bar">
-    <div class="rating-fill"></div>
-  </div>
-  </div>
-  
-</div>
+          <select class="filter-select">
+            <option>All</option>
+            <option>Open</option>
+            <option>In Progress</option>
+            <option>Completed</option>
+          </select>
         </div>
 
-        <div class="application-actions">
-          <button class="accept-btn">Accept</button>
-          <button class="reject-btn">Reject</button>
+        <button class="primary-btn" id="openCreateModal">
+          <i class="fa-solid fa-plus"></i> Create Request
+        </button>
+
+      </section>
+      <div class="request-tabs">
+        <button class="tab-btn active" data-tab="available">Available</button>
+        <button class="tab-btn" data-tab="my">My Requests</button>
+      </div>
+      <!-- 📄 Main Content -->
+      <section class="skills-main">
+
+        <!-- LEFT COLUMN -->
+        <div class="requests-feed">
+
+
+          <div id="availableSection" class="tab-content active">
+            <h2 class="section-title">Available Requests</h2>
+          </div>
+
+          <div id="mySection" class="tab-content">
+            <h2 class="section-title my-section">My Requests</h2>
+          </div>
+
+
+
+        </div>
+        <!-- RIGHT COLUMN -->
+        <aside class="skills-sidebar">
+
+          <!-- Leaderboard -->
+          <div class="sidebar-card premium">
+            <div class="card-header">
+              <i class="fa-solid fa-trophy"></i>
+              <h4>Weekly Leaderboard</h4>
+            </div>
+            <div class="leaderboard-list" id="leaderboardList"></div>
+
+            <button class="view-all-btn" id="toggleLeaderboard">
+              View All
+            </button>
+          </div>
+
+          <!-- Badges -->
+          <div class="sidebar-card premium">
+            <div class="card-header">
+              <i class="fa-solid fa-medal"></i>
+              <h4>Your Badges</h4>
+            </div>
+
+            <div class="badge-grid">
+              <span class="badge-chip">⚡ Fast Helper</span>
+              <span class="badge-chip">💻 Tech Wizard</span>
+              <span class="badge-chip">🌟 Community Star</span>
+            </div>
+          </div>
+
+          <!-- XP -->
+          <div class="sidebar-card premium">
+            <div class="card-header">
+              <i class="fa-solid fa-chart-line"></i>
+              <h4>Weekly XP</h4>
+            </div>
+
+            <div class="xp-box">
+              <div class="xp-value">+0 XP</div>
+              <div class="xp-progress">
+                <div class="xp-fill"></div>
+              </div>
+              <small class="xp-text">0% to next milestone</small>
+            </div>
+          </div>
+
+        </aside>
+
+      </section>
+
+      <!-- CREATE REQUEST MODAL -->
+      <div class="modal-overlay" id="createModal">
+
+        <div class="modal-box">
+
+          <div class="modal-header">
+            <h3>Create Help Request</h3>
+            <!-- <span class="close-modal" id="closeModal">&times;</span> -->
+          </div>
+
+          <label>Title</label>
+          <input type="text" id="requestTitle" placeholder="Need help with React project" />
+
+          <label>Description</label>
+          <textarea id="requestDesc" maxlength="300" placeholder="Describe what you need help with..."></textarea>
+          <small id="charCount">0 / 300</small>
+
+          <div class="row-2">
+            <div>
+              <label>Category</label>
+              <select id="category">
+                <option>Programming</option>
+                <option>Design</option>
+                <option>Writing</option>
+                <option>Math</option>
+                <option>Science</option>
+                <option>Language</option>
+                <option>Music</option>
+                <option>Sports</option>
+                <option>Other</option>
+              </select>
+            </div>
+
+            <div>
+              <label>Difficulty</label>
+              <select id="difficulty">
+                <option value="easy">Easy</option>
+                <option value="medium">Medium</option>
+                <option value="hard">Hard</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="row-2">
+            <div>
+              <label>Urgency</label>
+              <select id="urgency">
+                <option value="low">Low</option>
+                <option value="medium">Medium</option>
+                <option value="high">High</option>
+              </select>
+            </div>
+
+            <div>
+              <label>Deadline</label>
+              <input type="date" id="deadline">
+            </div>
+          </div>
+
+          <label>Points to Offer</label>
+          <input type="range" id="pointsSlider" min="10" max="200" value="50">
+
+          <div class="reward-preview">
+            <p>Base Points: <span id="basePoints">50</span></p>
+            <p>Urgency Bonus: <span id="bonusPoints">0</span></p>
+            <hr>
+            <p><strong>Total Reward: <span id="totalPoints">50</span></strong></p>
+          </div>
+
+          <div class="modal-actions">
+            <button class="primary-btn" id="submitRequest">Create Request</button>
+            <button class="secondary-btn" id="cancelModal">Cancel</button>
+          </div>
+
         </div>
       </div>
 
-    </div>
+      <!-- TOAST -->
+      <div class="toast" id="toast">🎉 Request Created! +5 XP</div>
 
+    </div>
   </div>
-</div>
+  <script type="module">
 
- 
+    import { auth, db } from "./js/firebase.js";
+    import { askGemini } from "./js/ai.js";
 
-</div>
-  <!-- RIGHT COLUMN -->
-  <aside class="skills-sidebar">
+    import {
+      onAuthStateChanged,
+      signOut
+    } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
 
-    <!-- Leaderboard -->
-    <div class="sidebar-card premium">
-      <div class="card-header">
-        <i class="fa-solid fa-trophy"></i>
-        <h4>Weekly Leaderboard</h4>
-      </div>
-<div class="leaderboard-list" id="leaderboardList">
+    import {
+      doc,
+      getDoc,
+      collection,
+      getDocs,
+      addDoc,
+      updateDoc,
+      onSnapshot,
+      deleteDoc,
+      query,
+      where,
+      increment,
+      orderBy,
+      limit
+    } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
 
-  <!-- Always visible top 3 -->
-  <div class="leader-item first"><span class="rank">1</span>
-      <a href="profile.html?uid=user4" class="leader-name">User1</a>
-      <span class="points">500 pts</span></div>
-  <div class="leader-item second"><span class="rank">2</span>
-      <a href="profile.html?uid=user4" class="leader-name">User2</a>
-      <span class="points">480 pts</span></div>
-  <div class="leader-item third"><span class="rank">3</span>
-      <a href="profile.html?uid=user4" class="leader-name">User3</a>
-      <span class="points">280 pts</span></div>
+    let unsubscribeUserPoints;
+    let currentXP = 0;
 
-  <!-- Hidden additional users -->
-  <div class="extra-leaders hidden">
-    <div class="leader-item">
-      <span class="rank">4</span>
-      <a href="profile.html?uid=user4" class="leader-name">User4</a>
-      <span class="points">180 pts</span>
-    </div>
+    // XP thresholds for each level
+    const BASE_XP = 1000;
+    const XP_PER_LEVEL = 900;
+    const MAX_LEVEL = 10;
 
-    <!-- Add up to 50 here dynamically -->
-  </div>
+    function updateLevel() {
+      const levelTitle = document.querySelector(".level-box h2");
+      const progressFill = document.querySelector(".progress-fill");
+      const progressText = document.querySelector(".level-box small");
 
-</div>
+      if (!levelTitle || !progressFill || !progressText) return;
 
-<button class="view-all-btn" id="toggleLeaderboard">
-  View All
-</button>
-    </div>
-
-    <!-- Badges -->
-    <div class="sidebar-card premium">
-      <div class="card-header">
-        <i class="fa-solid fa-medal"></i>
-        <h4>Your Badges</h4>
-      </div>
-
-      <div class="badge-grid">
-        <span class="badge-chip">⚡ Fast Helper</span>
-        <span class="badge-chip">💻 Tech Wizard</span>
-        <span class="badge-chip">🌟 Community Star</span>
-      </div>
-    </div>
-
-    <!-- XP -->
-    <div class="sidebar-card premium">
-      <div class="card-header">
-        <i class="fa-solid fa-chart-line"></i>
-        <h4>Weekly XP</h4>
-      </div>
-
-      <div class="xp-box">
-        <div class="xp-value">+120 XP</div>
-        <div class="xp-progress">
-          <div class="xp-fill" style="width:60%"></div>
-        </div>
-        <small>60% to next milestone</small>
-      </div>
-    </div>
-
-  </aside>
-
-</section>
-
-    <!-- CREATE REQUEST MODAL -->
-<div class="modal-overlay" id="createModal">
-
-  <div class="modal-box">
-
-    <div class="modal-header">
-      <h3>Create Help Request</h3>
-      <!-- <span class="close-modal" id="closeModal">&times;</span> -->
-    </div>
-
-    <label>Title</label>
-    <input type="text" id="requestTitle" placeholder="Need help with React project" />
-
-    <label>Description</label>
-    <textarea id="requestDesc" maxlength="300"
-      placeholder="Describe what you need help with..."></textarea>
-    <small id="charCount">0 / 300</small>
-
-    <div class="row-2">
-      <div>
-        <label>Category</label>
-        <select id="category">
-          <option>Programming</option>
-          <option>Design</option>
-          <option>Writing</option>
-          <option>Math</option>
-          <option>Science</option>
-          <option>Language</option>
-          <option>Music</option>
-          <option>Sports</option>
-          <option>Other</option>
-        </select>
-      </div>
-
-      <div>
-        <label>Difficulty</label>
-        <select id="difficulty">
-          <option value="easy">Easy</option>
-          <option value="medium">Medium</option>
-          <option value="hard">Hard</option>
-        </select>
-      </div>
-    </div>
-
-    <div class="row-2">
-      <div>
-        <label>Urgency</label>
-        <select id="urgency">
-          <option value="low">Low</option>
-          <option value="medium">Medium</option>
-          <option value="high">High</option>
-        </select>
-      </div>
-
-      <div>
-        <label>Deadline</label>
-        <input type="date" id="deadline">
-      </div>
-    </div>
-
-    <label>Points to Offer</label>
-    <input type="range" id="pointsSlider" min="10" max="200" value="50">
-
-    <div class="reward-preview">
-      <p>Base Points: <span id="basePoints">50</span></p>
-      <p>Urgency Bonus: <span id="bonusPoints">0</span></p>
-      <hr>
-      <p><strong>Total Reward: <span id="totalPoints">50</span></strong></p>
-    </div>
-
-    <div class="modal-actions">
-      <button class="primary-btn" id="submitRequest">Create Request</button>
-      <button class="secondary-btn" id="cancelModal">Cancel</button>
-    </div>
-
-  </div>
-</div>
-
-<!-- TOAST -->
-<div class="toast" id="toast">🎉 Request Created! +5 XP</div>
-
-  </div>
-</div>
-<script>
-fetch("navbar.html")
-  .then(res => res.text())
-  .then(data => {
-    document.getElementById("navbar-container").innerHTML = data;
-
-    // Highlight current page
-    const currentPage = window.location.pathname
-      .split("/")
-      .pop()
-      .replace(".html", "");
-
-    document.querySelectorAll("[data-link]").forEach(link => {
-      link.classList.remove("active");
-
-      if (link.dataset.link === currentPage) {
-        link.classList.add("active");
+      if (currentXP < BASE_XP) {
+        currentXP = BASE_XP;
       }
-    });
 
-    // ✅ Logout logic must be here
-    const logoutBtn = document.getElementById("logoutBtn");
+      let level = Math.floor((currentXP - BASE_XP) / XP_PER_LEVEL);
 
-    if (logoutBtn) {
-      logoutBtn.addEventListener("click", function (e) {
-        e.preventDefault();
+      if (level > MAX_LEVEL) level = MAX_LEVEL;
 
-        // If using Firebase:
-        // firebase.auth().signOut();
+      let currentLevelXP = BASE_XP + (level * XP_PER_LEVEL);
+      let nextLevelXP = BASE_XP + ((level + 1) * XP_PER_LEVEL);
 
-        window.location.href = "home.html";
+      let progress = 0;
+
+      if (level < MAX_LEVEL) {
+        progress = ((currentXP - currentLevelXP) / XP_PER_LEVEL) * 100;
+      } else {
+        progress = 100;
+      }
+
+      progress = Math.min(progress, 100);
+
+      levelTitle.textContent = `Level ${level}`;
+
+      progressFill.style.width = progress + "%";
+
+      if (level < MAX_LEVEL) {
+        progressText.textContent =
+          `${Math.round(progress)}% to Level ${level + 1}`;
+      } else {
+        progressText.textContent = "Max Level Reached";
+      }
+    }
+
+    function listenToUserPoints(userId) {
+
+      if (unsubscribeUserPoints) unsubscribeUserPoints();
+
+      const userRef = doc(db, "users", userId);
+
+      unsubscribeUserPoints = onSnapshot(userRef, (docSnap) => {
+        if (!docSnap.exists()) return;
+
+        const data = docSnap.data();
+        const points = data.points ?? 0;
+
+        // Navbar points
+        const navPoints = document.getElementById("navPointsValue");
+        if (navPoints) navPoints.textContent = points;
+
+        // Dashboard points
+        const dashPoints = document.getElementById("dashboardPoints");
+        if (dashPoints) dashPoints.textContent = `${points} Points`;
+
+        // Streak
+        const streakEl = document.getElementById("streakValue");
+        if (streakEl) streakEl.textContent = data.streak ?? 0;
+
+        // Username
+        const nameEl = document.getElementById("usernameValue");
+        if (nameEl) nameEl.textContent = data.name ?? "User";
+
+        currentXP = points;
+
+        console.log("User XP:", points);
+
+        updateLevel();
       });
     }
-  });
 
-document.addEventListener("DOMContentLoaded", function () {
+    async function updateDailyStreak(userId) {
 
-  /* ==============================
-     MODE FLAGS
-  =============================== */
-  let isEditMode = false;
-  let editingCard = null;
+      const userRef = doc(db, "users", userId);
+      const userSnap = await getDoc(userRef);
 
-  /* ==============================
-     MODAL LOGIC
-  =============================== */
-  const modal = document.getElementById("createModal");
-  const openBtn = document.getElementById("openCreateModal");
-  const closeBtn = document.getElementById("closeModal");
-  const cancelBtn = document.getElementById("cancelModal");
-  const submitBtn = document.getElementById("submitRequest");
+      if (!userSnap.exists()) return;
 
-  if (closeBtn && modal) closeBtn.addEventListener("click", () => modal.style.display = "none");
-  if (cancelBtn && modal) cancelBtn.addEventListener("click", () => modal.style.display = "none");
+      const data = userSnap.data();
 
-  // CREATE MODE
-  if (openBtn && modal) {
-    openBtn.addEventListener("click", () => {
-      isEditMode = false;
-      editingCard = null;
+      const today = new Date().toISOString().split("T")[0];
+      const lastActive = data.lastActiveDate || "";
+      let streak = data.streak || 0;
 
-      // Reset fields
-      document.getElementById("requestTitle").value = "";
-      document.getElementById("requestDesc").value = "";
-      document.getElementById("deadline").value = "";
-
-      // Reset button text
-      submitBtn.textContent = "Create Request";
-
-      modal.style.display = "flex";
-    });
-  }
-
-  /* ==============================
-     TAB SWITCHING
-  =============================== */
-  document.querySelectorAll(".tab-btn").forEach(btn => {
-    btn.addEventListener("click", () => {
-      document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
-      document.querySelectorAll(".tab-content").forEach(c => c.classList.remove("active"));
-
-      btn.classList.add("active");
-      document.getElementById(
-        btn.dataset.tab === "available" ? "availableSection" : "mySection"
-      ).classList.add("active");
-    });
-  });
-
-  /* ==============================
-     RATING LOGIC
-  =============================== */
-  document.querySelectorAll(".rating-inline").forEach(ratingBlock => {
-    const rating = parseFloat(ratingBlock.dataset.rating);
-    const fill = ratingBlock.querySelector(".rating-fill");
-    const number = ratingBlock.querySelector(".rating-number");
-    const star = ratingBlock.querySelector("i");
-
-    number.textContent = rating.toFixed(1);
-    fill.style.width = (rating / 5) * 100 + "%";
-
-    if (rating >= 4.5) { star.style.color = fill.style.background = "#22c55e"; }
-    else if (rating >= 4) { star.style.color = fill.style.background = "#facc15"; }
-    else if (rating >= 3) { star.style.color = fill.style.background = "#fb923c"; }
-    else { star.style.color = fill.style.background = "#ef4444"; }
-  });
-
-  /* ==============================
-     DELETE REQUEST
-  =============================== */
-  document.querySelectorAll(".delete-btn").forEach(btn => {
-    btn.addEventListener("click", () => {
-      if (!confirm("Are you sure you want to delete this request?")) return;
-      const card = btn.closest(".request-card");
-      card.style.opacity = "0";
-      card.style.transform = "scale(0.95)";
-      setTimeout(() => {
-        card.remove();
-        showToast("🗑 Request deleted.");
-      }, 300);
-    });
-  });
-
-  /* ==============================
-     EDIT REQUEST
-  =============================== */
-  document.querySelectorAll(".edit-btn").forEach(btn => {
-    btn.addEventListener("click", () => {
-      const card = btn.closest(".request-card");
-
-      isEditMode = true;
-      editingCard = card;
-
-      const title = card.querySelector("h3").textContent;
-      const desc = card.querySelector(".request-description").textContent;
-
-      document.getElementById("requestTitle").value = title;
-      document.getElementById("requestDesc").value = desc;
-
-      submitBtn.textContent = "Update Request";
-      modal.style.display = "flex";
-      showToast("✏ Editing request...");
-    });
-  });
-
-  /* ==============================
-     CHARACTER COUNTER
-  =============================== */
-  const desc = document.getElementById("requestDesc");
-  const charCount = document.getElementById("charCount");
-  if (desc && charCount) {
-    desc.addEventListener("input", () => {
-      charCount.textContent = desc.value.length + " / 300";
-    });
-  }
-
-  /* ==============================
-     REWARD CALCULATION
-  =============================== */
-  const slider = document.getElementById("pointsSlider");
-  const urgency = document.getElementById("urgency");
-  const difficulty = document.getElementById("difficulty");
-
-  function updateReward() {
-    if (!slider || !urgency || !difficulty) return;
-    let base = parseInt(slider.value);
-    let bonus = 0;
-    if (urgency.value === "high") bonus += Math.round(base * 0.1);
-    if (difficulty.value === "hard") bonus += Math.round(base * 0.2);
-    document.getElementById("basePoints").textContent = base;
-    document.getElementById("bonusPoints").textContent = bonus;
-    document.getElementById("totalPoints").textContent = base + bonus;
-  }
-  if (slider) slider.addEventListener("input", updateReward);
-  if (urgency) urgency.addEventListener("change", updateReward);
-  if (difficulty) difficulty.addEventListener("change", updateReward);
-  updateReward();
-
- /* ==============================
-   APPLY BUTTON LOGIC (Single Toggle)
-=============================== */
-document.querySelectorAll(".request-card .apply-btn").forEach(button => {
-  button.addEventListener("click", () => {
-    // If already applied → cancel
-    if (button.classList.contains("applied")) {
-      button.textContent = "Apply to Help";
-      button.classList.remove("applied");
-      showToast("Application Cancelled");
-      return;
-    }
-
-    // If closed → do nothing
-    if (button.classList.contains("closed")) return;
-
-    // Otherwise apply
-    button.textContent = "Cancel Application";
-    button.classList.add("applied");
-    showToast("🎉 Applied Successfully! +2 XP");
-  });
-});
-
-
-  /* ==============================
-     SUBMIT REQUEST (CREATE vs EDIT)
-  =============================== */
-  if (submitBtn) {
-    submitBtn.addEventListener("click", function () {
-      const title = document.getElementById("requestTitle").value;
-      const desc = document.getElementById("requestDesc").value;
-
-      if (!desc || desc.length < 20) {
-        alert("Description must be at least 20 characters.");
+      if (lastActive === today) {
+        // Already counted today
         return;
       }
 
-      if (isEditMode && editingCard) {
-        // UPDATE existing card
-        editingCard.querySelector("h3").textContent = title;
-        editingCard.querySelector(".request-description").textContent = desc;
-        showToast("✏ Request Updated!");
+      const yesterday = new Date();
+      yesterday.setDate(yesterday.getDate() - 1);
+      const yesterdayStr = yesterday.toISOString().split("T")[0];
+
+      if (lastActive === yesterdayStr) {
+        streak += 1;
       } else {
-        // CREATE new request (UI only for now)
-        showToast("🎉 Request Created! +5 XP");
-        // 👉 If you want the new request to appear in the list,
-        // append a new card element here.
+        streak = 1;
       }
 
-      if (modal) modal.style.display = "none";
-    });
-  }
+      await updateDoc(userRef, {
+        streak: streak,
+        lastActiveDate: today
+      });
 
-  /* ==============================
-     TOAST
-  =============================== */
-  function showToast(message) {
-    const toast = document.getElementById("toast");
-    if (!toast) return;
-    toast.textContent = message;
-    toast.style.display = "block";
-    setTimeout(() => { toast.style.display = "none"; }, 2500);
-  }
+    }
 
-  /* ==============================
-     LEADERBOARD TOGGLE
-  =============================== */
-  const toggleBtn = document.getElementById("toggleLeaderboard");
-  const extraLeaders = document.querySelector(".extra-leaders");
-  if (toggleBtn && extraLeaders) {
-    toggleBtn.addEventListener("click", () => {
-      extraLeaders.classList.toggle("hidden");
-      toggleBtn.textContent = extraLeaders.classList.contains("hidden") ? "View All" : "Show Less";
-    });
-  }
+    fetch("navbar.html")
+      .then(res => res.text())
+      .then(data => {
 
+        document.getElementById("navbar-container").innerHTML = data;
 
-  /* ==============================
-     APPLICATION ROWS
-  =============================== */
-  document.querySelectorAll(".application-row").forEach(row => {
-    const acceptBtn = row.querySelector(".accept-btn");
-    const rejectBtn = row.querySelector(".reject-btn");
+        // Highlight active link
+        const currentPage = window.location.pathname
+          .split("/")
+          .pop()
+          .replace(".html", "");
 
-    if (acceptBtn) {
-      acceptBtn.addEventListener("click", () => {
-        const applicantName = row.querySelector(".applicant-name")?.textContent || "User";
-        if (!confirm(`Accept ${applicantName}'s application?`)) return;
-        const container = row.closest(".applications-container");
-        if (container) {
-          container.querySelectorAll(".application-row").forEach(r => { if (r !== row) r.remove(); });
+        document.querySelectorAll("[data-link]").forEach(link => {
+          link.classList.remove("active");
+          if (link.dataset.link === currentPage) {
+            link.classList.add("active");
+          }
+        });
+
+        // Logout
+        const logoutBtn = document.getElementById("logoutBtn");
+        if (logoutBtn) {
+          logoutBtn.addEventListener("click", async (e) => {
+            e.preventDefault();
+            await signOut(auth);
+            window.location.href = "home.html";
+          });
         }
-        acceptBtn.remove();
-        if (rejectBtn) rejectBtn.remove();
-        const status = document.createElement("span");
-        status.textContent = "✔ In Progress";
-        status.style.color = "#10b981";
-        status.style.fontWeight = "600";
-        status.style.marginLeft = "10px";
-        row.appendChild(status);
-        const chatBtn = document.createElement("button");
-        chatBtn.textContent = "Chat";
-        chatBtn.className = "chat-btn";
-        chatBtn.style.marginLeft = "10px";
-        row.appendChild(chatBtn);
-        showToast(`🎉 ${applicantName} accepted!`);
+
+        // Wait for auth before loading data
+        onAuthStateChanged(auth, (user) => {
+          if (!user) return;
+
+          listenToUserPoints(user.uid);
+          updateDailyStreak(user.uid);
+          loadWeeklyXP(user.uid);
+          loadRequests(user);
+          loadLeaderboardRealtime();
+
+          // AI Skill Match button
+          const aiBtn = document.getElementById("aiSkillMatchBtn");
+          const aiResp = document.getElementById("aiSkillResponse");
+          if (aiBtn) {
+            aiBtn.addEventListener("click", async () => {
+              aiBtn.disabled = true;
+              aiResp.innerHTML = `<span style="color:#7c3aed;">✨ Thinking…</span>`;
+
+              try {
+                // Fetch user skills
+                const userSnap = await getDoc(doc(db, "users", user.uid));
+                const userData = userSnap.exists() ? userSnap.data() : {};
+                const userSkills = (userData.skills || []).join(", ") || "general";
+
+                // Fetch open requests
+                const reqSnap = await getDocs(query(collection(db, "requests"), where("status", "==", "open")));
+                const openRequests = reqSnap.docs.slice(0, 12).map(d => {
+                  const r = d.data();
+                  return `"${r.title}" (${r.category}, ${r.difficulty})`;
+                }).join("\n");
+
+                const prompt = `You are an AI assistant for UniX, a campus skill-exchange platform. A student has these skills: ${userSkills}.\n\nHere are the current open help requests from other students:\n${openRequests || "No open requests yet."}\n\nRecommend 2-3 specific requests this student should help with, explaining why their skills are a good match. Be brief (3 sentences max) and friendly.`;
+
+                const result = await askGemini(prompt);
+                aiResp.textContent = result;
+              } catch (e) {
+                aiResp.textContent = "Could not load recommendations right now.";
+              }
+              aiBtn.disabled = false;
+            });
+          }
+        });
+
+      });
+
+    async function awardXP(userId, amount) {
+
+      const userRef = doc(db, "users", userId);
+
+      await updateDoc(userRef, {
+        points: increment(amount)
+      });
+
+      await addDoc(collection(db, "xpLogs"), {
+        userId: userId,
+        amount: amount,
+        createdAt: new Date()
+      });
+
+      // 🔥 Refresh weekly XP if it's current user
+      if (auth.currentUser?.uid === userId) {
+        loadWeeklyXP(userId);
+      }
+    }
+
+    async function loadWeeklyXP(userId) {
+
+      const xpValue = document.querySelector(".xp-value");
+      const xpFill = document.querySelector(".xp-fill");
+      const xpText = document.querySelector(".xp-text");
+
+      if (!xpValue || !xpFill || !xpText) return;
+
+      const now = new Date();
+      const firstDay = new Date(now);
+      firstDay.setDate(now.getDate() - now.getDay()); // Sunday
+      firstDay.setHours(0, 0, 0, 0);
+
+      const q = query(
+        collection(db, "xpLogs"),
+        where("userId", "==", userId),
+        where("createdAt", ">=", firstDay)
+      );
+
+      const snapshot = await getDocs(q);
+
+      let weeklyXP = 0;
+
+      snapshot.forEach(doc => {
+        weeklyXP += doc.data().amount;
+      });
+
+      const weeklyGoal = 200;
+      const progress = Math.min((weeklyXP / weeklyGoal) * 100, 100);
+
+      xpValue.textContent = `+${weeklyXP} XP`;
+      xpFill.style.width = progress + "%";
+      xpText.textContent = `${Math.round(progress)}% to next milestone`;
+    }
+
+    let unsubscribeRequests;
+
+    async function loadRequests(user) {
+
+      const availableSection = document.getElementById("availableSection");
+      const mySection = document.getElementById("mySection");
+
+      if (!availableSection || !mySection) return;
+
+      if (unsubscribeRequests) unsubscribeRequests();
+
+      const q = query(
+        collection(db, "requests"),
+        orderBy("createdAt", "desc")
+      );
+
+      unsubscribeRequests = onSnapshot(q, (querySnapshot) => {
+
+        availableSection.innerHTML =
+          "<h2 class='section-title'>Available Requests</h2>";
+
+        mySection.innerHTML =
+          "<h2 class='section-title my-section'>My Requests</h2>";
+
+        querySnapshot.forEach((docSnap) => {
+
+          const data = docSnap.data();
+
+          const card = document.createElement("div");
+          card.classList.add("request-card");
+          card.dataset.id = docSnap.id;
+
+          card.innerHTML = `
+        <div class="request-header">
+          <div class="left-section">
+            <h3>${data.title}</h3>
+            <p class="request-description">${data.desc}</p>
+            <div class="request-tags">
+              <span class="badge category">${data.category}</span>
+              <span class="badge medium">${data.difficulty}</span>
+              <span class="badge ${data.urgency}">${data.urgency}</span>
+            </div>
+            ${user &&
+              data.userId !== user.uid &&
+              data.status === "open"
+              ? `<div style="display:flex; gap:8px; margin-top:10px;">
+                  <button class="apply-btn">Apply to Help</button>
+                  <a href="chat.html?uid=${data.userId}" class="chat-btn" style="text-decoration:none; display:flex; align-items:center; gap:5px;">
+                    <i class="fa-solid fa-message"></i> Chat
+                  </a>
+                 </div>`
+              : ""
+            }
+          </div>
+
+          <div class="right-section">
+            <div class="status-badge ${data.status}">
+            ${data.status === "open" ? "Open" :
+              data.status === "in-progress" ? "In Progress" :
+                data.status === "completed" ? "Completed" : ""}
+          </div>
+            <div class="meta-bottom">
+              <div class="deadline">
+                <i class="fa-regular fa-calendar"></i> Due: ${data.deadline}
+              </div>
+              <div class="reward-box">
+                <span>Reward</span>
+                <strong>+${data.points} pts</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        ${user && data.userId === user.uid
+              ? `
+  <div class="request-footer">
+    <div class="my-actions">
+      <button class="edit-btn">Edit</button>
+      <button class="delete-btn">Delete</button>
+      ${data.status === "in-progress"
+                ? '<button class="complete-btn">Mark Completed</button>'
+                : ""
+              }
+    </div>
+  </div>
+`
+              : ""
+            }
+
+        <div class="applications-container"></div>
+      `;
+
+          if (!user) return;
+
+          // MY REQUESTS
+          if (data.userId === user.uid) {
+            mySection.appendChild(card);
+          }
+
+          // AVAILABLE REQUESTS (only open & not mine)
+          else if (data.status === "open") {
+            availableSection.appendChild(card);
+          }
+
+          const applicationsContainer =
+            card.querySelector(".applications-container");
+
+          if (applicationsContainer) {
+            loadApplications(docSnap.id, applicationsContainer);
+          }
+
+        });
+
+      });
+    }
+    function loadApplications(requestId, container) {
+
+      const q = query(
+        collection(db, "applications"),
+        where("requestId", "==", requestId)
+      );
+
+      onSnapshot(q, async (snapshot) => {
+
+        container.innerHTML = "";
+        const currentUser = auth.currentUser;
+
+        for (const docSnap of snapshot.docs) {
+
+          const data = docSnap.data();
+
+          const row = document.createElement("div");
+          row.classList.add("application-row");
+          row.dataset.id = docSnap.id;
+          row.dataset.applicant = data.applicantId;
+
+          // Restore accepted state
+          if (data.status === "accepted") {
+            row.classList.add("accepted");
+          }
+
+          const userSnap = await getDoc(doc(db, "users", data.applicantId));
+          const userName = userSnap.exists()
+            ? userSnap.data().name
+            : "User";
+
+          row.innerHTML = `
+        <div class="applicant-info">
+          <a href="profile.html?uid=${data.applicantId}" class="applicant-name">
+            ${userName}
+          </a>
+        </div>
+        ${data.status === "pending"
+              ? `
+          <div class="application-actions">
+            <button class="accept-btn">Accept</button>
+            <button class="reject-btn">Reject</button>
+          </div>
+          `
+              : `<div style="display:flex;align-items:center;gap:10px;">
+                   <span style="color:#10b981;font-weight:600;">✔ In Progress</span>
+                   <a href="chat.html?uid=${data.applicantId}" style="background:#6a5af9;color:white;text-decoration:none;padding:5px 12px;border-radius:14px;font-size:12px;font-weight:600;">
+                     <i class="fa-solid fa-message"></i> Chat
+                   </a>
+                 </div>`
+            }
+      `;
+
+          container.appendChild(row);
+
+          if (currentUser && data.applicantId === currentUser.uid) {
+            const card = container.closest(".request-card");
+            const applyBtn = card?.querySelector(".apply-btn");
+
+            if (applyBtn) {
+              if (data.status === "accepted") {
+                // Replace apply button with a "Chat with Requester" button
+                const requestId = card.dataset.id;
+                const reqSnap = await getDoc(doc(db, "requests", requestId));
+                const requesterId = reqSnap.exists() ? reqSnap.data().userId : null;
+                if (requesterId) {
+                  applyBtn.outerHTML = `
+                    <a href="chat.html?uid=${requesterId}"
+                       style="display:inline-flex;align-items:center;gap:6px;
+                              background:#6a5af9;color:white;text-decoration:none;
+                              padding:8px 16px;border-radius:20px;font-size:13px;font-weight:600;">
+                      <i class="fa-solid fa-message"></i> Chat with Requester
+                    </a>`;
+                }
+              } else {
+                applyBtn.textContent = "Cancel Application";
+                applyBtn.classList.add("applied");
+              }
+            }
+          }
+        }
       });
     }
 
-    if (rejectBtn) {
-      rejectBtn.addEventListener("click", () => {
-        const applicantName = row.querySelector(".applicant-name")?.textContent || "User";
-        if (!confirm(`Reject ${applicantName}'s application?`)) return;
-        row.remove();
-        showToast(`❌ ${applicantName} rejected.`);
+    function loadLeaderboardRealtime() {
+
+      const leaderboard = document.getElementById("leaderboardList");
+      const toggleBtn = document.getElementById("toggleLeaderboard");
+
+      if (!leaderboard) return;
+
+      const q = query(
+        collection(db, "users"),
+        orderBy("points", "desc"),
+        limit(10)
+      );
+
+      onSnapshot(q, (snapshot) => {
+
+        leaderboard.innerHTML = "";
+
+        snapshot.docs.forEach((docSnap, index) => {
+
+          const data = docSnap.data();
+
+          const row = document.createElement("div");
+          row.classList.add("leader-item");
+
+          if (index === 0) row.classList.add("first");
+          else if (index === 1) row.classList.add("second");
+          else if (index === 2) row.classList.add("third");
+
+          // Hide ranks after 3 initially
+          if (index > 2) row.classList.add("extra-leader", "hidden");
+
+          let badgeIcon = "";
+          if (index === 0) badgeIcon = '<i class="fa-solid fa-crown" style="color:gold; margin-left:5px;"></i>';
+          else if (index === 1) badgeIcon = '<i class="fa-solid fa-medal" style="color:silver; margin-left:5px;"></i>';
+          else if (index === 2) badgeIcon = '<i class="fa-solid fa-medal" style="color:#cd7f32; margin-left:5px;"></i>';
+
+          row.innerHTML = `
+        <span class="rank">${index + 1}</span>
+        <span class="leader-name">${data.name || "User"} ${badgeIcon}</span>
+        <span class="points">${data.points ?? 0} pts</span>
+      `;
+
+          leaderboard.appendChild(row);
+        });
+
+        // Toggle logic
+        if (toggleBtn) {
+          toggleBtn.onclick = () => {
+
+            const extraRows = leaderboard.querySelectorAll(".extra-leader");
+
+            const isHidden = extraRows[0]?.classList.contains("hidden");
+
+            extraRows.forEach(row => {
+              row.classList.toggle("hidden");
+            });
+
+            toggleBtn.textContent = isHidden ? "Show Less" : "View All";
+          };
+        }
+
       });
     }
-  });
-/* ==============================
-   LEVEL SYSTEM WITH PROGRESS BAR
-=============================== */
-const levelTitle = document.querySelector(".level-box h2");
-const progressFill = document.querySelector(".progress-fill");
-const progressText = document.querySelector(".level-box small");
 
-// Example user XP
-let currentXP = 1000;
 
-// XP thresholds for each level
-let levelThresholds = [0, 200, 500, 1000, 2000];
-let levelTitles = [
-  "Level 0 – Beginner",
-  "Level 1 – Explorer",
-  "Level 2 – Learner",
-  "Level 3 – Campus Pro",
-  "Level 4 – Mentor"
-];
+    document.addEventListener("DOMContentLoaded", function () {
 
-function updateLevel() {
-  let level = 0;
-  for (let i = 0; i < levelThresholds.length; i++) {
-    if (currentXP >= levelThresholds[i]) level = i;
-  }
+      /* ==============================
+         MODE FLAGS
+      =============================== */
+      let isEditMode = false;
+      let editingCard = null;
 
-  let nextXP = levelThresholds[level + 1] || levelThresholds[level];
-  let progress = ((currentXP - levelThresholds[level]) / (nextXP - levelThresholds[level])) * 100;
+      /* ==============================
+         MODAL LOGIC
+      =============================== */
+      const modal = document.getElementById("createModal");
+      const openBtn = document.getElementById("openCreateModal");
+      const closeBtn = document.getElementById("closeModal");
+      const cancelBtn = document.getElementById("cancelModal");
+      const submitBtn = document.getElementById("submitRequest");
 
-  // Update UI
-  levelTitle.textContent = levelTitles[level];
-  progressFill.style.width = progress + "%";
-  progressText.textContent = `${Math.round(progress)}% to ${levelTitles[level + 1] || "Max Level"}`;
-}
 
-// Call once on load
-updateLevel();
+      if (closeBtn && modal) closeBtn.addEventListener("click", () => modal.style.display = "none");
+      if (cancelBtn && modal) cancelBtn.addEventListener("click", () => modal.style.display = "none");
 
-/* ==============================
-   SEARCH & FILTER WITH NO RESULTS
-=============================== */
-const searchInput = document.querySelector(".search-input");
-const filterSelect = document.querySelector(".filter-select");
+      // CREATE MODE
+      if (openBtn && modal) {
+        openBtn.addEventListener("click", () => {
+          isEditMode = false;
+          editingCard = null;
 
-// Create a reusable "no results" element
-const noResultsMsg = document.createElement("p");
-noResultsMsg.textContent = "No requests found.";
-noResultsMsg.className = "no-results";
-noResultsMsg.style.display = "none";
+          // Reset fields
+          document.getElementById("requestTitle").value = "";
+          document.getElementById("requestDesc").value = "";
+          document.getElementById("deadline").value = "";
 
-// Append message to both sections
-const availableSection = document.getElementById("availableSection");
-const mySection = document.getElementById("mySection");
-if (availableSection) availableSection.appendChild(noResultsMsg.cloneNode(true));
-if (mySection) mySection.appendChild(noResultsMsg.cloneNode(true));
+          // Reset button text
+          submitBtn.textContent = "Create Request";
 
-function filterRequests() {
-  const keyword = searchInput.value.toLowerCase();
-  const filter = filterSelect.value.toLowerCase();
+          modal.style.display = "flex";
+        });
+      }
 
-  let anyVisible = false;
 
-  document.querySelectorAll(".request-card").forEach(card => {
-    const title = card.querySelector("h3")?.textContent.toLowerCase() || "";
-    const desc = card.querySelector(".request-description")?.textContent.toLowerCase() || "";
-    const status = card.querySelector(".status-badge")?.textContent.toLowerCase() || "open";
+      /* ==============================
+         TAB SWITCHING
+      =============================== */
+      document.querySelectorAll(".tab-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+          document.querySelectorAll(".tab-content").forEach(c => c.classList.remove("active"));
 
-    const matchesKeyword = title.includes(keyword) || desc.includes(keyword);
-    const matchesFilter = filter === "all" || status.includes(filter);
+          btn.classList.add("active");
+          document.getElementById(
+            btn.dataset.tab === "available" ? "availableSection" : "mySection"
+          ).classList.add("active");
+        });
+      });
 
-    if (matchesKeyword && matchesFilter) {
-      card.style.display = "block";
-      anyVisible = true;
-    } else {
-      card.style.display = "none";
-    }
-  });
+      /* ==============================
+         RATING LOGIC
+      =============================== */
+      document.querySelectorAll(".rating-inline").forEach(ratingBlock => {
+        const rating = parseFloat(ratingBlock.dataset.rating);
+        const fill = ratingBlock.querySelector(".rating-fill");
+        const number = ratingBlock.querySelector(".rating-number");
+        const star = ratingBlock.querySelector("i");
 
-  // Show/hide "No results" message in each section
-  [availableSection, mySection].forEach(section => {
-    if (!section) return;
-    const visibleCards = section.querySelectorAll(".request-card:not([style*='display: none'])");
-    const msg = section.querySelector(".no-results");
-    if (msg) msg.style.display = visibleCards.length === 0 ? "block" : "none";
-  });
-}
+        number.textContent = rating.toFixed(1);
+        fill.style.width = (rating / 5) * 100 + "%";
 
-if (searchInput) searchInput.addEventListener("input", filterRequests);
-if (filterSelect) filterSelect.addEventListener("change", filterRequests);
+        if (rating >= 4.5) { star.style.color = fill.style.background = "#22c55e"; }
+        else if (rating >= 4) { star.style.color = fill.style.background = "#facc15"; }
+        else if (rating >= 3) { star.style.color = fill.style.background = "#fb923c"; }
+        else { star.style.color = fill.style.background = "#ef4444"; }
+      });
 
-/* ==============================
-   WEEKLY XP PROGRESS
-=============================== */
-const xpValue = document.querySelector(".xp-value");
-const xpFill = document.querySelector(".xp-fill");
-const xpText = document.querySelector(".skills-sidebar small");
+      /* ==============================
+         DELETE REQUEST
+      =============================== */
+      document.addEventListener("click", async (e) => {
+        if (e.target.classList.contains("delete-btn")) {
 
-// Example weekly XP data
-let weeklyXP = 120;
-let weeklyGoal = 200; // milestone target
+          const card = e.target.closest(".request-card");
+          const requestId = card.dataset.id;
 
-function updateWeeklyXP() {
-  const progress = (weeklyXP / weeklyGoal) * 100;
+          const status = card.querySelector(".status-badge")?.textContent?.toLowerCase();
+          if (status !== "open") {
+            alert("Only open requests can be deleted.");
+            return;
+          }
 
-  xpValue.textContent = `+${weeklyXP} XP`;
-  xpFill.style.width = progress + "%";
-  xpText.textContent = `${Math.round(progress)}% to next milestone`;
-}
+          if (!confirm("Are you sure you want to delete this request?")) return;
 
-// Call once on load
-updateWeeklyXP();
+          try {
+            await deleteDoc(doc(db, "requests", requestId));
+            card.remove();
+            showToast("🗑 Request deleted.");
+          } catch (error) {
+            console.error("Error deleting request:", error);
+          }
+        }
+      });
 
-});
-</script>
+      document.addEventListener("click", (e) => {
+        if (e.target.classList.contains("edit-btn")) {
+          const card = e.target.closest(".request-card");
+
+          isEditMode = true;
+          editingCard = card;
+
+          const title = card.querySelector("h3").textContent;
+          const desc = card.querySelector(".request-description").textContent;
+
+          document.getElementById("requestTitle").value = title;
+          document.getElementById("requestDesc").value = desc;
+
+          submitBtn.textContent = "Update Request";
+          modal.style.display = "flex";
+          showToast("✏ Editing request...");
+        }
+      });
+
+      /* ==============================
+         CHARACTER COUNTER
+      =============================== */
+      const desc = document.getElementById("requestDesc");
+      const charCount = document.getElementById("charCount");
+      if (desc && charCount) {
+        desc.addEventListener("input", () => {
+          charCount.textContent = desc.value.length + " / 300";
+        });
+      }
+
+      /* ==============================
+         REWARD CALCULATION
+      =============================== */
+      const slider = document.getElementById("pointsSlider");
+      const urgency = document.getElementById("urgency");
+      const difficulty = document.getElementById("difficulty");
+
+      function updateReward() {
+        if (!slider || !urgency || !difficulty) return;
+        let base = parseInt(slider.value);
+        let bonus = 0;
+        if (urgency.value === "high") bonus += Math.round(base * 0.1);
+        if (difficulty.value === "hard") bonus += Math.round(base * 0.2);
+        document.getElementById("basePoints").textContent = base;
+        document.getElementById("bonusPoints").textContent = bonus;
+        document.getElementById("totalPoints").textContent = base + bonus;
+      }
+      if (slider) slider.addEventListener("input", updateReward);
+      if (urgency) urgency.addEventListener("change", updateReward);
+      if (difficulty) difficulty.addEventListener("change", updateReward);
+      updateReward();
+
+      /* ==============================
+        APPLY BUTTON LOGIC (Single Toggle)
+     =============================== */
+      document.addEventListener("click", async (e) => {
+        if (e.target.classList.contains("apply-btn")) {
+
+          const button = e.target;
+          const card = button.closest(".request-card");
+          const requestId = card.dataset.id;
+          const user = auth.currentUser;
+
+          const requestSnap = await getDoc(doc(db, "requests", requestId));
+          const realStatus = requestSnap.data().status || "open";
+
+          if (realStatus !== "open") {
+            alert("This request is no longer open.");
+            return;
+          }
+
+          if (!user) {
+            alert("You must be logged in to apply.");
+            return;
+          }
+
+          if (button.classList.contains("applied")) {
+
+            button.textContent = "Apply to Help";
+            button.classList.remove("applied");
+            showToast("Application Cancelled");
+
+            const q = query(
+              collection(db, "applications"),
+              where("requestId", "==", requestId),
+              where("applicantId", "==", user.uid)
+            );
+
+            const snapshot = await getDocs(q);
+            snapshot.forEach(async (docSnap) => {
+              await deleteDoc(doc(db, "applications", docSnap.id));
+            });
+
+          } else {
+
+            button.textContent = "Cancel Application";
+            button.classList.add("applied");
+            showToast("🎉 Applied Successfully! +2 XP");
+
+            const userSnap = await getDoc(doc(db, "users", user.uid));
+            const userName = userSnap.exists() ? userSnap.data().name : "User";
+
+            await addDoc(collection(db, "applications"), {
+              requestId,
+              applicantId: user.uid,
+              applicantName: userName,   // 🔥 NEW
+              status: "pending",
+              appliedAt: new Date()
+            });
+
+            await awardXP(user.uid, 2);
+          }
+        }
+      });
+
+
+
+      /* ==============================
+         SUBMIT REQUEST (CREATE vs EDIT)
+      ============================== */
+      if (submitBtn) {
+        submitBtn.addEventListener("click", async () => {
+
+          const title = document.getElementById("requestTitle").value;
+          const desc = document.getElementById("requestDesc").value;
+          const category = document.getElementById("category").value;
+          const difficulty = document.getElementById("difficulty").value;
+          const urgency = document.getElementById("urgency").value;
+          const deadline = document.getElementById("deadline").value;
+          const points = document.getElementById("totalPoints").textContent;
+
+          const user = auth.currentUser;
+          if (!user) {
+            alert("You must be logged in.");
+            return;
+          }
+
+          try {
+            if (isEditMode && editingCard) {
+              const requestId = editingCard.dataset.id;
+
+              await updateDoc(doc(db, "requests", requestId), {
+                title, desc, category, difficulty, urgency, deadline, points
+              });
+
+              showToast("✏ Request Updated!");
+            } else {
+              await addDoc(collection(db, "requests"), {
+                title,
+                desc,
+                category,
+                difficulty,
+                urgency,
+                deadline,
+                points,
+                userId: user.uid,
+                status: "open",
+                createdAt: new Date()
+              });
+              await awardXP(user.uid, 5);
+              showToast("🎉 Request Created! +5 XP");
+            }
+
+            modal.style.display = "none";
+            loadRequests(user);
+
+          } catch (error) {
+            console.error("Error saving request:", error);
+          }
+        });
+      }
+      /* ==============================
+         TOAST
+      =============================== */
+      function showToast(message) {
+        const toast = document.getElementById("toast");
+        if (!toast) return;
+        toast.textContent = message;
+        toast.style.display = "block";
+        setTimeout(() => { toast.style.display = "none"; }, 2500);
+      }
+
+      // /* ==============================
+      //    LEADERBOARD TOGGLE
+      // =============================== */
+      // const toggleBtn = document.getElementById("toggleLeaderboard");
+      // const extraLeaders = document.querySelector(".extra-leaders");
+      // if (toggleBtn && extraLeaders) {
+      //   toggleBtn.addEventListener("click", () => {
+      //     extraLeaders.classList.toggle("hidden");
+      //     toggleBtn.textContent = extraLeaders.classList.contains("hidden") ? "View All" : "Show Less";
+      //   });
+      // }
+
+
+      /* ==============================
+         APPLICATION ROWS
+      =============================== */
+      // Handle Accept / Reject Application (delegated)
+      document.addEventListener("click", async (e) => {
+
+        /* ==============================
+           COMPLETE REQUEST
+        =============================== */
+        if (e.target.classList.contains("complete-btn")) {
+
+          const card = e.target.closest(".request-card");
+          const requestId = card.dataset.id;
+
+          // Only get the accepted application
+          const acceptedRow = card.querySelector(".application-row.accepted");
+          if (!acceptedRow) {
+            alert("No accepted applicant found.");
+            return;
+          }
+
+          const applicantId = acceptedRow.dataset.applicant;
+
+          const rewardText = card.querySelector(".reward-box strong").textContent;
+          const rewardPoints = parseInt(rewardText.replace(/\D/g, ""));
+
+          if (!confirm("Mark this request as completed?")) return;
+
+          try {
+
+            // Transfer reward to applicant
+            await awardXP(applicantId, rewardPoints);
+
+            // Update request status
+            await updateDoc(doc(db, "requests", requestId), {
+              status: "completed"
+            });
+
+            showToast("✅ Request completed & reward transferred!");
+
+          } catch (error) {
+            console.error("Completion error:", error);
+          }
+        }
+
+
+
+        /* ==============================
+           ACCEPT / REJECT APPLICATION
+        =============================== */
+        if (e.target.classList.contains("accept-btn") || e.target.classList.contains("reject-btn")) {
+
+          const row = e.target.closest(".application-row");
+          const applicantName = row.querySelector(".applicant-name")?.textContent || "User";
+          const applicationId = row.dataset.id;
+
+          /* ---------- ACCEPT ---------- */
+          if (e.target.classList.contains("accept-btn")) {
+
+            if (!confirm(`Accept ${applicantName}'s application?`)) return;
+
+            const applicationRef = doc(db, "applications", applicationId);
+            const applicationSnap = await getDoc(applicationRef);
+
+            if (!applicationSnap.exists()) return;
+
+            if (applicationSnap.data().status === "pending") {
+
+              await updateDoc(applicationRef, { status: "accepted" });
+
+              // Mark this row as accepted
+              row.classList.add("accepted");
+
+              const requestCard = row.closest(".request-card");
+              const requestId = requestCard.dataset.id;
+
+              // Update request status to in-progress
+              await updateDoc(doc(db, "requests", requestId), {
+                status: "in-progress"
+              });
+
+              // Remove other applicants visually
+              const container = row.closest(".applications-container");
+              container.querySelectorAll(".application-row").forEach(r => {
+                if (r !== row) r.remove();
+              });
+
+              // Remove action buttons
+              row.querySelector(".accept-btn")?.remove();
+              row.querySelector(".reject-btn")?.remove();
+
+              const status = document.createElement("span");
+              status.textContent = "✔ In Progress";
+              status.style.color = "#10b981";
+              status.style.fontWeight = "600";
+              status.style.marginLeft = "10px";
+              row.appendChild(status);
+
+              showToast(`🎉 ${applicantName} selected!`);
+            }
+          }
+
+
+          /* ---------- REJECT ---------- */
+          if (e.target.classList.contains("reject-btn")) {
+
+            if (!confirm(`Reject ${applicantName}'s application?`)) return;
+
+            await updateDoc(doc(db, "applications", applicationId), {
+              status: "rejected"
+            });
+
+            row.remove();
+
+            showToast(`❌ ${applicantName} rejected.`);
+          }
+        }
+
+      });
+      /* ==============================
+         LEVEL SYSTEM WITH PROGRESS BAR
+      =============================== */
+
+      // Call once on load
+
+      /* ==============================
+         SEARCH & FILTER WITH NO RESULTS
+      =============================== */
+      const searchInput = document.querySelector(".search-input");
+      const filterSelect = document.querySelector(".filter-select");
+
+      // Create a reusable "no results" element
+      const noResultsMsg = document.createElement("p");
+      noResultsMsg.textContent = "No requests found.";
+      noResultsMsg.className = "no-results";
+      noResultsMsg.style.display = "none";
+
+      // Append message to both sections
+      const availableSectionEl = document.getElementById("availableSection");
+      const mySectionEl = document.getElementById("mySection");
+
+      if (availableSectionEl) availableSectionEl.appendChild(noResultsMsg.cloneNode(true));
+      if (mySectionEl) mySectionEl.appendChild(noResultsMsg.cloneNode(true));
+
+      function filterRequests() {
+        const keyword = searchInput.value.toLowerCase();
+        const filter = filterSelect.value.toLowerCase();
+
+        let anyVisible = false;
+
+        document.querySelectorAll(".request-card").forEach(card => {
+          const title = card.querySelector("h3")?.textContent.toLowerCase() || "";
+          const desc = card.querySelector(".request-description")?.textContent.toLowerCase() || "";
+          const status = card.querySelector(".status-badge")?.textContent.toLowerCase() || "open";
+
+          const matchesKeyword = title.includes(keyword) || desc.includes(keyword);
+          const matchesFilter = filter === "all" || status.includes(filter);
+
+          if (matchesKeyword && matchesFilter) {
+            card.style.display = "block";
+            anyVisible = true;
+          } else {
+            card.style.display = "none";
+          }
+        });
+
+        // Show/hide "No results" message in each section
+        [availableSectionEl, mySectionEl].forEach(section => {
+          if (!section) return;
+          const visibleCards = section.querySelectorAll(".request-card:not([style*='display: none'])");
+          const msg = section.querySelector(".no-results");
+          if (msg) msg.style.display = visibleCards.length === 0 ? "block" : "none";
+        });
+      }
+
+      if (searchInput) searchInput.addEventListener("input", filterRequests);
+      if (filterSelect) filterSelect.addEventListener("change", filterRequests);
+
+    });
+  </script>
 </body>
+
 </html>
