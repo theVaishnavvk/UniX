@@ -167,7 +167,7 @@
 
             // 🔹 Active Listings Count
             const activeListQuery = query(
-              collection(db, "listings"),
+              collection(db, "marketplace"),
               where("createdBy", "==", user.uid),
               where("status", "==", "active")
             );
