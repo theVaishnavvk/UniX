@@ -221,7 +221,7 @@
     <script type="module">
         import { auth, db, storage } from "./js/firebase.js";
         import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
-        import { collection, addDoc, onSnapshot, query, orderBy, where, doc, getDoc, getDocs, or, and } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
+        import { collection, addDoc, onSnapshot, query, orderBy, where, doc, getDoc, getDocs, or, and, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
         import { ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-storage.js";
 
         let activeChatId = null;
@@ -274,8 +274,9 @@
 
         async function selectUser(uid, name) {
             activeUserId = uid;
-            document.getElementById("activeUserName").innerText = name;
-            document.getElementById("activeUserAvatar").innerText = name.charAt(0).toUpperCase();
+            const displayName = name || "User";
+            document.getElementById("activeUserName").innerText = displayName;
+            document.getElementById("activeUserAvatar").innerText = displayName.charAt(0).toUpperCase();
             document.getElementById("viewProfileBtn").style.display = "block";
             document.getElementById("viewProfileBtn").href = `profile.html?uid=${uid}`;
             document.getElementById("messageInput").disabled = false;
@@ -318,9 +319,15 @@
                     </a>`;
                 }
 
+                let timeStr = "...";
+                if (msg.createdAt) {
+                    const date = msg.createdAt.toDate ? msg.createdAt.toDate() : new Date(msg.createdAt);
+                    timeStr = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                }
+
                 div.innerHTML = `
                     ${content}
-                    <span class="msg-time">${msg.createdAt ? new Date(msg.createdAt.seconds * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '...'}</span>
+                    <span class="msg-time">${timeStr}</span>
                 `;
                 area.appendChild(div);
             });
@@ -330,20 +337,21 @@
         async function sendMessage() {
             const input = document.getElementById("messageInput");
             const text = input.value.trim();
-            if (!text && !activeUserId) return;
+            if (!text || !activeChatId) return;
 
-            const myUid = auth.currentUser.uid;
-            const chatId = activeChatId;
+            const myUid = auth.currentUser ? auth.currentUser.uid : null;
+            if (!myUid) return;
 
             try {
-                await addDoc(collection(db, "chats", chatId, "messages"), {
+                await addDoc(collection(db, "chats", activeChatId, "messages"), {
                     senderId: myUid,
                     text: text,
-                    createdAt: new Date()
+                    createdAt: serverTimestamp()
                 });
                 input.value = "";
             } catch (e) {
                 console.error("Error sending message:", e);
+                alert("Failed to send message. Please try again.");
             }
         }
 
@@ -369,7 +377,7 @@
                     text: "Sent a file:",
                     fileUrl: url,
                     fileName: file.name,
-                    createdAt: new Date()
+                    createdAt: serverTimestamp()
                 });
             } catch (err) {
                 console.error("Upload error:", err);
