@@ -1,0 +1,1382 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>UniX - Course Session</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="../../css/theme.css">
+  <link rel="stylesheet" href="../../css/navbar.css">
+  <style>
+    .tutoring-session-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      color: var(--color-text);
+      font-family: 'Inter', sans-serif;
+      padding-bottom: 4rem;
+    }
+
+    .session-layout {
+      display: grid;
+      grid-template-columns: 6fr 4fr;
+      gap: 2.5rem;
+      align-items: start;
+    }
+
+    .course-image-container {
+      width: 100%;
+      height: 260px;
+      border-radius: var(--radius-lg, 20px);
+      overflow: hidden;
+      margin-bottom: 2rem;
+      background: linear-gradient(135deg, #10b981, #0ea5e9);
+      box-shadow: var(--shadow-sm);
+      display: flex;
+    }
+
+    .course-hero-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: none;
+    }
+
+    @media (max-width: 968px) {
+      .session-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Main Content Styling */
+    .session-header-card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg, 20px);
+      padding: 3rem;
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 2rem;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .status-badge {
+      display: inline-block;
+      background: rgba(16, 185, 129, 0.1);
+      color: #10b981;
+      border: 1px solid rgba(16, 185, 129, 0.2);
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 0.4rem 1rem;
+      border-radius: 2rem;
+      letter-spacing: 0.05em;
+      margin-bottom: 1.25rem;
+    }
+
+    .session-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .session-badges .status-badge {
+      margin-bottom: 0;
+    }
+
+    .status-badge.ongoing {
+      background: rgba(245, 158, 11, 0.1);
+      color: #f59e0b;
+      border-color: rgba(245, 158, 11, 0.2);
+    }
+
+    .status-badge.completed {
+      background: rgba(99, 102, 241, 0.1);
+      color: #6366f1;
+      border-color: rgba(99, 102, 241, 0.2);
+    }
+
+    .course-cert-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      background: rgba(14, 165, 233, 0.12);
+      color: #0284c7;
+      border: 1px solid rgba(14, 165, 233, 0.22);
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 0.4rem 1rem;
+      border-radius: 2rem;
+      letter-spacing: 0.03em;
+    }
+
+    .course-cert-badge[hidden] {
+      display: none !important;
+    }
+
+    .session-title {
+      font-size: 2.35rem;
+      font-weight: 800;
+      color: var(--color-text);
+      margin-bottom: 0.9rem;
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+      max-width: 760px;
+    }
+
+    .session-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      align-items: center;
+      padding-top: 1.75rem;
+      border-top: 1px solid var(--color-border);
+    }
+
+    .meta-item {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.85rem 1rem;
+      border-radius: var(--radius-md, 14px);
+      border: 1px solid var(--color-border);
+      background: rgba(var(--color-primary-rgb), 0.04);
+      font-size: 0.98rem;
+      color: var(--color-text-muted);
+      font-weight: 600;
+    }
+
+    .meta-item i {
+      color: var(--color-primary);
+      font-size: 1.1rem;
+    }
+
+    .session-short-desc {
+      font-size: 1rem;
+      color: var(--color-text-muted);
+      margin: 0 0 1.6rem;
+      line-height: 1.7;
+      max-width: 760px;
+    }
+
+    .hero-price {
+      font-size: 2.15rem;
+      font-weight: 800;
+      color: var(--color-primary);
+      margin-top: 1.35rem;
+      padding-top: 1.35rem;
+      border-top: 1px dashed var(--color-border);
+      visibility: hidden;
+    }
+
+    .hero-price.is-free {
+      color: #047857;
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.12), rgba(5, 150, 105, 0.04));
+      border: 1px solid rgba(16, 185, 129, 0.18);
+      border-top-style: solid;
+      border-radius: 18px;
+      padding: 1.1rem 1.2rem;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5);
+    }
+
+    .hero-price::before {
+      content: "Course Fee";
+      display: block;
+      margin-bottom: 0.45rem;
+      color: var(--color-text-muted);
+      font-size: 0.82rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .hero-price.is-free::before {
+      content: "Free Course";
+      color: #047857;
+    }
+
+    .session-rating-overview {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.6rem;
+      padding: 1rem 1.15rem;
+      border-radius: var(--radius-md, 14px);
+      border: 1px solid rgba(245, 158, 11, 0.22);
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(251, 191, 36, 0.06));
+    }
+
+    .session-rating-copy {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      min-width: 0;
+    }
+
+    .session-rating-value {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: var(--color-text);
+    }
+
+    .session-rating-meta {
+      font-size: 0.92rem;
+      color: var(--color-text-muted);
+      line-height: 1.5;
+    }
+
+    .session-section {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg, 20px);
+      padding: 2.5rem;
+      margin-bottom: 2rem;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .section-title {
+      font-size: 1.32rem;
+      font-weight: 700;
+      color: var(--color-text);
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .section-title i {
+      color: var(--color-primary-light);
+    }
+
+    .reviews-header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .reviews-header .section-title {
+      margin-bottom: 0;
+    }
+
+    .reviews-summary-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      padding: 0.6rem 0.95rem;
+      border-radius: 999px;
+      border: 1px solid rgba(245, 158, 11, 0.2);
+      background: rgba(245, 158, 11, 0.08);
+      color: #b45309;
+      font-size: 0.86rem;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .review-scoreboard {
+      display: grid;
+      grid-template-columns: minmax(220px, 0.9fr) minmax(1px, 1px) minmax(260px, 1.1fr);
+      gap: 2rem;
+      align-items: center;
+      padding: 1.5rem 0 1.75rem;
+      border-top: 1px solid var(--color-border);
+      border-bottom: 1px solid var(--color-border);
+      margin-bottom: 1.75rem;
+    }
+
+    .review-score-main {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.55rem;
+    }
+
+    .review-score-number {
+      font-size: clamp(2.1rem, 4vw, 3.25rem);
+      line-height: 1;
+      font-weight: 800;
+      color: var(--color-text);
+      letter-spacing: -0.03em;
+    }
+
+    .review-score-copy {
+      font-size: 0.96rem;
+      color: var(--color-text-muted);
+      line-height: 1.55;
+      max-width: 250px;
+    }
+
+    .review-score-divider {
+      width: 1px;
+      height: 100%;
+      min-height: 112px;
+      background: var(--color-border);
+      justify-self: center;
+    }
+
+    .review-breakdown {
+      display: grid;
+      gap: 0.8rem;
+    }
+
+    .review-breakdown-row {
+      display: grid;
+      grid-template-columns: auto minmax(120px, 1fr) auto;
+      align-items: center;
+      gap: 0.8rem;
+      font-size: 0.94rem;
+      color: var(--color-text);
+    }
+
+    .review-breakdown-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      min-width: 2.5rem;
+      font-weight: 700;
+    }
+
+    .review-breakdown-label i {
+      color: #f59e0b;
+      font-size: 0.85rem;
+    }
+
+    .review-breakdown-track {
+      width: 100%;
+      height: 8px;
+      border-radius: 999px;
+      background: #e5e7eb;
+      overflow: hidden;
+    }
+
+    .review-breakdown-fill {
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, #16a34a, #22c55e);
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+
+    .review-breakdown-count {
+      min-width: 1.5rem;
+      text-align: right;
+      color: var(--color-text-muted);
+      font-weight: 600;
+    }
+
+    .reviews-sort-shell {
+      display: grid;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .reviews-sort-title {
+      margin: 0;
+      font-size: 1.45rem;
+      color: var(--color-text);
+    }
+
+    .reviews-sort-controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+
+    .review-sort-chip {
+      appearance: none;
+      border: 1px solid var(--color-border);
+      background: var(--color-surface);
+      color: var(--color-text);
+      border-radius: 999px;
+      padding: 0.7rem 1.15rem;
+      font: inherit;
+      font-weight: 600;
+      cursor: pointer;
+      transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+    }
+
+    .review-sort-chip:hover {
+      transform: translateY(-1px);
+      border-color: rgba(var(--color-primary-rgb), 0.28);
+      background: rgba(var(--color-primary-rgb), 0.05);
+    }
+
+    .review-sort-chip.is-active {
+      border-color: rgba(59, 130, 246, 0.4);
+      background: rgba(59, 130, 246, 0.1);
+      color: #2563eb;
+      box-shadow: inset 0 0 0 1px rgba(59, 130, 246, 0.14);
+    }
+
+    .section-text {
+      font-size: 1rem;
+      line-height: 1.7;
+      color: var(--color-text-muted);
+      white-space: pre-wrap;
+    }
+
+    .outcomes-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+    }
+
+    @media (min-width: 650px) {
+      .outcomes-list {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    .outcomes-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      font-size: 1.05rem;
+      color: var(--color-text);
+      line-height: 1.5;
+    }
+
+    .outcomes-list li i {
+      color: #10b981;
+      margin-top: 0.3rem;
+      font-size: 1rem;
+    }
+
+    /* Sidebar Context */
+    .session-sidebar {
+      position: sticky;
+      top: 6rem;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Action Card UI Integration */
+    .action-card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg, 20px);
+      padding: 2.5rem;
+      box-shadow: var(--shadow-md);
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* UI Logic States containers */
+    .action-state {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+
+
+    .action-desc {
+      font-size: 0.94rem;
+      color: var(--color-text-muted);
+      margin-bottom: 1rem;
+      line-height: 1.5;
+    }
+
+    /* Buttons */
+    .btn-primary-full {
+      width: 100%;
+      background: var(--color-primary);
+      color: #ffffff;
+      border: none;
+      padding: 0.95rem 1rem;
+      border-radius: var(--radius-md, 12px);
+      font-weight: 600;
+      font-size: 0.92rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .btn-primary-full:hover {
+      background: var(--color-primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(var(--color-primary-rgb), 0.3);
+    }
+
+    .btn-secondary-full {
+      width: 100%;
+      background: var(--color-bg);
+      color: var(--color-text);
+      border: 1px solid var(--color-border);
+      padding: 0.95rem 1rem;
+      border-radius: var(--radius-md, 12px);
+      font-weight: 600;
+      font-size: 0.92rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .btn-secondary-full:hover {
+      background: var(--color-border);
+    }
+
+    .btn-disabled-full {
+      width: 100%;
+      background: var(--color-bg);
+      color: var(--color-text-muted);
+      border: 1px dashed var(--color-border);
+      padding: 0.95rem 1rem;
+      border-radius: var(--radius-md, 12px);
+      font-weight: 600;
+      font-size: 0.92rem;
+      cursor: not-allowed;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0.7;
+    }
+
+    /* States Stylizations */
+    .status-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+
+    .status-icon.pending {
+      color: #f59e0b;
+    }
+
+    .status-icon.approved {
+      color: #10b981;
+    }
+
+    .status-icon.completed {
+      color: #6366f1;
+    }
+
+    .state-title {
+      font-size: 1.32rem;
+      font-weight: 700;
+      color: var(--color-text);
+      text-align: center;
+      margin-bottom: 0.5rem;
+    }
+
+    .action-state.centered {
+      align-items: center;
+      text-align: center;
+    }
+
+    .attendance-box {
+      width: 100%;
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md, 12px);
+      padding: 1.5rem;
+      margin: 1rem 0;
+      text-align: left;
+    }
+
+    .attendance-info {
+      display: flex;
+      justify-content: space-between;
+      font-size: 1rem;
+      color: var(--color-text);
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 10px;
+      background: var(--color-border);
+      border-radius: 5px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: #10b981;
+      border-radius: 5px;
+      transition: width 0.3s ease;
+    }
+
+    .star-rating {
+      --rating-fill: 0%;
+      position: relative;
+      display: inline-flex;
+      color: #d1d5db;
+      line-height: 1;
+      flex-shrink: 0;
+    }
+
+    .star-rating-base,
+    .star-rating-fill {
+      display: inline-flex;
+      gap: 0.2rem;
+    }
+
+    .star-rating-fill {
+      position: absolute;
+      inset: 0 auto 0 0;
+      width: var(--rating-fill);
+      overflow: hidden;
+      color: #f59e0b;
+      white-space: nowrap;
+    }
+
+    .star-rating.large i {
+      font-size: 1.12rem;
+    }
+
+    .star-rating.small i {
+      font-size: 0.92rem;
+    }
+
+    .review-form-card {
+      margin-bottom: 1.5rem;
+      padding: 1.5rem;
+      border-radius: var(--radius-md, 16px);
+      border: 1px solid var(--color-border);
+      background: var(--color-bg);
+    }
+
+    .review-form-card[hidden] {
+      display: none !important;
+    }
+
+    .review-form-head {
+      margin-bottom: 1rem;
+    }
+
+    .review-form-head h3 {
+      margin: 0 0 0.35rem;
+      font-size: 1.08rem;
+      color: var(--color-text);
+    }
+
+    .review-form-head p {
+      margin: 0;
+      font-size: 0.92rem;
+      color: var(--color-text-muted);
+      line-height: 1.55;
+    }
+
+    .review-star-input {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.65rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .review-star-btn {
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      border: 1px solid var(--color-border);
+      background: var(--color-surface);
+      color: #cbd5e1;
+      cursor: pointer;
+      transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.05rem;
+    }
+
+    .review-star-btn:hover,
+    .review-star-btn.is-selected {
+      color: #f59e0b;
+      border-color: rgba(245, 158, 11, 0.28);
+      background: rgba(245, 158, 11, 0.1);
+      transform: translateY(-1px);
+    }
+
+    .review-rating-caption {
+      margin: 0 0 1.1rem;
+      min-height: 1.2rem;
+      font-size: 0.92rem;
+      color: var(--color-text-muted);
+    }
+
+    .review-label {
+      display: block;
+      margin-bottom: 0.65rem;
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: var(--color-text);
+    }
+
+    .review-textarea {
+      width: 100%;
+      min-height: 130px;
+      resize: vertical;
+      padding: 1rem 1.05rem;
+      border-radius: var(--radius-md, 14px);
+      border: 1px solid var(--color-border);
+      background: var(--color-surface);
+      color: var(--color-text);
+      font: inherit;
+      line-height: 1.6;
+    }
+
+    .review-textarea:focus {
+      outline: none;
+      border-color: rgba(var(--color-primary-rgb), 0.45);
+      box-shadow: 0 0 0 4px rgba(var(--color-primary-rgb), 0.12);
+    }
+
+    .review-form-footer {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .review-form-note {
+      font-size: 0.88rem;
+      color: var(--color-text-muted);
+      line-height: 1.5;
+    }
+
+    .review-submit-btn {
+      width: auto;
+      min-width: 180px;
+    }
+
+    .review-notice {
+      margin-bottom: 1.5rem;
+      padding: 1rem 1.15rem;
+      border-radius: var(--radius-md, 16px);
+      border: 1px dashed var(--color-border);
+      background: rgba(var(--color-primary-rgb), 0.05);
+      color: var(--color-text-muted);
+      line-height: 1.6;
+    }
+
+    .review-notice.success {
+      border-style: solid;
+      border-color: rgba(16, 185, 129, 0.24);
+      background: rgba(16, 185, 129, 0.1);
+      color: #047857;
+    }
+
+    .review-notice[hidden] {
+      display: none !important;
+    }
+
+    .reviews-list {
+      display: grid;
+      gap: 1.1rem;
+    }
+
+    .review-card {
+      padding: 1.5rem;
+      border-radius: var(--radius-lg, 18px);
+      border: 1px solid rgba(15, 23, 42, 0.08);
+      background: var(--color-surface);
+      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.05);
+    }
+
+    .review-card.is-own {
+      border-color: rgba(var(--color-primary-rgb), 0.28);
+      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.05), inset 0 0 0 1px rgba(var(--color-primary-rgb), 0.08);
+    }
+
+    .review-card-top {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 1rem;
+      margin-bottom: 0.95rem;
+    }
+
+    .review-card-header {
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+      min-width: 0;
+    }
+
+    .review-rating-line {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.7rem;
+    }
+
+    .review-rating-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      padding: 0.4rem 0.65rem;
+      border-radius: 10px;
+      background: #16a34a;
+      color: #fff;
+      font-size: 0.9rem;
+      font-weight: 800;
+      line-height: 1;
+    }
+
+    .review-rating-badge i {
+      font-size: 0.74rem;
+    }
+
+    .review-card-title {
+      margin: 0;
+      font-size: 1.05rem;
+      line-height: 1.4;
+      color: var(--color-text);
+    }
+
+    .review-card-date {
+      font-size: 0.88rem;
+      color: var(--color-text-muted);
+    }
+
+    .review-comment {
+      margin: 0;
+      font-size: 0.96rem;
+      color: var(--color-text);
+      line-height: 1.75;
+      white-space: pre-wrap;
+    }
+
+    .review-card-footer {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.85rem 1rem;
+      margin-top: 1.15rem;
+      padding-top: 1rem;
+      border-top: 1px solid rgba(15, 23, 42, 0.08);
+    }
+
+    .review-card-reviewer {
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+
+    .review-card-reviewer strong {
+      font-size: 0.98rem;
+      color: var(--color-text);
+    }
+
+    .review-card-reviewer span {
+      font-size: 0.86rem;
+      color: var(--color-text-muted);
+    }
+
+    .review-card-verified {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      font-size: 0.88rem;
+      color: var(--color-text-muted);
+    }
+
+    .review-card-verified i {
+      color: #16a34a;
+    }
+
+    .review-empty-card {
+      padding: 1.35rem;
+      border-radius: var(--radius-md, 16px);
+      border: 1px dashed var(--color-border);
+      background: var(--color-bg);
+      text-align: center;
+      color: var(--color-text-muted);
+      line-height: 1.6;
+    }
+
+    @media (max-width: 640px) {
+      .session-rating-overview {
+        align-items: flex-start;
+      }
+
+      .review-scoreboard {
+        grid-template-columns: 1fr;
+        gap: 1.35rem;
+      }
+
+      .review-score-divider {
+        width: 100%;
+        height: 1px;
+        min-height: 1px;
+      }
+
+      .review-form-footer {
+        align-items: stretch;
+      }
+
+      .review-submit-btn {
+        width: 100%;
+      }
+
+      .review-breakdown-row {
+        grid-template-columns: auto minmax(90px, 1fr) auto;
+      }
+    }
+
+    /* Modal Styles */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(4px);
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .modal-overlay.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .modal-content {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg, 20px);
+      width: 90%;
+      max-width: 480px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+      transform: translateY(20px);
+      transition: transform 0.3s ease;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .modal-overlay.active .modal-content {
+      transform: translateY(0);
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.5rem 2rem;
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .modal-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--color-text);
+      margin: 0;
+    }
+
+    .modal-close {
+      background: transparent;
+      border: none;
+      color: var(--color-text-muted);
+      font-size: 1.25rem;
+      cursor: pointer;
+      transition: color 0.2s ease;
+    }
+
+    .modal-close:hover {
+      color: #ef4444;
+    }
+
+    .modal-body {
+      padding: 2rem;
+      overflow-y: auto;
+      max-height: 75vh;
+    }
+
+    .modal-desc {
+      font-size: 0.9rem;
+      color: var(--color-text-muted);
+      line-height: 1.5;
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+
+    .qr-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: var(--color-bg);
+      padding: 1.5rem;
+      border-radius: var(--radius-md, 12px);
+      border: 1px dashed var(--color-border);
+      margin-bottom: 2rem;
+    }
+
+    .qr-image {
+      width: 180px;
+      height: 180px;
+      object-fit: cover;
+      background: #fff;
+      padding: 0.5rem;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+    }
+
+    .qr-label {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--color-text);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .upload-box {
+      border: 2px dashed var(--color-border);
+      border-radius: var(--radius-lg, 16px);
+      padding: 1.5rem;
+      text-align: center;
+      background: var(--color-bg);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+    }
+
+    .upload-box:hover {
+      border-color: var(--color-primary);
+      background: var(--color-surface);
+    }
+
+    .upload-icon {
+      font-size: 2.25rem;
+      margin-bottom: 0.25rem;
+      opacity: 0.9;
+    }
+
+    .upload-text {
+      font-size: 0.94rem;
+      color: var(--color-text);
+      font-weight: 500;
+    }
+
+    .upload-subtext {
+      font-size: 0.85rem;
+      color: var(--color-text-muted);
+    }
+
+    .form-group-label {
+      display: block;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--color-text);
+      margin-bottom: 0.75rem;
+      margin-left: 0.25rem;
+    }
+  </style>
+</head>
+
+<body class="in-pages">
+  <div class="layout">
+    <div id="navbar-container"></div>
+
+    <div class="page-content">
+      <div class="tutoring-session-container">
+
+        <div class="session-layout">
+
+          <!-- Layout Left: Core Documentation -->
+          <div class="session-main">
+
+            <!-- 1. Course Header Card -->
+            <div class="session-header-card">
+              <div class="session-badges">
+                <span class="status-badge" id="displayStatusBadge">LOADING</span>
+                <span class="course-cert-badge" id="displayCertifiedBadge" hidden><i class="fa-solid fa-award"></i> Certified Course</span>
+              </div>
+
+              <h1 class="session-title" id="displayTitle">Loading course...</h1>
+              <p class="session-short-desc" id="displayShortDesc" hidden></p>
+
+              <div class="session-rating-overview" id="courseRatingOverview">
+                <div id="courseAverageRatingStars"></div>
+                <div class="session-rating-copy">
+                  <strong class="session-rating-value" id="courseAverageRatingValue">No ratings yet</strong>
+                  <span class="session-rating-meta" id="courseAverageRatingMeta">Be the first learner to review this course.</span>
+                </div>
+              </div>
+
+              <div class="session-meta">
+                <span class="meta-item"><i class="fa-solid fa-chalkboard-user"></i> <span
+                    id="displayTutorId">Loading tutor...</span></span>
+                <span class="meta-item"><i class="fa-solid fa-users"></i> <span id="displaySeats">-- / --</span> Seats
+                  Filled</span>
+                <span class="meta-item"><i class="fa-regular fa-calendar"></i> <span id="displayStartDate">Start date not updated</span></span>
+              </div>
+
+              <div class="hero-price" id="displayPrice">--</div>
+            </div>
+
+            <!-- 2. Course Description -->
+            <div class="session-section">
+              <h2 class="section-title"><i class="fa-solid fa-file-alt"></i> About This Course</h2>
+              <p class="section-text" id="displayFullDesc"></p>
+            </div>
+
+            <!-- 3. Outcomes -->
+            <div class="session-section">
+              <h2 class="section-title"><i class="fa-solid fa-bullseye"></i> What You'll Learn</h2>
+              <ul class="outcomes-list" id="displayOutcomes"></ul>
+            </div>
+
+            <div class="session-section">
+              <div class="reviews-header">
+                <h2 class="section-title"><i class="fa-solid fa-star"></i> Ratings & Reviews</h2>
+                <span class="reviews-summary-badge" id="reviewsSummaryBadge"><i class="fa-solid fa-star-half-stroke"></i> No ratings yet</span>
+              </div>
+
+              <div class="review-scoreboard">
+                <div class="review-score-main">
+                  <strong class="review-score-number" id="reviewSummaryAverage">0.0</strong>
+                  <div id="reviewSummaryStars"></div>
+                  <p class="review-score-copy" id="reviewSummaryCountText">0 ratings and 0 reviews</p>
+                </div>
+
+                <div class="review-score-divider" aria-hidden="true"></div>
+
+                <div class="review-breakdown" id="reviewBreakdownList"></div>
+              </div>
+
+              <div class="reviews-sort-shell">
+                <h3 class="reviews-sort-title">User reviews sorted by</h3>
+                <div class="reviews-sort-controls" id="reviewSortControls">
+                  <button type="button" class="review-sort-chip is-active" data-review-sort="helpful">Most Helpful</button>
+                  <button type="button" class="review-sort-chip" data-review-sort="latest">Latest</button>
+                  <button type="button" class="review-sort-chip" data-review-sort="positive">Positive</button>
+                  <button type="button" class="review-sort-chip" data-review-sort="negative">Negative</button>
+                </div>
+              </div>
+
+              <form class="review-form-card" id="reviewFormCard" hidden>
+                <div class="review-form-head">
+                  <h3>Leave your review</h3>
+                  <p>Share a quick rating and comment after your booking has been approved. One review is allowed per student for each course.</p>
+                </div>
+
+                <div class="review-star-input" id="reviewStarInput" aria-label="Choose a rating">
+                  <button type="button" class="review-star-btn" data-review-star="1" aria-label="Rate 1 out of 5"><i class="fa-solid fa-star"></i></button>
+                  <button type="button" class="review-star-btn" data-review-star="2" aria-label="Rate 2 out of 5"><i class="fa-solid fa-star"></i></button>
+                  <button type="button" class="review-star-btn" data-review-star="3" aria-label="Rate 3 out of 5"><i class="fa-solid fa-star"></i></button>
+                  <button type="button" class="review-star-btn" data-review-star="4" aria-label="Rate 4 out of 5"><i class="fa-solid fa-star"></i></button>
+                  <button type="button" class="review-star-btn" data-review-star="5" aria-label="Rate 5 out of 5"><i class="fa-solid fa-star"></i></button>
+                </div>
+
+                <input type="hidden" id="reviewRatingValue" value="">
+                <p class="review-rating-caption" id="reviewRatingCaption">Select a rating to continue.</p>
+
+                <label class="review-label" for="reviewComment">Comment</label>
+                <textarea id="reviewComment" class="review-textarea" maxlength="600" placeholder="What did you like about the course? What should future students know?"></textarea>
+
+                <div class="review-form-footer">
+                  <span class="review-form-note">Reviews are visible on this course page and update the average rating instantly.</span>
+                  <button type="submit" class="btn-primary-full review-submit-btn" id="submitReviewBtn"><i class="fa-solid fa-paper-plane"></i> Submit Review</button>
+                </div>
+              </form>
+
+              <div class="review-notice" id="reviewGateMessage" hidden></div>
+              <div class="reviews-list" id="reviewsList"></div>
+            </div>
+
+          </div>
+
+          <!-- Layout Right: Actions -->
+          <div class="session-sidebar">
+
+            <div class="course-image-container">
+              <img id="displayImage" class="course-hero-img" src="" alt="Course Cover">
+            </div>
+
+            <!-- 4. Action Card -->
+            <div class="action-card">
+
+              <!-- STATE 1: Not Booked -->
+              <div class="action-state" id="stateNotBooked">
+                <p class="action-desc" id="actionDesc">Secure your seat before the course closes.</p>
+                <button class="btn-primary-full" id="openModalBtn"><i class="fa-solid fa-bolt"></i> Book Seat</button>
+                <button class="btn-secondary-full" id="chatTutorBtn"><i class="fa-solid fa-comment-dots"></i> Chat with Tutor</button>
+              </div>
+
+              <!-- STATE 2: Pending -->
+              <div class="action-state centered" id="statePending" style="display: none;">
+                <div class="status-icon pending"><i class="fa-solid fa-hourglass-half"></i></div>
+                <h4 class="state-title">Request Pending</h4>
+                <p class="action-desc">Waiting for tutor approval. You will be notified shortly once reviewed.</p>
+                <button class="btn-disabled-full" disabled>Request Sent</button>
+              </div>
+
+              <!-- STATE 3: Approved / Enrolled -->
+              <div class="action-state centered" id="stateApproved" style="display: none;">
+                <div class="status-icon approved"><i class="fa-solid fa-circle-check"></i></div>
+                <h4 class="state-title">You are enrolled</h4>
+
+                <div class="attendance-box">
+                  <div class="attendance-info">
+                    <span>Attendance Progress</span>
+                    <strong id="approvedAttendanceValue">--</strong>
+                  </div>
+                  <div class="progress-bar">
+                    <div class="progress-fill" id="approvedAttendanceProgress" style="width: 0%;"></div>
+                  </div>
+                </div>
+
+                <p class="action-desc">The tutor has been pinged. Coordinate logistics in chat.</p>
+                <button class="btn-primary-full" id="approvedChatTutorBtn"><i class="fa-solid fa-envelope"></i> Contact Tutor</button>
+              </div>
+
+              <!-- STATE 4: Completed -->
+              <div class="action-state centered" id="stateCompleted" style="display: none;">
+                <div class="status-icon completed"><i class="fa-solid fa-graduation-cap"></i></div>
+                <h4 class="state-title">Course Completed</h4>
+                <p class="action-desc">You have successfully finished this session module block.</p>
+                <button class="btn-secondary-full"><i class="fa-solid fa-star"></i> Leave a Review</button>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Booking Payment Modal -->
+  <div class="modal-overlay" id="paymentModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title" id="paymentModalTitle">Complete Your Booking</h3>
+        <button class="modal-close" id="closeModalBtn"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <div class="modal-body">
+        <p class="modal-desc" id="paymentModalDesc">Please scan the tutor's QR code to pay the course fee. Then, upload your payment
+          screenshot to verify enrollment.</p>
+
+        <div class="qr-container" id="paymentQrContainer">
+          <img src="" alt="Tutor QR Code" id="tutorQrImage"
+            class="qr-image" hidden />
+          <p class="qr-label" id="tutorQrLabel">Tutor QR code will appear when available.</p>
+        </div>
+
+        <div style="margin-bottom: 2rem;" id="paymentProofField">
+          <span class="form-group-label">Payment Proof <span style="color:#ef4444;">*</span></span>
+          <div class="upload-box" onclick="document.getElementById('proofUpload').click()">
+            <i class="fa-solid fa-file-invoice-dollar upload-icon" style="color: #10b981;"></i>
+            <div class="upload-text" id="proofUploadText">Click or drag to upload screenshot</div>
+            <div class="upload-subtext">PNG, JPG up to 5MB</div>
+            <input type="file" id="proofUpload" accept="image/png, image/jpeg" style="display: none;">
+          </div>
+        </div>
+
+        <button class="btn-primary-full" id="submitProofBtn">Submit Payment Proof</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="../../js/tutoring.js"></script>
+  <script type="module" src="../../js/nav-loader.js"></script>
+  <script>
+    // Pure UI functionality for Booking Modal Toggle
+    document.addEventListener("DOMContentLoaded", () => {
+      const modal = document.getElementById("paymentModal");
+      const openBtn = document.getElementById("openModalBtn");
+      const closeBtn = document.getElementById("closeModalBtn");
+      const uploadInput = document.getElementById("proofUpload");
+      const uploadText = document.getElementById("proofUploadText");
+
+      // Open Modal
+      if (openBtn) {
+        openBtn.addEventListener("click", () => {
+          if (openBtn.dataset.action === "manage" && openBtn.dataset.manageHref) {
+            window.location.href = openBtn.dataset.manageHref;
+            return;
+          }
+
+          if (openBtn.disabled) {
+            return;
+          }
+
+          modal.classList.add("active");
+        });
+      }
+
+      const chatTutorBtn = document.getElementById("chatTutorBtn");
+      if (chatTutorBtn) {
+        chatTutorBtn.addEventListener("click", () => {
+          const chatHref = chatTutorBtn.dataset.chatHref;
+          if (!chatHref || chatTutorBtn.disabled) {
+            return;
+          }
+
+          window.location.href = chatHref;
+        });
+      }
+
+      const approvedChatTutorBtn = document.getElementById("approvedChatTutorBtn");
+      if (approvedChatTutorBtn) {
+        approvedChatTutorBtn.addEventListener("click", () => {
+          const chatHref = approvedChatTutorBtn.dataset.chatHref;
+          if (!chatHref || approvedChatTutorBtn.disabled) {
+            return;
+          }
+
+          window.location.href = chatHref;
+        });
+      }
+
+      // Close Modal
+      if (closeBtn) {
+        closeBtn.addEventListener("click", () => {
+          modal.classList.remove("active");
+        });
+      }
+
+      // Close Modal on Outside Overlay click
+      window.addEventListener("click", (e) => {
+        if (e.target === modal) {
+          modal.classList.remove("active");
+        }
+      });
+
+      // Handle custom file upload display
+      if (uploadInput && uploadText) {
+        uploadInput.addEventListener("change", (e) => {
+          if (e.target.files && e.target.files.length > 0) {
+            uploadText.textContent = e.target.files[0].name;
+            uploadText.style.color = "var(--color-primary)";
+          } else {
+            uploadText.textContent = "Click or drag to upload screenshot";
+            uploadText.style.color = "";
+          }
+        });
+      }
+    });
+  </script>
+</body>
+
+</html>

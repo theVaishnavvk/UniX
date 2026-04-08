@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>UniX - Auth</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/theme.css">
+  <link rel="stylesheet" href="css/auth.css">
+</head>
+
+<body class="auth-page">
+
+  <div class="auth-container">
+    <div class="auth-card">
+
+      <div class="auth-header">
+        <div class="auth-logo" onclick="location.href='index.html'" style="cursor:pointer"></div>
+        <h2 id="formTitle">Welcome Back</h2>
+        <p class="auth-subtext">Access your campus dashboard</p>
+      </div>
+
+      <div id="message"></div>
+
+      <div class="auth-forms">
+
+        <!-- LOGIN -->
+        <form id="loginForm" class="auth-form active">
+          <div class="form-group">
+            <label>Email</label>
+            <input type="email" id="loginEmail" required>
+          </div>
+
+          <div class="form-group">
+            <label>Password</label>
+            <input type="password" id="loginPassword" required>
+          </div>
+
+          <button class="primary-btn">Login</button>
+
+          <p class="switch-text">
+            Don't have an account?
+            <span onclick="switchForm('signup')">Sign up</span>
+          </p>
+        </form>
+
+        <!-- SIGNUP -->
+        <form id="signupForm" class="auth-form">
+
+          <div class="form-group">
+            <label>Name</label>
+            <input type="text" id="name" required>
+          </div>
+
+          <div class="form-group">
+            <label>Email</label>
+            <input type="email" id="signupEmail" required>
+          </div>
+
+          <div class="form-group">
+            <label>Your Role</label>
+            <select id="role" required>
+              <option value="">Select Role</option>
+              <option value="Student">Student</option>
+              <option value="Faculty">Faculty</option>
+              <option value="Admin">Admin</option>
+            </select>
+          </div>
+
+          <div id="adminField" class="form-group" style="display:none;">
+            <label>Admin Access Code</label>
+            <input type="password" id="adminCode" placeholder="Enter secret code">
+          </div>
+
+          <div id="dynamicField" class="form-group" style="display:none;">
+            <label>Register Number</label>
+            <input type="text" id="regNo">
+          </div>
+
+          <div class="form-group">
+            <label>Password</label>
+            <input type="password" id="signupPassword" required>
+          </div>
+
+          <div class="form-group">
+            <label>Confirm Password</label>
+            <input type="password" id="confirmPassword" required>
+          </div>
+
+          <button class="primary-btn">Create Account</button>
+
+          <p class="switch-text">
+            Already have an account?
+            <span onclick="switchForm('login')">Login</span>
+          </p>
+
+        </form>
+
+      </div>
+
+    </div>
+  </div>
+  <script type="module">
+
+    import { auth, db, checkAdmin } from "./js/firebase.js";
+    import {
+      signInWithEmailAndPassword,
+      createUserWithEmailAndPassword,
+      sendEmailVerification,
+      onAuthStateChanged,
+      signOut,
+      sendPasswordResetEmail
+    } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
+
+    import {
+      doc,
+      setDoc,
+      serverTimestamp,
+      getDoc
+    } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
+
+    const messageEl = document.getElementById("message");
+    const roleSelect = document.getElementById("role");
+    const dynamicField = document.getElementById("dynamicField");
+    const adminField = document.getElementById("adminField");
+
+    function showMessage(text, type = "error") {
+      messageEl.innerText = text;
+      messageEl.className = text ? ("is-visible " + (type === "success" ? "message-success" : "message-error")) : "";
+    }
+
+    roleSelect.addEventListener("change", function () {
+      dynamicField.style.display = this.value === "Student" ? "block" : "none";
+      adminField.style.display = this.value === "Admin" ? "block" : "none";
+    });
+
+
+    // SWITCH UI
+    window.switchForm = function (type) {
+      const login = document.getElementById("loginForm");
+      const signup = document.getElementById("signupForm");
+      const title = document.getElementById("formTitle");
+      const subtext = document.querySelector(".auth-subtext");
+
+      if (type === "signup") {
+        login.classList.remove("active");
+        signup.classList.add("active");
+        title.innerText = "Create Account";
+        subtext.innerText = "Join your campus network";
+      } else {
+        signup.classList.remove("active");
+        login.classList.add("active");
+        title.innerText = "Welcome Back";
+        subtext.innerText = "Access your campus dashboard";
+      }
+    };
+
+    // Check for mode parameter on load
+    window.addEventListener("DOMContentLoaded", () => {
+      const params = new URLSearchParams(window.location.search);
+      const mode = params.get("mode");
+      if (mode === "signup") {
+        switchForm("signup");
+      }
+    });
+
+
+    // LOGIN
+    document.getElementById("loginForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      showMessage("");
+
+      const email = document.getElementById("loginEmail").value.trim();
+      const password = document.getElementById("loginPassword").value;
+
+      try {
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+
+        // Verification Check
+        if (!user.emailVerified) {
+          showMessage("Please verify your email to login. Check your inbox.");
+          await signOut(auth);
+          return;
+        }
+
+        // Check if Admin
+        const isAdmin = await checkAdmin(user, db);
+        if (isAdmin) {
+          window.location.href = "pages/admin.html";
+        } else {
+          window.location.href = "pages/dashboard.html";
+        }
+      } catch (error) {
+        showMessage("Login failed: " + (error.code === "auth/invalid-credential" ? "Invalid email or password" : error.message));
+      }
+    });
+
+
+    // SIGNUP
+    document.getElementById("signupForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      showMessage("");
+
+      const name = document.getElementById("name").value.trim();
+      const email = document.getElementById("signupEmail").value.trim();
+      const password = document.getElementById("signupPassword").value;
+      const confirmPassword = document.getElementById("confirmPassword").value;
+      const role = roleSelect.value;
+      const regNo = document.getElementById("regNo").value.trim();
+      const adminCode = document.getElementById("adminCode").value.trim();
+
+      if (role === "Admin" && adminCode !== "UNIXADMIN2026") {
+        showMessage("Invalid Admin Access Code.");
+        return;
+      }
+
+      if (password !== confirmPassword) {
+        showMessage("Passwords do not match.");
+        return;
+      }
+
+      if (password.length < 8) {
+        showMessage("Password must be at least 8 characters.");
+        return;
+      }
+
+      try {
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+
+        await setDoc(doc(db, "users", user.uid), {
+          name,
+          email,
+          role,
+          regNo: role === "Student" ? regNo : null,
+          points: 100,
+          createdAt: serverTimestamp()
+        });
+
+        await setDoc(doc(db, "publicUsers", user.uid), {
+          name,
+          points: 100,
+          online: false
+        });
+
+        await sendEmailVerification(user);
+        showMessage("Account created! Verify your email to login.", "success");
+        
+        await signOut(auth); // Sign out until verified
+        setTimeout(() => switchForm("login"), 4000);
+
+      } catch (error) {
+        showMessage("Registration failed: " + error.message);
+      }
+    });
+  </script>
+
+</body>
+
+</html>

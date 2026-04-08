@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>UniX - Create Course</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="../../css/theme.css">
+  <link rel="stylesheet" href="../../css/navbar.css">
+  <style>
+    .tutoring-create-container {
+      max-width: 800px; 
+      margin: 0 auto;
+      color: var(--color-text);
+      font-family: 'Inter', sans-serif;
+      padding-bottom: 4rem;
+    }
+
+    .tutoring-header {
+      margin-bottom: 2.5rem;
+    }
+
+    .page-eyebrow {
+      margin: 0 0 0.6rem;
+      color: var(--color-primary);
+      font-size: 0.85rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .discover-title {
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: var(--color-text);
+      margin-bottom: 0.25rem;
+      letter-spacing: -0.02em;
+    }
+
+    .discover-subtitle {
+      color: var(--color-text-muted);
+      font-size: 1rem;
+      font-weight: 400;
+    }
+
+    .form-card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg, 20px);
+      padding: 2.5rem;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .create-course-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .form-row {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .form-row .form-group {
+      flex: 1;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+
+    .form-group label {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--color-text);
+      margin-left: 0.15rem;
+    }
+
+    .required-asterisk {
+      color: #ef4444;
+    }
+
+    .required-red {
+      color: #ef4444;
+      font-weight: 500;
+      font-size: 0.85rem;
+      margin-left: 0.25rem;
+    }
+
+    .form-text {
+      font-size: 0.85rem;
+      color: var(--color-text-muted);
+      margin-top: 0.15rem;
+      margin-left: 0.15rem;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 0.875rem 1.15rem;
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md, 12px);
+      color: var(--color-text);
+      font-family: inherit;
+      font-size: 0.95rem;
+      transition: all 0.2s ease;
+      box-sizing: border-box;
+    }
+
+    .form-control:focus {
+      outline: none;
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 3px var(--color-primary-light);
+      background: var(--color-surface);
+    }
+
+    .form-control::placeholder {
+      color: var(--color-text-muted);
+      opacity: 0.7;
+    }
+
+    textarea.form-control {
+      resize: vertical;
+      min-height: 120px;
+    }
+
+    .certification-toggle {
+      margin-left: 0;
+      display: flex;
+      align-items: flex-start;
+      gap: 0.85rem;
+      padding: 1rem 1.1rem;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md, 12px);
+      background: linear-gradient(180deg, rgba(var(--color-primary-rgb), 0.05), rgba(255, 255, 255, 0));
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .certification-toggle:hover {
+      border-color: rgba(var(--color-primary-rgb), 0.28);
+      background: var(--color-surface);
+    }
+
+    .certification-toggle input {
+      width: 1.05rem;
+      height: 1.05rem;
+      margin-top: 0.2rem;
+      accent-color: var(--color-primary);
+      flex-shrink: 0;
+      cursor: pointer;
+    }
+
+    .certification-toggle-copy {
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+
+    .certification-toggle-title {
+      color: var(--color-text);
+      font-size: 0.98rem;
+      font-weight: 700;
+    }
+
+    .certification-toggle-text {
+      color: var(--color-text-muted);
+      font-size: 0.84rem;
+      line-height: 1.5;
+    }
+
+    .select-control {
+      appearance: none;
+      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231e293b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+      background-repeat: no-repeat;
+      background-position: right 1rem center;
+      background-size: 1em;
+      cursor: pointer;
+    }
+
+    html[data-theme="dark"] .select-control,
+    html[data-theme="galaxy"] .select-control {
+      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23f1f5f9' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    }
+
+    .course-assets-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1rem;
+    }
+
+    .media-upload-card {
+      display: flex;
+      flex-direction: column;
+      gap: 0.95rem;
+      padding: 1.25rem;
+      border-radius: var(--radius-lg, 20px);
+      border: 1px dashed rgba(148, 163, 184, 0.3);
+      background: rgba(148, 163, 184, 0.08);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .media-upload-card:hover {
+      border-color: rgba(var(--color-primary-rgb), 0.3);
+      background: rgba(148, 163, 184, 0.12);
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .media-upload-card.is-filled {
+      border-color: rgba(var(--color-primary-rgb), 0.26);
+      background: rgba(148, 163, 184, 0.1);
+    }
+
+    .media-upload-heading {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.65rem;
+      color: var(--color-text);
+      font-size: 1rem;
+      font-weight: 800;
+    }
+
+    .media-upload-heading i {
+      color: var(--color-text);
+      font-size: 0.98rem;
+    }
+
+    .media-preview-frame {
+      width: 100%;
+      min-height: 224px;
+      border-radius: var(--radius-lg, 18px);
+      border: 1px solid rgba(148, 163, 184, 0.24);
+      background: #ffffff;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .media-preview-image {
+      width: 100%;
+      height: 224px;
+      object-fit: contain;
+      display: block;
+      background: #ffffff;
+    }
+
+    .media-preview-image[hidden] {
+      display: none !important;
+    }
+
+    .media-preview-empty {
+      width: 100%;
+      min-height: 224px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.85rem;
+      padding: 1.25rem;
+      text-align: center;
+      color: #64748b;
+    }
+
+    .media-preview-empty[hidden] {
+      display: none !important;
+    }
+
+    .media-preview-empty i {
+      font-size: 2.15rem;
+      color: var(--color-primary);
+    }
+
+    .media-preview-title {
+      color: #64748b;
+      font-size: 0.95rem;
+      font-weight: 700;
+      line-height: 1.5;
+    }
+
+    .media-upload-meta {
+      color: var(--color-primary);
+      font-size: 0.92rem;
+      font-weight: 700;
+      line-height: 1.4;
+    }
+
+    .media-upload-field {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .media-upload-card.is-pending-removal {
+      border-color: rgba(239, 68, 68, 0.32);
+      background: rgba(239, 68, 68, 0.08);
+    }
+
+    .media-upload-actions {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .media-action-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      min-height: 42px;
+      padding: 0.72rem 1rem;
+      border-radius: var(--radius-md, 12px);
+      border: 1px solid var(--color-border);
+      background: var(--color-surface);
+      color: var(--color-text);
+      font: inherit;
+      font-size: 0.88rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .media-action-btn:hover:not(:disabled) {
+      border-color: rgba(var(--color-primary-rgb), 0.3);
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .media-action-btn.is-danger {
+      border: none;
+      background: #ef4444;
+      color: #ffffff;
+      box-shadow: none;
+    }
+
+    .media-action-btn.is-danger:hover:not(:disabled) {
+      border: none;
+      background: #dc2626;
+      color: #ffffff;
+      box-shadow: none;
+    }
+
+    .media-action-btn:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .form-helper {
+      margin: 0;
+      color: #64748b;
+      font-size: 0.82rem;
+      font-weight: 600;
+      line-height: 1.5;
+    }
+
+    /* Full width primary button */
+    .btn-create-full {
+      width: 100%;
+      background: var(--color-primary, #6366f1);
+      color: #ffffff;
+      border: none;
+      padding: 0.875rem;
+      border-radius: var(--radius-md, 12px);
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      margin-top: 0.75rem;
+      box-shadow: 0 4px 6px rgba(99, 102, 241, 0.2);
+    }
+
+    .btn-create-full:hover {
+      background: #4f46e5;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 14px rgba(99, 102, 241, 0.3);
+    }
+
+    @media (max-width: 768px) {
+      .form-row {
+        flex-direction: column;
+        gap: 1.75rem;
+      }
+      .form-card {
+        padding: 1.5rem;
+      }
+      .course-assets-grid {
+        grid-template-columns: 1fr;
+      }
+      .media-upload-card {
+        padding: 1rem;
+      }
+    }
+  </style>
+</head>
+<body class="in-pages">
+  <div class="layout">
+    <div id="navbar-container"></div>
+    
+    <div class="page-content">
+      <div class="tutoring-create-container">
+        
+        <!-- Header -->
+        <div class="tutoring-header">
+          <p class="page-eyebrow">Course Creator</p>
+          <h1 class="discover-title">Create Course</h1>
+          <p class="discover-subtitle">Share your knowledge with others</p>
+        </div>
+
+        <!-- Form Container -->
+        <div class="form-card">
+          <form id="createCourseForm" class="create-course-form">
+            
+            <div class="form-group">
+              <label for="title">Course Name <span class="required-asterisk">*</span></label>
+              <input type="text" id="title" class="form-control" placeholder="Enter course title" required />
+            </div>
+
+            <div class="form-group">
+              <label for="description">Description <span class="required-asterisk">*</span></label>
+              <textarea id="description" class="form-control" placeholder="Enter course description" rows="4" required></textarea>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="seats">Total Seats <span class="required-asterisk">*</span></label>
+                <input type="number" id="seats" class="form-control" min="1" placeholder="Enter total seats" required />
+              </div>
+              <div class="form-group">
+                <label for="price">Price <span class="required-asterisk">*</span></label>
+                <input type="number" id="price" step="0.01" class="form-control" min="0" placeholder="Enter course price" required />
+              </div>
+              <div class="form-group">
+                <label for="totalSessions">Total Sessions</label>
+                <input type="number" id="totalSessions" class="form-control" min="0" step="1" placeholder="Enter total sessions" />
+                <div class="form-text">Set `0` if you do not want a session target yet</div>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="startDate">Start Date</label>
+                <input type="date" id="startDate" class="form-control" />
+                <div class="form-text">Optional. Leave blank if the course start date is not fixed yet</div>
+              </div>
+              <div class="form-group">
+                <label for="courseStatus">Status <span class="required-asterisk">*</span></label>
+                <select id="courseStatus" class="form-control select-control" required>
+                  <option value="open">Open - Accepting Bookings</option>
+                  <option value="closed">Closed - Full</option>
+                  <option value="draft">Draft - Not Visible</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="certification-toggle" for="isCertified">
+                <input type="checkbox" id="isCertified" />
+                <span class="certification-toggle-copy">
+                  <span class="certification-toggle-title">Provide Certificate</span>
+                  <span class="certification-toggle-text">Optional. Mark this as a certified course so learners can see certificate availability.</span>
+                </span>
+              </label>
+            </div>
+
+            <div class="form-group">
+              <label class="certification-toggle" for="isFeatured">
+                <input type="checkbox" id="isFeatured" />
+                <span class="certification-toggle-copy">
+                  <span class="certification-toggle-title">Feature This Course</span>
+                  <span class="certification-toggle-text">Optional. Use sparingly to highlight selected courses near the top of the browse page.</span>
+                </span>
+              </label>
+            </div>
+
+            <div class="form-group">
+              <label for="courseOutcomes">Learning Outcomes (one per line)</label>
+              <textarea id="courseOutcomes" class="form-control" placeholder="Add one learning outcome per line" rows="4"></textarea>
+              <div class="form-text">Enter each outcome on a new line</div>
+            </div>
+
+
+
+            <div class="form-group">
+              <label>Course Assets</label>
+              <div class="course-assets-grid">
+                <div class="media-upload-field">
+                  <label id="qrCodeUploadBox" class="media-upload-card" for="qrCodeUpload">
+                    <span class="media-upload-heading"><i class="fa-solid fa-qrcode"></i> Payment QR Code</span>
+                    <div class="media-preview-frame">
+                      <img id="qrCodeUploadPreview" class="media-preview-image" src="" alt="Payment QR code preview" hidden>
+                      <div id="qrCodeUploadEmpty" class="media-preview-empty">
+                        <i class="fa-solid fa-qrcode"></i>
+                        <span class="media-preview-title">No QR code uploaded yet</span>
+                      </div>
+                    </div>
+                    <span class="media-upload-meta" id="qrCodeUploadText">Click to upload a payment QR code</span>
+                    <p class="form-helper">PNG or JPG. Add this when learners need to pay for the course.</p>
+                    <input type="file" id="qrCodeUpload" accept="image/png, image/jpeg" style="display: none;">
+                  </label>
+                  <div class="media-upload-actions">
+                    <button type="button" class="media-action-btn" id="clearQrCodeUploadBtn" disabled>
+                      <i class="fa-solid fa-xmark"></i>
+                      <span>Clear selected QR code</span>
+                    </button>
+                  </div>
+                </div>
+
+                <div class="media-upload-field">
+                  <label id="imageUploadBox" class="media-upload-card" for="imageUpload">
+                    <span class="media-upload-heading"><i class="fa-regular fa-image"></i> Course Image</span>
+                    <div class="media-preview-frame">
+                      <img id="imageUploadPreview" class="media-preview-image" src="" alt="Course image preview" hidden>
+                      <div id="imageUploadEmpty" class="media-preview-empty">
+                        <i class="fa-regular fa-image"></i>
+                        <span class="media-preview-title">No course image uploaded yet</span>
+                      </div>
+                    </div>
+                    <span class="media-upload-meta" id="imageUploadText">Click to upload a course image</span>
+                    <p class="form-helper">PNG or JPG. Optional. Shows on browse cards and the course detail page.</p>
+                    <input type="file" id="imageUpload" accept="image/png, image/jpeg" style="display: none;">
+                  </label>
+                  <div class="media-upload-actions">
+                    <button type="button" class="media-action-btn" id="clearImageUploadBtn" disabled>
+                      <i class="fa-solid fa-xmark"></i>
+                      <span>Clear selected image</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <button type="submit" class="btn-create-full">Create Course</button>
+
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="../../js/nav-loader.js"></script>
+  <script type="module" src="../../js/tutoring.js"></script>
+</body>
+</html>

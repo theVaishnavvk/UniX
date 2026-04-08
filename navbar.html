@@ -1,0 +1,72 @@
+<nav class="navbar glass">
+  <div class="nav-container">
+    <a href="dashboard.html" class="logo-box brand-lockup" data-link="dashboard" aria-label="UniX dashboard">
+      <span class="brand-logo-image" aria-hidden="true"></span>
+      <span class="brand-logo-word">UniX</span>
+    </a>
+    <button id="navToggle" class="nav-toggle" type="button" aria-expanded="false" aria-controls="navMenu" aria-label="Open navigation menu">
+      <i class="fa-solid fa-bars"></i>
+    </button>
+    <div class="nav-menu" id="navMenu">
+      <div class="nav-links">
+        <a href="dashboard.html" data-link="dashboard">
+          <i class="fa-solid fa-house"></i>
+          <span>Dashboard</span>
+        </a>
+        <a href="skills.html" data-link="skills">
+          <i class="fa-solid fa-user-group"></i>
+          <span>Skills</span>
+        </a>
+        <a href="marketplace.html" data-link="marketplace">
+          <i class="fa-solid fa-shop"></i>
+          <span>Marketplace</span>
+        </a>
+        <a href="lostfound.html" data-link="lostfound">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <span>Lost & Found</span>
+        </a>
+
+        <!-- Tutoring Dropdown -->
+        <div class="nav-dropdown">
+          <button class="nav-dropdown-btn">
+            <i class="fa-solid fa-chalkboard-user"></i>
+            <span>Tutoring</span>
+            <i class="fa-solid fa-chevron-down nav-dropdown-arrow"></i>
+          </button>
+          <div class="nav-dropdown-menu">
+            <a href="tutoring/browse.html"><i class="fa-solid fa-book-open"></i><span>Browse Courses</span></a>
+            <a href="tutoring/my-learning.html"><i class="fa-solid fa-laptop-code"></i><span>My Learning</span></a>
+            <a href="tutoring/create.html"><i class="fa-solid fa-plus-circle"></i><span>Create Course</span></a>
+            <a href="tutoring/manage.html"><i class="fa-solid fa-list-check"></i><span>Manage Courses</span></a>
+          </div>
+        </div>
+
+        <a href="chat.html" data-link="chat">
+          <i class="fa-solid fa-message"></i>
+          <span>Chat</span>
+        </a>
+        <a href="admin.html" data-link="admin" id="adminNavLink" style="display: none;">
+          <i class="fa-solid fa-shield-halved"></i>
+          <span>Admin</span>
+        </a>
+      </div>
+
+      <div class="nav-right">
+        <div class="points-badge">
+          <i class="fa-solid fa-coins"></i>
+          <span id="navPointsValue">0</span>
+        </div>
+        <a href="profile.html" class="profile-link">
+          <div class="profile-avatar" id="navProfileAvatar" aria-label="Your profile">
+            <i class="fa-regular fa-user"></i>
+          </div>
+          <span id="usernameValue">User</span>
+        </a>
+        <button id="logoutBtn" class="icon-btn" title="Logout">
+          <i class="fa-solid fa-arrow-right-from-bracket"></i>
+          <span class="icon-btn-label">Logout</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</nav>

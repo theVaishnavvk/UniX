@@ -1,0 +1,1814 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>UniX - Manage Courses</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="../../css/theme.css">
+  <link rel="stylesheet" href="../../css/navbar.css">
+  <style>
+    .tutoring-manage-container {
+      max-width: 1180px;
+      margin: 0 auto;
+      color: var(--color-text);
+      font-family: 'Inter', sans-serif;
+      padding-bottom: 4rem;
+    }
+
+    .dashboard-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 1.5rem;
+      margin-bottom: 1.75rem;
+    }
+
+    .dashboard-eyebrow {
+      margin: 0 0 0.5rem;
+      color: var(--color-primary);
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .dashboard-title {
+      margin: 0;
+      font-size: 2.15rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: var(--color-text);
+    }
+
+    .dashboard-subtitle {
+      margin: 0.75rem 0 0;
+      color: var(--color-text-muted);
+      font-size: 0.95rem;
+      line-height: 1.6;
+      max-width: 760px;
+    }
+
+    .dashboard-highlight {
+      margin-top: 1rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.85rem;
+      padding: 0.9rem 1.1rem;
+      border-radius: 18px;
+      border: 1px solid rgba(var(--color-primary-rgb), 0.3);
+      background: linear-gradient(135deg, rgba(var(--color-primary-rgb), 0.2), rgba(14, 165, 233, 0.14));
+      box-shadow: 0 14px 32px rgba(var(--color-primary-rgb), 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.42);
+    }
+
+    .dashboard-highlight-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      color: var(--color-text);
+      font-size: 0.82rem;
+      font-weight: 900;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .dashboard-highlight-label i {
+      width: 34px;
+      height: 34px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--color-primary);
+      color: #ffffff;
+      box-shadow: 0 8px 18px rgba(var(--color-primary-rgb), 0.26);
+      font-size: 0.95rem;
+    }
+
+    .dashboard-highlight-value {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.45rem 0.95rem;
+      border-radius: 999px;
+      background: var(--color-primary);
+      color: #ffffff;
+      font-size: 1.02rem;
+      font-weight: 900;
+      letter-spacing: 0.04em;
+      box-shadow: 0 10px 22px rgba(var(--color-primary-rgb), 0.28);
+    }
+
+    .dashboard-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.55rem;
+      text-decoration: none;
+      color: var(--color-text);
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md, 12px);
+      padding: 0.85rem 1.1rem;
+      font-weight: 600;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .dashboard-link:hover {
+      transform: translateY(-1px);
+      border-color: var(--color-primary);
+      color: var(--color-primary);
+    }
+
+    .feedback-banner {
+      margin-bottom: 1.5rem;
+      padding: 1rem 1.15rem;
+      border-radius: var(--radius-md, 12px);
+      border: 1px solid var(--color-border);
+      background: var(--color-surface);
+      color: var(--color-text);
+      font-weight: 500;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .feedback-banner.success {
+      border-color: rgba(16, 185, 129, 0.25);
+      background: rgba(16, 185, 129, 0.08);
+      color: #047857;
+    }
+
+    .feedback-banner.error {
+      border-color: rgba(239, 68, 68, 0.25);
+      background: rgba(239, 68, 68, 0.08);
+      color: #b91c1c;
+    }
+
+    .dashboard-card,
+    .state-card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg, 20px);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .tutoring-manage-container[data-shell-state="ready"] #manageStateCard {
+      display: none !important;
+    }
+
+    .tutoring-manage-container[data-shell-state="ready"] #manageCourseGrid {
+      display: grid !important;
+    }
+
+    .tutoring-manage-container[data-shell-state="ready"] #manageDashboardContent {
+      display: block !important;
+    }
+
+    .tutoring-manage-container[data-shell-state="loading"] #manageStateCard,
+    .tutoring-manage-container[data-shell-state="empty"] #manageStateCard,
+    .tutoring-manage-container[data-shell-state="error"] #manageStateCard {
+      display: flex !important;
+    }
+
+    .tutoring-manage-container[data-shell-state="loading"] #manageCourseGrid,
+    .tutoring-manage-container[data-shell-state="empty"] #manageCourseGrid,
+    .tutoring-manage-container[data-shell-state="error"] #manageCourseGrid,
+    .tutoring-manage-container[data-shell-state="loading"] #manageDashboardContent,
+    .tutoring-manage-container[data-shell-state="empty"] #manageDashboardContent,
+    .tutoring-manage-container[data-shell-state="error"] #manageDashboardContent {
+      display: none !important;
+    }
+
+    .course-selector-shell {
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .course-selector-header {
+      margin-bottom: 1.25rem;
+    }
+
+    .manage-course-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .manage-course-grid .course-card {
+      width: 100%;
+      height: 100%;
+      padding: 0;
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg, 20px);
+      display: flex;
+      flex-direction: column;
+      color: inherit;
+      text-align: left;
+      text-decoration: none;
+      cursor: pointer;
+      overflow: hidden;
+      transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+      box-shadow: var(--shadow-sm);
+      box-sizing: border-box;
+    }
+
+    .manage-course-grid .course-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-card);
+      border-color: var(--color-primary);
+    }
+
+    .manage-course-grid .course-card:focus-visible {
+      outline: none;
+      border-color: var(--color-primary);
+      box-shadow: var(--shadow-card), 0 0 0 3px rgba(var(--color-primary-rgb), 0.14);
+    }
+
+    .manage-course-card.active {
+      border-color: var(--color-primary);
+      box-shadow: var(--shadow-card), 0 0 0 3px rgba(var(--color-primary-rgb), 0.14);
+    }
+
+    .manage-course-grid .card-banner {
+      position: relative;
+      height: 140px;
+      border-bottom: 1px solid var(--color-border);
+      background-size: cover;
+      background-position: center;
+    }
+
+    .manage-course-banner-image {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 1;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .manage-course-grid .card-banner::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(15, 23, 42, 0.08), rgba(15, 23, 42, 0.34));
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .manage-course-grid .status-badge {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: rgba(16, 185, 129, 0.9);
+      color: #ffffff;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 0.35rem 0.75rem;
+      border-radius: 2rem;
+      letter-spacing: 0.05em;
+      backdrop-filter: blur(4px);
+      box-shadow: var(--shadow-sm);
+      border: none;
+      z-index: 1;
+    }
+
+    .manage-course-grid .card-content {
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+
+    .manage-course-grid .course-title {
+      margin: 0 0 0.5rem;
+      font-size: 1.12rem;
+      font-weight: 600;
+      color: var(--color-text);
+      line-height: 1.4;
+    }
+
+    .manage-course-grid .course-desc {
+      margin: 0 0 1.5rem;
+      font-size: 0.92rem;
+      color: var(--color-text-muted);
+      line-height: 1.5;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .manage-course-grid .star-rating {
+      --rating-fill: 0%;
+      position: relative;
+      display: inline-flex;
+      line-height: 1;
+    }
+
+    .manage-course-grid .star-rating-base,
+    .manage-course-grid .star-rating-fill {
+      display: inline-flex;
+      gap: 0.18rem;
+    }
+
+    .manage-course-grid .star-rating-base {
+      color: #d1d5db;
+    }
+
+    .manage-course-grid .star-rating-fill {
+      position: absolute;
+      inset: 0 auto 0 0;
+      overflow: hidden;
+      width: var(--rating-fill);
+      color: #f59e0b;
+      white-space: nowrap;
+      pointer-events: none;
+    }
+
+    .manage-course-grid .star-rating.small i {
+      font-size: 0.82rem;
+    }
+
+    .manage-course-grid .course-rating-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+      padding: 0.8rem 0.9rem;
+      border-radius: 14px;
+      background: rgba(15, 23, 42, 0.04);
+      border: 1px solid rgba(148, 163, 184, 0.18);
+    }
+
+    .manage-course-grid .course-rating-row.is-empty {
+      background: rgba(148, 163, 184, 0.08);
+    }
+
+    .manage-course-grid .course-rating-inline {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.55rem;
+      min-width: 0;
+    }
+
+    .manage-course-grid .course-rating-score {
+      font-size: 0.94rem;
+      font-weight: 700;
+      color: var(--color-text);
+    }
+
+    .manage-course-grid .course-rating-meta {
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--color-text-muted);
+      text-align: right;
+    }
+
+    .manage-course-grid .card-info-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      margin-bottom: 1.25rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .manage-course-grid .tutor-id {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--color-text-muted);
+      font-weight: 500;
+      font-size: 0.9rem;
+    }
+
+    .manage-course-grid .tutor-id i {
+      color: var(--color-primary);
+      font-size: 1rem;
+    }
+
+    .manage-course-grid .price {
+      font-weight: 700;
+      color: var(--color-primary);
+      font-size: 1.02rem;
+    }
+
+    .manage-course-grid .price.is-free {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      color: #047857;
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.22);
+      padding: 0.38rem 0.68rem;
+      border-radius: 999px;
+      line-height: 1;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45);
+    }
+
+    .manage-course-grid .manage-course-card.is-free-card {
+      border-color: rgba(16, 185, 129, 0.24);
+      box-shadow: 0 14px 28px rgba(16, 185, 129, 0.1);
+    }
+
+    .manage-course-grid .manage-course-card.is-free-card:hover,
+    .manage-course-grid .manage-course-card.is-free-card.active {
+      border-color: rgba(16, 185, 129, 0.38);
+      box-shadow: 0 18px 32px rgba(16, 185, 129, 0.15);
+    }
+
+    .manage-course-grid .course-free-badge {
+      position: absolute;
+      left: 1rem;
+      bottom: 1rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.4rem 0.78rem;
+      border-radius: 999px;
+      background: rgba(16, 185, 129, 0.92);
+      color: #ffffff;
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      box-shadow: var(--shadow-sm);
+      z-index: 1;
+    }
+
+    .manage-course-grid .card-bottom {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1.25rem;
+      flex-wrap: wrap;
+    }
+
+    .manage-course-grid .seats-info {
+      font-size: 0.84rem;
+      color: var(--color-text);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 700;
+      padding: 0.62rem 0.9rem;
+      border-radius: 999px;
+      border: 1px solid rgba(var(--color-primary-rgb), 0.14);
+      background: rgba(var(--color-primary-rgb), 0.08);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45);
+    }
+
+    .manage-course-grid .seats-info i {
+      color: var(--color-primary);
+      font-size: 0.95rem;
+    }
+
+    .manage-course-grid .progress-info {
+      font-size: 0.84rem;
+      color: #047857;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 700;
+      padding: 0.62rem 0.9rem;
+      border-radius: 999px;
+      border: 1px solid rgba(16, 185, 129, 0.18);
+      background: rgba(16, 185, 129, 0.1);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45);
+    }
+
+    .manage-course-grid .progress-info i {
+      color: #10b981;
+      font-size: 0.95rem;
+    }
+
+    .manage-course-grid .session-info {
+      font-size: 0.84rem;
+      color: var(--color-text-muted);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 600;
+      padding: 0.62rem 0.9rem;
+      border-radius: 999px;
+      border: 1px solid var(--color-border);
+      background: var(--color-bg);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45);
+    }
+
+    .manage-course-grid .session-info i {
+      color: var(--color-primary);
+      font-size: 0.95rem;
+    }
+
+    .manage-course-grid .card-bottom .progress-info:last-child {
+      border-color: rgba(16, 185, 129, 0.18);
+      background: rgba(16, 185, 129, 0.1);
+      color: #047857;
+    }
+
+    .manage-course-grid .card-bottom .progress-info:last-child i {
+      color: #10b981;
+    }
+
+    .manage-course-grid .card-actions {
+      display: flex;
+      gap: 0.75rem;
+      margin-top: auto;
+      pointer-events: auto;
+    }
+
+    .manage-course-grid .btn-book,
+    .manage-course-grid .btn-chat {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: var(--radius-md, 12px);
+      border: none;
+      font: inherit;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+
+    .manage-course-grid .btn-book {
+      flex: 1;
+      background: var(--color-primary);
+      color: #ffffff;
+      padding: 0.75rem 1rem;
+      font-size: 0.95rem;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .manage-course-grid .btn-chat {
+      width: 44px;
+      height: 44px;
+      background: var(--color-primary-light);
+      color: var(--color-primary);
+      font-size: 1.1rem;
+    }
+
+    .manage-course-card.active .btn-book {
+      background: var(--color-primary-dark);
+    }
+
+    .manage-course-card.active .btn-chat {
+      background: var(--color-primary);
+      color: #ffffff;
+    }
+
+    .state-card {
+      min-height: 280px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 2.5rem;
+    }
+
+    .state-content {
+      max-width: 420px;
+    }
+
+    .state-icon {
+      font-size: 2.8rem;
+      margin-bottom: 1rem;
+      color: var(--color-primary);
+    }
+
+    .state-icon.error {
+      color: #ef4444;
+    }
+
+    .state-title {
+      margin: 0 0 0.75rem;
+      font-size: 1.32rem;
+      font-weight: 700;
+      color: var(--color-text);
+    }
+
+    .state-text {
+      margin: 0;
+      color: var(--color-text-muted);
+      line-height: 1.6;
+    }
+
+    .dashboard-shell {
+      padding: 1.5rem;
+    }
+
+    .dashboard-tabs {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      margin-bottom: 1.5rem;
+    }
+
+    .tab-btn {
+      border: 1px solid var(--color-border);
+      background: var(--color-bg);
+      color: var(--color-text-muted);
+      border-radius: 999px;
+      padding: 0.75rem 1.15rem;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .tab-btn:hover {
+      border-color: var(--color-primary);
+      color: var(--color-primary);
+    }
+
+    .tab-btn.active {
+      background: rgba(var(--color-primary-rgb), 0.12);
+      border-color: rgba(var(--color-primary-rgb), 0.25);
+      color: var(--color-primary);
+    }
+
+    .tab-panel[hidden] {
+      display: none;
+    }
+
+    .panel-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .panel-title {
+      margin: 0;
+      font-size: 1.22rem;
+      font-weight: 700;
+      color: var(--color-text);
+    }
+
+    .panel-subtitle {
+      margin: 0.4rem 0 0;
+      color: var(--color-text-muted);
+      line-height: 1.5;
+    }
+
+    .overview-hero {
+      padding: 1.75rem;
+    }
+
+    .overview-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 1.5rem;
+      align-items: flex-start;
+      margin-bottom: 1.75rem;
+    }
+
+    .course-name {
+      margin: 0;
+      font-size: 1.75rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--color-text);
+    }
+
+    .course-description {
+      margin: 0.85rem 0 0;
+      color: var(--color-text-muted);
+      line-height: 1.7;
+      max-width: 760px;
+      white-space: pre-wrap;
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.45rem 0.9rem;
+      border-radius: 999px;
+      font-size: 0.82rem;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      border: 1px solid transparent;
+      white-space: nowrap;
+    }
+
+    .status-badge.open,
+    .status-badge.approved {
+      background: rgba(16, 185, 129, 0.12);
+      color: #059669;
+      border-color: rgba(16, 185, 129, 0.22);
+    }
+
+    .status-badge.closed,
+    .status-badge.rejected {
+      background: rgba(239, 68, 68, 0.12);
+      color: #dc2626;
+      border-color: rgba(239, 68, 68, 0.22);
+    }
+
+    .status-badge.pending {
+      background: rgba(245, 158, 11, 0.14);
+      color: #d97706;
+      border-color: rgba(245, 158, 11, 0.22);
+    }
+
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1rem;
+    }
+
+    .metric-card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg, 18px);
+      padding: 1.2rem;
+    }
+
+    .metric-label {
+      display: block;
+      margin-bottom: 0.55rem;
+      color: var(--color-text-muted);
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    .metric-value {
+      display: block;
+      color: var(--color-text);
+      font-size: 1.25rem;
+      font-weight: 800;
+    }
+
+    .metric-value.is-free {
+      color: #047857;
+    }
+
+    .progress-block {
+      margin-top: 1.5rem;
+      padding: 1.2rem;
+      border-radius: var(--radius-lg, 18px);
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+    }
+
+    .progress-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 0.9rem;
+      color: var(--color-text);
+      font-weight: 600;
+    }
+
+    .progress-row span:last-child {
+      color: var(--color-text-muted);
+    }
+
+    .progress-track {
+      width: 100%;
+      height: 12px;
+      border-radius: 999px;
+      background: var(--color-border);
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      width: 0;
+      height: 100%;
+      background: linear-gradient(90deg, #10b981, #0ea5e9);
+      border-radius: inherit;
+      transition: width 0.25s ease;
+    }
+
+    .applicant-toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-bottom: 1.25rem;
+    }
+
+    .filter-row {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      border: 1px solid var(--color-border);
+      background: var(--color-bg);
+      color: var(--color-text-muted);
+      border-radius: 999px;
+      padding: 0.65rem 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .filter-btn.active {
+      background: rgba(var(--color-primary-rgb), 0.12);
+      border-color: rgba(var(--color-primary-rgb), 0.25);
+      color: var(--color-primary);
+    }
+
+    .applicant-summary {
+      color: var(--color-text-muted);
+      font-weight: 600;
+    }
+
+    .applicant-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .applicant-card {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1.25rem;
+      padding: 1.25rem;
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg, 18px);
+    }
+
+    .applicant-info {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      flex: 1;
+      min-width: 0;
+    }
+
+    .applicant-avatar {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, rgba(var(--color-primary-rgb), 0.2), rgba(14, 165, 233, 0.25));
+      color: var(--color-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+
+    .applicant-copy {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .applicant-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      align-items: center;
+      margin-bottom: 0.75rem;
+    }
+
+    .applicant-top .status-badge {
+      flex-shrink: 0;
+    }
+
+    .applicant-name {
+      margin: 0;
+      color: var(--color-text);
+      font-size: 1.1rem;
+      font-weight: 700;
+    }
+
+    .applicant-meta {
+      margin: 0.35rem 0 0;
+      color: var(--color-text-muted);
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+
+    .applicant-detail-row {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      color: var(--color-text-muted);
+      font-size: 0.92rem;
+    }
+
+    .applicant-detail-row span {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+    }
+
+    .attendance-progress {
+      margin-top: 0.9rem;
+      padding: 0.9rem 1rem;
+      border-radius: var(--radius-md, 14px);
+      border: 1px solid rgba(var(--color-primary-rgb), 0.16);
+      background: linear-gradient(180deg, rgba(var(--color-primary-rgb), 0.08), rgba(14, 165, 233, 0.06));
+    }
+
+    .attendance-progress.completed {
+      border-color: rgba(16, 185, 129, 0.24);
+      background: linear-gradient(180deg, rgba(16, 185, 129, 0.1), rgba(14, 165, 233, 0.08));
+    }
+
+    .attendance-progress-top {
+      display: flex;
+      justify-content: flex-start;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.55rem;
+      margin-bottom: 0.55rem;
+    }
+
+    .attendance-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      color: var(--color-text-muted);
+      font-size: 0.8rem;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .attendance-value {
+      color: var(--color-primary);
+      font-size: 0.95rem;
+      font-weight: 800;
+    }
+
+    .attendance-progress.completed .attendance-value {
+      color: #059669;
+    }
+
+    .attendance-track-mini {
+      width: 100%;
+      height: 8px;
+      border-radius: 999px;
+      background: rgba(var(--color-primary-rgb), 0.14);
+      overflow: hidden;
+    }
+
+    .attendance-fill-mini {
+      width: 0;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, #22c55e, #6366f1);
+      transition: width 0.25s ease;
+    }
+
+    .applicant-actions {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .btn-primary,
+    .btn-secondary,
+    .btn-chat-action,
+    .btn-danger,
+    .btn-save {
+      border: none;
+      border-radius: var(--radius-md, 12px);
+      padding: 0.78rem 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-family: inherit;
+    }
+
+    .btn-primary,
+    .btn-save {
+      background: var(--color-primary);
+      color: #ffffff;
+      box-shadow: 0 6px 18px rgba(var(--color-primary-rgb), 0.2);
+    }
+
+    .btn-primary:hover,
+    .btn-save:hover {
+      transform: translateY(-1px);
+      background: var(--color-primary-dark);
+    }
+
+    .btn-secondary {
+      background: var(--color-surface);
+      color: var(--color-text);
+      border: 1px solid var(--color-border);
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--color-primary);
+      color: var(--color-primary);
+    }
+
+    .btn-chat-action {
+      width: 44px;
+      height: 44px;
+      padding: 0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--color-primary-light);
+      color: var(--color-primary);
+      text-decoration: none;
+      font-size: 1.1rem;
+    }
+
+    .btn-chat-action:hover {
+      background: var(--color-primary);
+      color: #ffffff;
+      box-shadow: var(--shadow-sm);
+      transform: translateY(-1px);
+    }
+
+    .btn-danger {
+      background: rgba(239, 68, 68, 0.1);
+      color: #dc2626;
+      border: 1px solid rgba(239, 68, 68, 0.2);
+    }
+
+    .btn-danger:hover {
+      background: rgba(239, 68, 68, 0.14);
+    }
+
+    .btn-primary:disabled,
+    .btn-secondary:disabled,
+    .btn-chat-action:disabled,
+    .btn-danger:disabled,
+    .btn-save:disabled {
+      opacity: 0.65;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .empty-card {
+      padding: 1.5rem;
+      border: 1px dashed var(--color-border);
+      background: var(--color-bg);
+      border-radius: var(--radius-lg, 18px);
+      text-align: center;
+      color: var(--color-text-muted);
+    }
+
+    .settings-form-card {
+      padding: 1.75rem;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1rem;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .form-group.full {
+      grid-column: 1 / -1;
+    }
+
+    .form-group label {
+      color: var(--color-text);
+      font-size: 0.95rem;
+      font-weight: 700;
+    }
+
+    .settings-toggle {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.85rem;
+      padding: 1rem 1.1rem;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md, 12px);
+      background: linear-gradient(180deg, rgba(var(--color-primary-rgb), 0.05), rgba(255, 255, 255, 0));
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .settings-toggle:hover {
+      border-color: rgba(var(--color-primary-rgb), 0.28);
+      background: var(--color-surface);
+    }
+
+    .settings-toggle input {
+      width: 1.05rem;
+      height: 1.05rem;
+      margin-top: 0.2rem;
+      accent-color: var(--color-primary);
+      flex-shrink: 0;
+      cursor: pointer;
+    }
+
+    .settings-toggle-copy {
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+
+    .settings-toggle-title {
+      color: var(--color-text);
+      font-size: 0.98rem;
+      font-weight: 700;
+    }
+
+    .settings-toggle-text {
+      color: var(--color-text-muted);
+      font-size: 0.84rem;
+      line-height: 1.5;
+    }
+
+    .settings-media-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1rem;
+    }
+
+    .media-upload-card {
+      display: flex;
+      flex-direction: column;
+      gap: 0.95rem;
+      padding: 1.25rem;
+      border-radius: var(--radius-lg, 20px);
+      border: 1px dashed rgba(148, 163, 184, 0.3);
+      background: rgba(148, 163, 184, 0.08);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .media-upload-card:hover {
+      border-color: rgba(var(--color-primary-rgb), 0.3);
+      background: rgba(148, 163, 184, 0.12);
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .media-upload-card.is-filled {
+      border-color: rgba(var(--color-primary-rgb), 0.26);
+      background: rgba(148, 163, 184, 0.1);
+    }
+
+    .media-upload-heading {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.65rem;
+      color: var(--color-text);
+      font-size: 1rem;
+      font-weight: 800;
+    }
+
+    .media-upload-heading i {
+      color: var(--color-text);
+      font-size: 0.98rem;
+    }
+
+    .media-preview-frame {
+      width: 100%;
+      min-height: 224px;
+      border-radius: var(--radius-lg, 18px);
+      border: 1px solid rgba(148, 163, 184, 0.24);
+      background: #ffffff;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .media-preview-image {
+      width: 100%;
+      height: 224px;
+      object-fit: contain;
+      display: block;
+      background: #ffffff;
+    }
+
+    .media-preview-image[hidden] {
+      display: none !important;
+    }
+
+    .media-preview-empty {
+      min-height: 224px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.85rem;
+      padding: 1.25rem;
+      text-align: center;
+      color: #64748b;
+    }
+
+    .media-preview-empty[hidden] {
+      display: none !important;
+    }
+
+    .media-preview-empty i {
+      font-size: 2.15rem;
+      color: var(--color-primary);
+    }
+
+    .media-preview-title {
+      color: #64748b;
+      font-size: 0.95rem;
+      font-weight: 700;
+      line-height: 1.5;
+    }
+
+    .media-upload-meta {
+      color: var(--color-primary);
+      font-size: 0.92rem;
+      font-weight: 700;
+      line-height: 1.4;
+    }
+
+    .media-upload-field {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .media-upload-card.is-pending-removal {
+      border-color: rgba(239, 68, 68, 0.32);
+      background: rgba(239, 68, 68, 0.08);
+    }
+
+    .media-upload-actions {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .media-action-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      min-height: 42px;
+      padding: 0.72rem 1rem;
+      border-radius: var(--radius-md, 12px);
+      border: 1px solid var(--color-border);
+      background: var(--color-surface);
+      color: var(--color-text);
+      font: inherit;
+      font-size: 0.88rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .media-action-btn:hover:not(:disabled) {
+      border-color: rgba(var(--color-primary-rgb), 0.3);
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .media-action-btn.is-danger {
+      border: none;
+      background: #ef4444;
+      color: #ffffff;
+      box-shadow: none;
+    }
+
+    .media-action-btn.is-danger:hover:not(:disabled) {
+      border: none;
+      background: #dc2626;
+      color: #ffffff;
+      box-shadow: none;
+    }
+
+    .media-action-btn:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .form-helper {
+      margin: 0;
+      color: #64748b;
+      font-size: 0.82rem;
+      font-weight: 600;
+      line-height: 1.5;
+    }
+
+    .form-control {
+      width: 100%;
+      box-sizing: border-box;
+      border: 1px solid var(--color-border);
+      background: var(--color-bg);
+      color: var(--color-text);
+      border-radius: var(--radius-md, 12px);
+      padding: 0.95rem 1rem;
+      font-family: inherit;
+      font-size: 0.95rem;
+      transition: all 0.2s ease;
+    }
+
+    .form-control:focus {
+      outline: none;
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 3px rgba(var(--color-primary-rgb), 0.12);
+      background: var(--color-surface);
+    }
+
+    textarea.form-control {
+      resize: vertical;
+      min-height: 170px;
+    }
+
+    .form-note {
+      margin: 0;
+      color: var(--color-text-muted);
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+
+    .settings-actions {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 1.25rem;
+    }
+
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.58);
+      backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.2rem;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease;
+      z-index: 9999;
+    }
+
+    .modal-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal-content {
+      width: min(640px, 100%);
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg, 20px);
+      box-shadow: 0 24px 60px rgba(15, 23, 42, 0.28);
+      overflow: hidden;
+      transform: translateY(12px);
+      transition: transform 0.2s ease;
+    }
+
+    .modal-overlay.active .modal-content {
+      transform: translateY(0);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .modal-title {
+      margin: 0;
+      color: var(--color-text);
+      font-size: 1.08rem;
+      font-weight: 700;
+    }
+
+    .modal-close {
+      border: none;
+      background: transparent;
+      color: var(--color-text-muted);
+      font-size: 1.08rem;
+      cursor: pointer;
+    }
+
+    .modal-close:hover {
+      color: #ef4444;
+    }
+
+    .modal-body {
+      padding: 1.5rem;
+    }
+
+    .modal-description {
+      margin: 0 0 1rem;
+      color: var(--color-text-muted);
+      line-height: 1.6;
+    }
+
+    .proof-preview {
+      width: 100%;
+      max-height: min(320px, 52vh);
+      object-fit: contain;
+      border-radius: var(--radius-lg, 18px);
+      border: 1px solid var(--color-border);
+      background: var(--color-bg);
+      display: block;
+    }
+
+    .proof-preview[hidden] {
+      display: none !important;
+    }
+
+    .proof-placeholder {
+      min-height: 180px;
+      border: 1px dashed var(--color-border);
+      border-radius: var(--radius-lg, 18px);
+      background: var(--color-bg);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.85rem;
+      color: var(--color-text-muted);
+      text-align: center;
+      padding: 2rem;
+    }
+
+    .proof-placeholder[hidden] {
+      display: none !important;
+    }
+
+    .proof-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 1rem;
+      color: var(--color-primary);
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .proof-link[hidden] {
+      display: none !important;
+    }
+
+    .proof-link:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 900px) {
+      .manage-course-grid,
+      .metric-grid,
+      .form-grid,
+      .settings-media-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .overview-top,
+      .applicant-card {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .applicant-actions {
+        justify-content: flex-start;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .dashboard-header,
+      .course-selector-header,
+      .panel-header,
+      .applicant-toolbar,
+      .applicant-top {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .manage-course-grid,
+      .metric-grid,
+      .form-grid,
+      .settings-media-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .dashboard-shell {
+        padding: 1rem;
+      }
+
+      .overview-hero,
+      .settings-form-card {
+        padding: 1.2rem;
+      }
+
+      .dashboard-title {
+        font-size: 2rem;
+      }
+
+      .course-name {
+        font-size: 1.65rem;
+      }
+    }
+  </style>
+</head>
+
+<body class="in-pages">
+  <div class="layout">
+    <div id="navbar-container"></div>
+
+    <div class="page-content">
+      <div class="tutoring-manage-container" id="manageDashboardRoot">
+        <div class="dashboard-header">
+          <div>
+            <p class="dashboard-eyebrow">Course Management</p>
+            <h1 class="dashboard-title" id="managePageHeading">Manage Courses</h1>
+            <p class="dashboard-subtitle" id="managePageSubtitle">Select one of your created courses to review applicants, track seat usage, and update settings.</p>
+            <div class="dashboard-highlight" id="manageTutorIdHighlight" hidden>
+              <span class="dashboard-highlight-label"><i class="fa-solid fa-id-card"></i> Tutor ID</span>
+              <strong class="dashboard-highlight-value" id="manageTutorIdValue">--</strong>
+            </div>
+          </div>
+          <a href="browse.html" class="dashboard-link" id="manageBackLink">
+            <i class="fa-solid fa-arrow-left"></i>
+            <span>Back to Course</span>
+          </a>
+        </div>
+
+        <div id="manageFeedback" class="feedback-banner" hidden></div>
+
+        <div class="dashboard-card course-selector-shell">
+          <div class="panel-header course-selector-header">
+            <div>
+              <h2 class="panel-title">Your Created Courses</h2>
+            </div>
+            <div class="applicant-summary" id="manageCourseCountText">Loading courses...</div>
+          </div>
+
+          <div id="manageStateCard" class="state-card">
+            <div class="state-content">
+              <div class="state-icon" id="manageStateIcon"><i class="fa-solid fa-circle-notch fa-spin"></i></div>
+              <h2 class="state-title" id="manageStateTitle">Loading courses</h2>
+              <p class="state-text" id="manageStateText">Fetching the courses you created and preparing the dashboard.</p>
+            </div>
+          </div>
+
+          <div id="manageCourseGrid" class="manage-course-grid" hidden></div>
+        </div>
+
+        <div id="manageDashboardContent" class="dashboard-card dashboard-shell" hidden>
+          <div class="dashboard-tabs" role="tablist" aria-label="Course dashboard tabs">
+            <button class="tab-btn active" type="button" data-tab-target="overviewTabPanel" aria-selected="true">Overview</button>
+            <button class="tab-btn" type="button" data-tab-target="applicantsTabPanel" aria-selected="false">Applicants</button>
+            <button class="tab-btn" type="button" data-tab-target="settingsTabPanel" aria-selected="false">Settings</button>
+          </div>
+
+          <section id="overviewTabPanel" class="tab-panel panel-stack">
+            <div class="dashboard-card overview-hero">
+              <div class="overview-top">
+                <div>
+                  <h2 class="course-name" id="overviewCourseTitle">Selected course</h2>
+                  <p class="course-description" id="overviewCourseDescription">Choose a course tile above to view its details.</p>
+                </div>
+                <span class="status-badge pending" id="overviewStatusBadge">Status</span>
+              </div>
+
+              <div class="metric-grid">
+                <div class="metric-card">
+                  <span class="metric-label">Price</span>
+                  <strong class="metric-value" id="overviewCoursePrice">--</strong>
+                </div>
+                <div class="metric-card">
+                  <span class="metric-label">Seats Filled</span>
+                  <strong class="metric-value" id="overviewSeatsFilled">--</strong>
+                </div>
+                <div class="metric-card">
+                  <span class="metric-label">Approved Students</span>
+                  <strong class="metric-value" id="overviewTotalStudents">--</strong>
+                </div>
+                <div class="metric-card">
+                  <span class="metric-label">Pending Requests</span>
+                  <strong class="metric-value" id="overviewPendingStudents">--</strong>
+                </div>
+                <div class="metric-card">
+                  <span class="metric-label">Avg Attendance</span>
+                  <strong class="metric-value" id="overviewAverageAttendance">--</strong>
+                </div>
+              </div>
+
+              <div class="progress-block">
+                <div class="progress-row">
+                  <span>Seat Utilization</span>
+                  <span id="overviewProgressLabel">--</span>
+                </div>
+                <div class="progress-track">
+                  <div id="overviewProgressFill" class="progress-fill"></div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section id="applicantsTabPanel" class="tab-panel panel-stack" hidden>
+            <div class="dashboard-card overview-hero">
+              <div class="panel-header">
+                <div>
+                  <h2 class="panel-title">Applicants</h2>
+                  <p class="panel-subtitle">Review payment proof, approve learners, reject invalid submissions, and track attendance for approved students.</p>
+                </div>
+                <div class="applicant-summary" id="applicantSummaryText">Choose a course to view applicants.</div>
+              </div>
+
+              <div class="applicant-toolbar">
+                <div class="filter-row" id="applicantFilterRow">
+                  <button type="button" class="filter-btn active" data-filter-status="all">All</button>
+                  <button type="button" class="filter-btn" data-filter-status="pending">Pending</button>
+                  <button type="button" class="filter-btn" data-filter-status="approved">Approved</button>
+                  <button type="button" class="filter-btn" data-filter-status="rejected">Rejected</button>
+                </div>
+              </div>
+
+              <div id="applicantsList" class="applicant-list">
+                <div class="empty-card">Applicants will appear here when a course is selected.</div>
+              </div>
+            </div>
+          </section>
+
+          <section id="settingsTabPanel" class="tab-panel panel-stack" hidden>
+            <div class="dashboard-card settings-form-card">
+              <div class="panel-header">
+                <div>
+                  <h2 class="panel-title">Course Settings</h2>
+                  <p class="panel-subtitle">Update the course description, pricing, seat settings, image, payment QR code, and availability.</p>
+                </div>
+              </div>
+
+              <form id="courseSettingsForm">
+                <div class="form-grid">
+                  <div class="form-group full">
+                    <label for="manageCourseDescription">Description</label>
+                    <textarea id="manageCourseDescription" class="form-control" required></textarea>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="manageCoursePrice">Price</label>
+                    <input id="manageCoursePrice" class="form-control" type="number" min="0" step="0.01" required>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="manageCourseSeats">Total Seats</label>
+                    <input id="manageCourseSeats" class="form-control" type="number" min="1" step="1" required>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="manageCourseTotalSessions">Total Sessions</label>
+                    <input id="manageCourseTotalSessions" class="form-control" type="number" min="0" step="1" required>
+                    <p class="form-helper">Set this to 0 if you only want to track attendance count without a session target.</p>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="manageCourseStartDate">Start Date</label>
+                    <input id="manageCourseStartDate" class="form-control" type="date">
+                    <p class="form-helper">Leave blank if you do not want to publish a start date yet.</p>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="manageCourseStatus">Status</label>
+                    <select id="manageCourseStatus" class="form-control" required>
+                      <option value="open">Open</option>
+                      <option value="closed">Closed</option>
+                    </select>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="settings-toggle" for="manageIsCertified">
+                      <input id="manageIsCertified" type="checkbox">
+                      <span class="settings-toggle-copy">
+                        <span class="settings-toggle-title">Provide Certificate</span>
+                        <span class="settings-toggle-text">Show this course as certified on browse cards, the session page, and learners' progress.</span>
+                      </span>
+                    </label>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="settings-toggle" for="manageIsFeatured">
+                      <input id="manageIsFeatured" type="checkbox">
+                      <span class="settings-toggle-copy">
+                        <span class="settings-toggle-title">Feature This Course</span>
+                        <span class="settings-toggle-text">Highlight this course in the featured section at the top of the browse page. Use this sparingly.</span>
+                      </span>
+                    </label>
+                  </div>
+
+                  <div class="form-group full">
+                    <label>Course Assets</label>
+                    <div class="settings-media-grid">
+                      <div class="media-upload-field">
+                        <label class="media-upload-card media-upload-card-qr">
+                          <span class="media-upload-heading"><i class="fa-solid fa-qrcode"></i> Payment QR Code</span>
+                          <div class="media-preview-frame">
+                            <img id="manageQrCodePreview" class="media-preview-image" src="" alt="Course payment QR code preview" hidden>
+                            <div id="manageQrCodeEmpty" class="media-preview-empty">
+                              <i class="fa-solid fa-qrcode"></i>
+                              <span class="media-preview-title">No QR code uploaded yet</span>
+                            </div>
+                          </div>
+                          <span class="media-upload-meta" id="manageQrCodeUploadText">Click to upload a payment QR code</span>
+                          <p class="form-helper">PNG or JPG. Update this when learners need to pay for the course.</p>
+                          <input id="manageQrCodeUpload" type="file" accept="image/png, image/jpeg" hidden>
+                        </label>
+                        <div class="media-upload-actions">
+                          <button type="button" class="media-action-btn" id="manageQrCodeActionBtn">
+                            <i class="fa-solid fa-trash-can"></i>
+                            <span>Remove QR code</span>
+                          </button>
+                        </div>
+                      </div>
+
+                      <div class="media-upload-field">
+                        <label class="media-upload-card media-upload-card-image">
+                          <span class="media-upload-heading"><i class="fa-regular fa-image"></i> Course Image</span>
+                          <div class="media-preview-frame">
+                            <img id="manageCourseImagePreview" class="media-preview-image" src="" alt="Course image preview" hidden>
+                            <div id="manageCourseImageEmpty" class="media-preview-empty">
+                              <i class="fa-regular fa-image"></i>
+                              <span class="media-preview-title">No course image uploaded yet</span>
+                            </div>
+                          </div>
+                          <span class="media-upload-meta" id="manageCourseImageUploadText">Click to upload a course image</span>
+                          <p class="form-helper">PNG or JPG. Leave this unchanged to keep the current course image.</p>
+                          <input id="manageCourseImageUpload" type="file" accept="image/png, image/jpeg" hidden>
+                        </label>
+                        <div class="media-upload-actions">
+                          <button type="button" class="media-action-btn" id="manageCourseImageActionBtn">
+                            <i class="fa-solid fa-trash-can"></i>
+                            <span>Remove course image</span>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="settings-actions">
+                  <button type="submit" class="btn-save" id="saveCourseChangesBtn">Save Changes</button>
+                </div>
+              </form>
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="paymentProofModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title" id="paymentProofModalTitle">Payment Proof</h3>
+        <button class="modal-close" id="closeProofModalBtn" type="button" aria-label="Close payment proof modal">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <p class="modal-description" id="paymentProofModalDescription">Review the submitted proof before making a decision.</p>
+        <img id="paymentProofImage" class="proof-preview" src="" alt="Payment proof" hidden>
+        <div id="paymentProofPlaceholder" class="proof-placeholder">
+          <i class="fa-regular fa-image" style="font-size: 2.4rem;"></i>
+          <strong>No payment proof uploaded</strong>
+          <span>A placeholder is shown because there is no stored image URL for this enrollment.</span>
+        </div>
+        <a id="paymentProofLink" class="proof-link" href="#" target="_blank" rel="noopener noreferrer" hidden>
+          <i class="fa-solid fa-arrow-up-right-from-square"></i>
+          <span>Open image in new tab</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="../../js/nav-loader.js"></script>
+  <script type="module" src="../../js/tutoring.js"></script>
+</body>
+
+</html>

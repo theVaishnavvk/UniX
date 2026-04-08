@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>UniX - Welcome Back</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script type="module" src="js/theme.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/theme.css">
+  <link rel="stylesheet" href="css/auth.css">
+</head>
+
+<body class="auth-page">
+  <div class="auth-container">
+    <div class="auth-card">
+      <div class="auth-header">
+        <a class="auth-logo" href="index.html" aria-label="Go to UniX home">
+          <span class="auth-logo-image" aria-hidden="true"></span>
+          <span class="auth-logo-word">UniX</span>
+        </a>
+        <h2>Welcome Back</h2>
+        <p class="auth-subtext">Access your campus or admin dashboard</p>
+      </div>
+
+      <div id="message" aria-live="polite"></div>
+
+      <form id="loginForm">
+        <div class="form-group">
+          <label for="email">Campus Email</label>
+          <input type="email" id="email" name="email" placeholder="name@gmail.com" autocomplete="email" required>
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" placeholder="••••••••" autocomplete="current-password"
+            required>
+        </div>
+
+        <div class="secondary-actions">
+          <button type="button" id="forgotPasswordBtn" class="text-link">Forgot password?</button>
+          <button type="button" id="resendVerificationBtn" class="text-link" style="display: none;">Resend
+            verification</button>
+        </div>
+
+        <button class="primary-btn" type="submit" id="loginBtn">Login to UniX</button>
+      </form>
+
+      <div class="auth-footer">
+        Don't have an account? <a href="signup.html">Join now</a>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { auth, db, checkAdmin } from "./js/firebase.js";
+    import {
+      signInWithEmailAndPassword,
+      onAuthStateChanged,
+      signOut,
+      sendPasswordResetEmail,
+      sendEmailVerification
+    } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
+
+    const form = document.getElementById("loginForm");
+    const message = document.getElementById("message");
+    const loginBtn = document.getElementById("loginBtn");
+    const forgotPasswordBtn = document.getElementById("forgotPasswordBtn");
+    const resendVerificationBtn = document.getElementById("resendVerificationBtn");
+
+    let loginAttempted = false;
+    let resendFlowActive = false;
+
+    function showMessage(text, type = "error") {
+      message.innerText = text;
+      message.className = "";
+      if (!text) {
+        message.classList.remove("is-visible");
+        return;
+      }
+      message.classList.add("is-visible", type === "success" ? "message-success" : "message-error");
+    }
+
+    onAuthStateChanged(auth, async (user) => {
+      if (resendFlowActive || !user) return;
+
+      try {
+        await user.reload();
+        if (!auth.currentUser.emailVerified) {
+          if (loginAttempted) {
+            resendVerificationBtn.style.display = "block";
+            showMessage("Please verify your email to continue.");
+          }
+          await signOut(auth);
+          return;
+        }
+
+        const isAdmin = await checkAdmin(user, db);
+        if (isAdmin) {
+          window.location.replace("pages/admin.html");
+        } else {
+          window.location.replace("pages/dashboard.html");
+        }
+      } catch (error) {
+        console.error(error);
+        await signOut(auth);
+      }
+    });
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      showMessage("");
+      loginBtn.disabled = true;
+      loginBtn.innerText = "Authenticating...";
+
+      try {
+        loginAttempted = true;
+        await signInWithEmailAndPassword(auth, email.value.trim(), password.value);
+      } catch (error) {
+        const errorMessages = {
+          "auth/invalid-credential": "Invalid email or password.",
+          "auth/too-many-requests": "Too many attempts. Please try later.",
+          "auth/network-request-failed": "Network error. Check connection."
+        };
+        showMessage(errorMessages[error.code] || "Login failed. Please try again.");
+      } finally {
+        loginBtn.disabled = false;
+        loginBtn.innerText = "Login to UniX";
+      }
+    });
+
+    forgotPasswordBtn.addEventListener("click", async () => {
+      const emailVal = email.value.trim();
+      if (!emailVal) { showMessage("Enter email for reset."); return; }
+
+      try {
+        await sendPasswordResetEmail(auth, emailVal);
+        showMessage("Reset email sent! Check your inbox.", "success");
+      } catch (error) {
+        showMessage("Unable to send reset email.");
+      }
+    });
+
+    resendVerificationBtn.addEventListener("click", async () => {
+      resendFlowActive = true;
+      showMessage("");
+      try {
+        const userCredential = await signInWithEmailAndPassword(auth, email.value.trim(), password.value);
+        await sendEmailVerification(userCredential.user);
+        await signOut(auth);
+        showMessage("Verification resent! Check inbox.", "success");
+        resendVerificationBtn.style.display = "none";
+      } catch (error) {
+        showMessage("Error resending verification.");
+      } finally {
+        resendFlowActive = false;
+      }
+    });
+  </script>
+</body>
+
+</html>

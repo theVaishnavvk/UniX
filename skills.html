@@ -1,0 +1,348 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UniX – Skills</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+   <link rel="stylesheet" href="../css/theme.css">
+   <link rel="stylesheet" href="../css/navbar.css">
+   <link rel="stylesheet" href="../css/skills.css">
+</head>
+
+<body class="in-pages">
+  <div class="layout">
+    <div id="navbar-container"></div>
+
+    <div class="page-content skills-page">
+
+      <section class="skills-page-header">
+        <h1 class="skills-page-title">Skills</h1>
+      </section>
+
+
+      <!-- Skill Dashboard Header -->
+      <section class="skill-dashboard">
+
+        <div class="level-box">
+          <div class="level-top-row">
+            <div class="level-title-stack">
+              <span class="level-kicker">Skill Progress</span>
+              <h2 id="dashboardLevelTitle">Level 0</h2>
+            </div>
+            <p class="level-xp-meta" id="dashboardLevelXpMeta">
+              <span class="level-xp-current">0</span><span class="level-xp-slash"> / </span><span
+                class="level-xp-target">0</span> <span class="level-xp-unit">Points</span>
+            </p>
+          </div>
+
+          <div class="progress-bar-shell">
+            <div class="progress-bar">
+              <div class="progress-fill" id="dashboardLevelFill"></div>
+            </div>
+          </div>
+
+          <div class="level-bottom-row">
+            <small id="dashboardLevelProgressText">
+              <span class="level-progress-main">
+                <span class="level-progress-percent">0%</span> to Level 1
+              </span>
+              <span class="level-progress-sep"> • </span>
+              <span class="level-progress-secondary"><span class="level-progress-remaining-value">0</span> Points
+                remaining</span>
+            </small>
+
+            <div class="stats-mini">
+              <div class="mini-card points-mini-card">
+                <i class="fa-solid fa-coins"></i>
+                <div class="mini-card-copy">
+                  <span class="mini-card-value" id="dashboardPoints">0</span>
+                  <span class="mini-card-label">Points</span>
+                </div>
+              </div>
+
+              <div class="mini-card streak-mini-card">
+                <i class="fa-solid fa-fire"></i>
+                <div class="mini-card-copy">
+                  <span class="mini-card-value"><span id="streakValue">0</span></span>
+                  <span class="mini-card-label">Day Streak</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <section class="action-row" id="requestsControls">
+        <div class="left-actions requests-filter-row">
+          <input type="text" id="requestsSearchInput" placeholder="Search requests..." class="search-input" />
+
+          <select id="requestCategoryFilter" class="filter-select">
+            <option value="all">All Categories</option>
+            <option value="programming">Programming</option>
+            <option value="design">Design</option>
+            <option value="writing">Writing</option>
+            <option value="math">Math</option>
+            <option value="science">Science</option>
+            <option value="language">Language</option>
+            <option value="music">Music</option>
+            <option value="sports">Sports</option>
+            <option value="other">Other</option>
+          </select>
+
+          <select id="requestDifficultyFilter" class="filter-select">
+            <option value="all">All Difficulty</option>
+            <option value="easy">Easy</option>
+            <option value="medium">Medium</option>
+            <option value="hard">Hard</option>
+          </select>
+
+          <select id="requestUrgencyFilter" class="filter-select">
+            <option value="all">All Urgency</option>
+            <option value="low">Low Urgency</option>
+            <option value="medium">Medium Urgency</option>
+            <option value="high">High Urgency</option>
+          </select>
+
+          <select id="requestSortSelect" class="filter-select">
+            <option value="newest">Newest</option>
+            <option value="highest_reward">Highest Reward</option>
+            <option value="closest_deadline">Closest Deadline</option>
+            <option value="most_applicants">Most Applicants</option>
+          </select>
+        </div>
+      </section>
+
+      <!-- Main Content -->
+      <section class="skills-main">
+        <aside class="skills-left-sidebar">
+          <div class="skills-nav-group expanded active" data-section="requests">
+            <button class="skills-menu-parent active" type="button" data-section-toggle="requests" aria-expanded="true">
+              <span>Requests</span>
+              <i class="fa-solid fa-caret-right"></i>
+            </button>
+            <div class="skills-submenu">
+              <button class="skills-submenu-btn active" type="button" data-section="requests"
+                data-target="availableRequestsPane">Available Requests</button>
+              <button class="skills-submenu-btn" type="button" data-section="requests" data-target="myRequestsPane">My
+                Requests</button>
+              <button class="skills-submenu-btn" type="button" data-section="requests"
+                data-target="appliedRequestsPane">Applied Requests</button>
+            </div>
+          </div>
+
+          <button class="skills-menu-btn" type="button" data-target="transactionsView">Transactions</button>
+          <button class="skills-menu-btn" type="button" data-target="progressView">Progress</button>
+        </aside>
+
+        <div class="skills-content-area">
+          <div id="requestsView" class="skills-view active">
+            <div id="availableRequestsPane" class="requests-tab-panel active">
+              <div id="availableSection">
+                <h2 class="section-title">Available Requests</h2>
+              </div>
+            </div>
+
+            <div id="myRequestsPane" class="requests-tab-panel">
+              <div id="mySection">
+                <div class="section-title-row">
+                  <h2 class="section-title my-section">My Requests</h2>
+                  <button class="primary-btn my-requests-create-btn" type="button" data-create-request-btn>
+                    <i class="fa-solid fa-plus"></i> Create Request
+                  </button>
+                </div>
+                <div class="status-bubble-row" id="myRequestsFilterRow">
+                  <button class="status-bubble-btn active" type="button" aria-pressed="true" data-scope="my"
+                    data-status="open">Open</button>
+                  <button class="status-bubble-btn" type="button" aria-pressed="false" data-scope="my"
+                    data-status="in-progress">In Progress</button>
+                  <button class="status-bubble-btn" type="button" aria-pressed="false" data-scope="my"
+                    data-status="completed">Completed</button>
+                </div>
+                <div id="myRequestsList" class="request-cards-list" data-request-scope="my"></div>
+              </div>
+            </div>
+
+            <div id="appliedRequestsPane" class="requests-tab-panel">
+              <h2 class="section-title">Applied Requests</h2>
+              <div class="status-bubble-row" id="appliedRequestsFilterRow">
+                <button class="status-bubble-btn active" type="button" aria-pressed="true" data-scope="applied"
+                  data-status="pending">Pending</button>
+                <button class="status-bubble-btn" type="button" aria-pressed="false" data-scope="applied"
+                  data-status="in-progress">In Progress</button>
+                <button class="status-bubble-btn" type="button" aria-pressed="false" data-scope="applied"
+                  data-status="completed">Completed</button>
+              </div>
+              <div id="appliedRequestsList" class="request-cards-list" data-request-scope="applied">
+                <p class="my-activity-empty">No applied requests yet.</p>
+              </div>
+            </div>
+          </div>
+
+          <div id="transactionsView" class="skills-view">
+            <h2 class="section-title">Transactions</h2>
+            <div id="skillsTransactionsList" class="skills-transactions-list">
+              <p class="my-activity-empty">No skill transactions yet.</p>
+            </div>
+          </div>
+
+          <div id="progressView" class="skills-view">
+            <h2 class="section-title">Progress</h2>
+            <div class="sidebar-card premium">
+              <div class="card-header">
+                <i class="fa-solid fa-chart-line"></i>
+                <h4>Weekly XP</h4>
+              </div>
+              <div class="xp-box progress-xp-box">
+                <div class="xp-value" id="weeklyXpValue">0 XP</div>
+                <div class="xp-progress">
+                  <div class="xp-fill" id="weeklyXpFill"></div>
+                </div>
+                <small class="xp-text" id="weeklyXpText">0 / 200 XP</small>
+                <p class="xp-goal-meta" id="weeklyGoalMeta">0% of weekly goal</p>
+              </div>
+            </div>
+
+            <div class="sidebar-card premium">
+              <div class="card-header">
+                <i class="fa-solid fa-medal"></i>
+                <h4>Achievements &amp; Badges</h4>
+              </div>
+              <div class="badge-grid progress-badge-grid" id="badgeGrid"></div>
+            </div>
+
+            <div class="sidebar-card premium">
+              <div class="card-header">
+                <i class="fa-solid fa-chart-pie"></i>
+                <h4>Contribution Stats</h4>
+              </div>
+              <div class="contrib-stats-grid" id="contribStatsGrid">
+                <div class="contrib-stat-card">
+                  <p class="contrib-label">Requests Completed</p>
+                  <h3 id="requestsCompletedStat">0</h3>
+                </div>
+                <div class="contrib-stat-card">
+                  <p class="contrib-label">Total Points Earned</p>
+                  <h3 id="totalPointsEarnedStat">0</h3>
+                </div>
+                <div class="contrib-stat-card">
+                  <p class="contrib-label">Success Rate</p>
+                  <h3 id="successRateStat">0%</h3>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- CREATE REQUEST MODAL -->
+      <div class="modal-overlay" id="createModal">
+
+        <div class="modal-box create-request-modal-box">
+
+          <div class="modal-header create-request-header">
+            <h3>Create Help Request</h3>
+            <span class="close-modal" id="closeModal">&times;</span>
+          </div>
+          <p class="create-request-subtitle">Post a clear request and get help faster from the community.</p>
+          <div class="create-request-body">
+
+            <label>Title</label>
+            <input type="text" id="requestTitle" placeholder="Need help with React project" />
+
+            <label>Description</label>
+            <textarea id="requestDesc" maxlength="300" placeholder="Describe what you need help with..."></textarea>
+            <small id="charCount">0 / 300</small>
+
+            <div class="row-2">
+              <div>
+                <label>Category</label>
+                <select id="category">
+                  <option>Programming</option>
+                  <option>Design</option>
+                  <option>Writing</option>
+                  <option>Math</option>
+                  <option>Science</option>
+                  <option>Language</option>
+                  <option>Music</option>
+                  <option>Sports</option>
+                  <option>Other</option>
+                </select>
+              </div>
+
+              <div>
+                <label>Difficulty</label>
+                <select id="difficulty">
+                  <option value="easy">Easy</option>
+                  <option value="medium">Medium</option>
+                  <option value="hard">Hard</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="row-2">
+              <div>
+                <label>Urgency</label>
+                <select id="urgency">
+                  <option value="low">Low</option>
+                  <option value="medium">Medium</option>
+                  <option value="high">High</option>
+                </select>
+              </div>
+
+              <div>
+                <label>Deadline</label>
+                <input type="date" id="deadline">
+              </div>
+            </div>
+
+            <label>Points to Offer</label>
+            <input type="range" id="pointsSlider" min="10" max="200" value="50">
+
+            <div class="reward-preview">
+              <p>Base Points: <span id="basePoints">50</span></p>
+              <p>Urgency Bonus: <span id="bonusPoints">0</span></p>
+              <hr>
+              <p><strong>Total Reward: <span id="totalPoints">50</span></strong></p>
+            </div>
+
+            <div class="modal-actions">
+              <button class="primary-btn" id="submitRequest" type="button">Create Request</button>
+              <button class="secondary-btn" id="cancelModal" type="button">Cancel</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- REUSABLE ACTION CONFIRMATION MODAL -->
+      <div class="action-confirm-overlay" id="actionConfirmModal" role="dialog" aria-modal="true" aria-hidden="true"
+        aria-labelledby="actionConfirmTitle" aria-describedby="actionConfirmMessage">
+        <div class="action-confirm-card">
+          <h3 class="action-confirm-title" id="actionConfirmTitle">Confirm Action</h3>
+          <p class="action-confirm-message" id="actionConfirmMessage">Are you sure you want to continue?</p>
+          <div class="action-confirm-actions">
+            <button type="button" class="action-confirm-btn action-confirm-cancel"
+              id="actionConfirmCancel">Cancel</button>
+            <button type="button" class="action-confirm-btn action-confirm-proceed is-danger"
+              id="actionConfirmProceed">Confirm</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- TOAST HOST -->
+      <div class="toast-host" id="toastHost" aria-live="polite" aria-atomic="true"></div>
+
+    </div>
+  </div>
+  <script type="module" src="../js/skills.js"></script>
+  <script type="module" src="../js/nav-loader.js"></script>
+</body>
+
+</html>
