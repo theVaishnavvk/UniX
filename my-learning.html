@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>UniX - My Learning</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="../../css/theme.css">
+  <link rel="stylesheet" href="../../css/navbar.css">
+  <style>
+    .learning-shell {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding-bottom: 4rem;
+      color: var(--color-text);
+      font-family: 'Inter', sans-serif;
+    }
+
+    .learning-header {
+      margin-bottom: 2rem;
+    }
+
+    .learning-eyebrow {
+      margin: 0 0 0.6rem;
+      color: var(--color-primary);
+      font-size: 0.85rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .learning-header h1 {
+      margin: 0 0 0.75rem;
+      font-size: clamp(1.85rem, 3.4vw, 2.45rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+    }
+
+    .learning-subtitle {
+      margin: 0;
+      color: var(--color-text-muted);
+      font-size: 0.95rem;
+      line-height: 1.6;
+      max-width: 720px;
+    }
+
+    .learning-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .learning-tab-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      border: 1px solid var(--color-border);
+      background: var(--color-surface);
+      color: var(--color-text-muted);
+      border-radius: 999px;
+      padding: 0.65rem 0.95rem;
+      font: inherit;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .learning-tab-btn:hover {
+      border-color: rgba(var(--color-primary-rgb), 0.35);
+      color: var(--color-text);
+    }
+
+    .learning-tab-btn.is-active {
+      background: rgba(var(--color-primary-rgb), 0.12);
+      border-color: rgba(var(--color-primary-rgb), 0.35);
+      color: var(--color-primary);
+    }
+
+    .learning-tab-count {
+      min-width: 1.45rem;
+      height: 1.45rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 999px;
+      background: rgba(var(--color-primary-rgb), 0.12);
+      color: inherit;
+      font-size: 0.78rem;
+      font-weight: 800;
+      padding: 0 0.32rem;
+    }
+
+    .learning-state-card,
+    .learning-empty-card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg, 20px);
+      padding: 2rem;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .learning-state-card {
+      text-align: center;
+    }
+
+    .learning-state-icon {
+      width: 4rem;
+      height: 4rem;
+      margin: 0 auto 1rem;
+      display: grid;
+      place-items: center;
+      border-radius: 999px;
+      background: rgba(var(--color-primary-rgb), 0.1);
+      color: var(--color-primary);
+      font-size: 1.4rem;
+    }
+
+    .learning-state-icon.error {
+      background: rgba(239, 68, 68, 0.12);
+      color: #ef4444;
+    }
+
+    .learning-state-title {
+      margin: 0 0 0.55rem;
+      font-size: 1.1rem;
+      font-weight: 800;
+    }
+
+    .learning-state-text,
+    .learning-empty-card {
+      margin: 0;
+      color: var(--color-text-muted);
+      line-height: 1.6;
+    }
+
+    .learning-list {
+      display: grid;
+      gap: 1rem;
+    }
+
+    .learning-card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg, 20px);
+      padding: 1.5rem;
+      box-shadow: var(--shadow-sm);
+      cursor: pointer;
+      transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .learning-card:hover {
+      transform: translateY(-2px);
+      border-color: rgba(var(--color-primary-rgb), 0.28);
+      box-shadow: var(--shadow-card);
+    }
+
+    .learning-card:focus-visible {
+      outline: none;
+      border-color: var(--color-primary);
+      box-shadow: var(--shadow-card), 0 0 0 3px rgba(var(--color-primary-rgb), 0.14);
+    }
+
+    .learning-card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .learning-card-title {
+      margin: 0 0 0.35rem;
+      font-size: 1.08rem;
+      font-weight: 800;
+      color: var(--color-text);
+    }
+
+    .learning-card-subtitle {
+      margin: 0;
+      color: var(--color-text-muted);
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    .learning-course-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 0.7rem;
+    }
+
+    .learning-course-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      border-radius: 999px;
+      padding: 0.45rem 0.8rem;
+      font-size: 0.78rem;
+      font-weight: 800;
+      border: 1px solid transparent;
+    }
+
+    .learning-course-badge.certificate {
+      background: rgba(14, 165, 233, 0.12);
+      color: #0284c7;
+      border-color: rgba(14, 165, 233, 0.22);
+    }
+
+    .learning-status-badge {
+      flex-shrink: 0;
+      border-radius: 999px;
+      padding: 0.45rem 0.8rem;
+      font-size: 0.8rem;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      border: 1px solid transparent;
+    }
+
+    .learning-status-badge.active {
+      background: rgba(16, 185, 129, 0.12);
+      color: #059669;
+      border-color: rgba(16, 185, 129, 0.24);
+    }
+
+    .learning-status-badge.pending {
+      background: rgba(245, 158, 11, 0.12);
+      color: #d97706;
+      border-color: rgba(245, 158, 11, 0.24);
+    }
+
+    .learning-status-badge.completed {
+      background: rgba(99, 102, 241, 0.12);
+      color: #6366f1;
+      border-color: rgba(99, 102, 241, 0.24);
+    }
+
+    .learning-status-badge.rejected {
+      background: rgba(239, 68, 68, 0.12);
+      color: #dc2626;
+      border-color: rgba(239, 68, 68, 0.24);
+    }
+
+    .learning-card-details {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 0.85rem;
+    }
+
+    .learning-detail-item {
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md, 14px);
+      background: var(--color-bg);
+      padding: 0.9rem 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+
+    .learning-detail-item span {
+      color: var(--color-text-muted);
+      font-size: 0.82rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .learning-detail-item strong {
+      color: var(--color-text);
+      font-size: 0.98rem;
+      font-weight: 800;
+    }
+
+    .learning-card-actions {
+      margin-top: 1rem;
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .learning-chat-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 148px;
+      border-radius: var(--radius-md, 12px);
+      padding: 0.85rem 1.1rem;
+      background: var(--color-primary);
+      color: #ffffff;
+      text-decoration: none;
+      font-weight: 700;
+      transition: all 0.2s ease;
+    }
+
+    .learning-chat-btn:hover {
+      background: var(--color-primary-dark);
+      box-shadow: var(--shadow-md);
+    }
+
+    @media (max-width: 720px) {
+      .learning-card-top {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .learning-status-badge {
+        align-self: flex-start;
+      }
+
+      .learning-card-actions {
+        justify-content: stretch;
+      }
+
+      .learning-chat-btn {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body class="in-pages">
+  <div class="layout">
+    <div id="navbar-container"></div>
+    <div class="page-content">
+      <section class="learning-shell" id="myLearningRoot" data-shell-state="loading">
+        <div class="learning-header">
+          <p class="learning-eyebrow">Learning Progress</p>
+          <h1>My Learning</h1>
+          <p class="learning-subtitle">See your tutoring requests, active enrollments, and attendance progress in one place.</p>
+        </div>
+
+        <div class="learning-tabs" id="myLearningTabs" hidden>
+          <button type="button" class="learning-tab-btn is-active" data-learning-tab="active">
+            Active
+            <span class="learning-tab-count" data-learning-count="active">0</span>
+          </button>
+          <button type="button" class="learning-tab-btn" data-learning-tab="pending">
+            Pending
+            <span class="learning-tab-count" data-learning-count="pending">0</span>
+          </button>
+          <button type="button" class="learning-tab-btn" data-learning-tab="completed">
+            Completed
+            <span class="learning-tab-count" data-learning-count="completed">0</span>
+          </button>
+          <button type="button" class="learning-tab-btn" data-learning-tab="rejected">
+            Rejected
+            <span class="learning-tab-count" data-learning-count="rejected">0</span>
+          </button>
+        </div>
+
+        <div class="learning-state-card" id="myLearningStateCard">
+          <div class="learning-state-icon" id="myLearningStateIcon"><i class="fa-solid fa-circle-notch fa-spin"></i></div>
+          <h2 class="learning-state-title" id="myLearningStateTitle">Loading your courses</h2>
+          <p class="learning-state-text" id="myLearningStateText">Fetching your enrolled tutoring courses and attendance progress.</p>
+        </div>
+
+        <div class="learning-list" id="myLearningList" hidden></div>
+      </section>
+    </div>
+  </div>
+  <script type="module" src="../../js/nav-loader.js"></script>
+  <script type="module" src="../../js/tutoring.js"></script>
+</body>
+</html>

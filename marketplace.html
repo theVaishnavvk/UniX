@@ -1,0 +1,1692 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UniX – Marketplace</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/theme.css">
+  <link rel="stylesheet" href="../css/navbar.css">
+  <style>
+    /* ── LAYOUT ── */
+    .mp-wrapper {
+      display: flex;
+      gap: 28px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .mp-main {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .mp-sidebar {
+      width: 300px;
+      flex-shrink: 0;
+    }
+
+    /* ── HEADER ── */
+    .mp-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+
+    .mp-header h1 {
+      font-size: 28px;
+      font-weight: 800;
+      margin: 0;
+    }
+
+    .mp-header .subtitle {
+      color: #6b7280;
+      font-size: 14px;
+      margin-top: 2px;
+    }
+
+    .post-btn {
+      background: linear-gradient(135deg, #6a5af9, #7c3aed);
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 25px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: .2s;
+    }
+
+    .post-btn:hover {
+      opacity: .88;
+      transform: translateY(-2px);
+    }
+
+    /* ── CATEGORY PILLS ── */
+    .cat-pills {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
+    }
+
+    .cat-pill {
+      padding: 7px 16px;
+      border-radius: 30px;
+      border: 1.5px solid #e5e7eb;
+      background: #fff;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: .2s;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .cat-pill:hover,
+    .cat-pill.active {
+      background: linear-gradient(135deg, #6a5af9, #7c3aed);
+      color: #fff;
+      border-color: transparent;
+    }
+
+    /* ── SEARCH & SORT BAR ── */
+    .search-bar-row {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 22px;
+      flex-wrap: wrap;
+    }
+
+    .search-bar-row .search-input {
+      flex: 1;
+      min-width: 180px;
+      padding: 10px 16px;
+      border-radius: 25px;
+      border: 1.5px solid #e5e7eb;
+      font-size: 14px;
+      background: #fff;
+      outline: none;
+    }
+
+    .search-bar-row .search-input:focus {
+      border-color: #6a5af9;
+      box-shadow: 0 0 0 3px rgba(106, 90, 249, .1);
+    }
+
+    .filter-select {
+      padding: 10px 14px;
+      border-radius: 25px;
+      border: 1.5px solid #e5e7eb;
+      font-size: 13px;
+      background: #fff;
+      cursor: pointer;
+      outline: none;
+    }
+
+    .filter-select:focus {
+      border-color: #6a5af9;
+    }
+
+    .my-listings-toggle, .fav-toggle {
+      padding: 10px 16px;
+      border-radius: 25px;
+      border: 1.5px solid #e5e7eb;
+      background: #fff;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: .2s;
+    }
+
+    .my-listings-toggle.active {
+      background: #fef3c7;
+      border-color: #f59e0b;
+      color: #92400e;
+    }
+
+    .fav-toggle.active {
+      background: #fff1f2;
+      border-color: #fecaca;
+      color: #dc2626;
+    }
+
+    /* ── GRID ── */
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 24px;
+      align-items: stretch;
+    }
+
+    /* ── CARD ── */
+    .product-card {
+      background: #fff;
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, .05);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      border: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .product-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 28px rgba(0, 0, 0, .11);
+    }
+
+    .card-img {
+      width: 100%;
+      height: 150px;
+      background: #f3f4f6;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 44px;
+    }
+
+    .card-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .card-img i {
+      color: #9ca3af;
+    }
+
+    .card-body {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+
+    .card-title {
+      font-weight: 700;
+      font-size: 15px;
+      margin-bottom: 5px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .card-price {
+      color: #6a5af9;
+      font-weight: 800;
+      font-size: 18px;
+      margin-bottom: 8px;
+    }
+
+    .card-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .cond-badge {
+      display: inline-block;
+      padding: 2px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      background: #f3f4f6;
+    }
+
+    .card-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: auto;
+    }
+
+    .contact-btn, .primary-btn, .sold-btn {
+      flex: 1;
+      background: linear-gradient(135deg, #6a5af9, #7c3aed);
+      color: #fff;
+      border: none;
+      padding: 10px;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: .2s;
+    }
+
+    .offer-btn, .edit-btn {
+      flex: 1;
+      background: #fff;
+      border: 1.5px solid #6a5af9;
+      color: #6a5af9;
+      padding: 9px;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .save-btn {
+      flex: 1;
+      background: rgba(0, 229, 255, 0.08);
+      border: 1.5px solid rgba(0, 229, 255, 0.18);
+      color: var(--color-primary);
+      padding: 9px 12px;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      transition: .2s;
+    }
+
+    .save-btn:hover {
+      background: rgba(0, 229, 255, 0.14);
+      border-color: rgba(0, 229, 255, 0.28);
+      transform: translateY(-1px);
+    }
+
+    .save-btn.active {
+      background: var(--gradient-primary);
+      color: #07090f;
+      border-color: transparent;
+      box-shadow: var(--glow-accent);
+    }
+
+    .edit-btn { border-color: #059669; color: #059669; }
+
+    .sidebar-card {
+      background: #fff;
+      border-radius: 18px;
+      padding: 20px;
+      box-shadow: 0 4px 15px rgba(0,0,0,.06);
+      margin-bottom: 20px;
+    }
+
+    .ai-panel-card {
+      background: linear-gradient(160deg, #f5f3ff, #ede9fe);
+      border: 1px solid #c4b5fd;
+    }
+
+    /* ── MODALS ── */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.45);
+      z-index: 1400;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 24px 16px;
+      overflow-y: auto;
+      backdrop-filter: blur(4px);
+      box-sizing: border-box;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal-box {
+      background: #fff;
+      border-radius: 22px;
+      padding: 28px;
+      max-width: 500px;
+      width: 90%;
+      max-height: calc(100vh - 48px);
+      overflow-y: auto;
+      position: relative;
+      box-sizing: border-box;
+    }
+    .modal-box.with-fixed-head {
+      padding: 0;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .modal-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 18px;
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      background: #fff;
+      padding-bottom: 8px;
+    }
+    .modal-box.with-fixed-head .modal-head {
+      margin: 0;
+      padding: 20px 24px 14px;
+      border-bottom: 1px solid #f3f4f6;
+      position: relative;
+      top: auto;
+      flex-shrink: 0;
+    }
+    .modal-head h3 {
+      margin: 0;
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: #111827;
+    }
+    .modal-scroll {
+      flex: 1 1 auto;
+      min-height: 0;
+      overflow-y: auto;
+      padding: 18px 24px 24px;
+    }
+    .modal-close {
+      border: none;
+      background: #f3f4f6;
+      border-radius: 50%;
+      width: 32px;
+      height: 32px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      color: #374151;
+      font-size: 22px;
+      line-height: 1;
+      transition: background .2s, transform .2s;
+    }
+    .modal-close:hover {
+      background: #e5e7eb;
+      transform: scale(1.04);
+    }
+
+    .form-group { margin-bottom: 15px; }
+    .form-group label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 5px; }
+    .form-group input, .form-group textarea, .form-group select {
+      width: 100%;
+      padding: 10px;
+      border-radius: 10px;
+      border: 1.5px solid #e5e7eb;
+      box-sizing: border-box;
+      font-family: inherit;
+    }
+
+    .image-upload-card {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding: 14px;
+      border: 1.5px dashed #d1d5db;
+      border-radius: 16px;
+      background: #fafafa;
+      cursor: pointer;
+      transition: .2s;
+    }
+
+    .image-upload-card:hover {
+      border-color: #a78bfa;
+      background: #f5f3ff;
+    }
+
+    .image-upload-preview {
+      width: 100%;
+      height: 180px;
+      border-radius: 14px;
+      background: #f3f4f6;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      color: #9ca3af;
+      font-size: 40px;
+    }
+
+    .image-upload-preview img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transform: scale(1);
+      transform-origin: center center;
+      transition: transform .18s ease, object-position .18s ease;
+    }
+
+    .image-upload-placeholder {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      color: #9ca3af;
+      text-align: center;
+      padding: 16px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .image-upload-placeholder i {
+      font-size: 34px;
+      color: #8b5cf6;
+    }
+
+    .image-upload-meta {
+      color: #6a5af9;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .image-upload-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+
+    .image-frame-editor {
+      margin-top: 14px;
+      padding: 14px;
+      border-radius: 16px;
+      border: 1px solid #e5e7eb;
+      background: #fff;
+    }
+
+    .image-frame-editor[hidden] {
+      display: none;
+    }
+
+    .image-frame-editor-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .image-frame-editor-head strong {
+      font-size: 13px;
+      color: #111827;
+    }
+
+    .image-frame-editor-head span {
+      font-size: 12px;
+      color: #6b7280;
+    }
+
+    .image-frame-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 12px;
+    }
+
+    .image-frame-field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .image-frame-field label {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      color: #374151;
+    }
+
+    .image-frame-field input[type="range"] {
+      width: 100%;
+      accent-color: #6a5af9;
+    }
+
+    .ghost-btn {
+      border: 1.5px solid #e5e7eb;
+      background: #fff;
+      color: #374151;
+      padding: 10px 14px;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: .2s;
+      font-family: inherit;
+    }
+
+    .ghost-btn:hover:not(:disabled) {
+      border-color: #c4b5fd;
+      color: #6a5af9;
+    }
+
+    .ghost-btn:disabled {
+      opacity: .55;
+      cursor: not-allowed;
+    }
+
+    #toast-container { position: fixed; bottom: 20px; right: 20px; z-index: 1000; }
+    .toast { padding: 12px 20px; border-radius: 10px; color: #fff; margin-top: 10px; font-size: 13px; }
+    .toast.success { background: #10b981; }
+    .toast.error { background: #ef4444; }
+
+    .logo-loader { text-align: center; padding: 40px; grid-column: 1/-1; }
+    .empty-state { text-align: center; padding: 40px; grid-column: 1/-1; color: #9ca3af; }
+
+    @media (max-width: 1100px) {
+      .mp-wrapper {
+        flex-direction: column;
+      }
+
+      .mp-sidebar {
+        width: 100%;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 16px;
+      }
+
+      .sidebar-card {
+        margin-bottom: 0;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .mp-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .post-btn,
+      .search-bar-row .search-input,
+      .filter-select,
+      .my-listings-toggle,
+      .fav-toggle {
+        width: 100%;
+      }
+
+      .post-btn {
+        justify-content: center;
+      }
+
+      .product-grid {
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 16px;
+      }
+
+      .card-actions {
+        flex-wrap: wrap;
+      }
+
+      .contact-btn,
+      .primary-btn,
+      .sold-btn,
+      .offer-btn,
+      .edit-btn,
+      .save-btn {
+        min-width: calc(50% - 4px);
+      }
+
+      .mp-sidebar {
+        grid-template-columns: 1fr;
+      }
+
+      .modal-box {
+        padding: 22px 18px;
+        max-height: calc(100vh - 32px);
+      }
+      .modal-box.with-fixed-head {
+        padding: 0;
+      }
+      .modal-box.with-fixed-head .modal-head {
+        padding: 18px 18px 12px;
+      }
+      .modal-scroll {
+        padding: 14px 18px 18px;
+      }
+
+      #toast-container {
+        left: 16px;
+        right: 16px;
+        bottom: 16px;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .mp-header h1 {
+        font-size: 24px;
+      }
+
+      .cat-pill {
+        flex: 1 1 calc(50% - 5px);
+        justify-content: center;
+      }
+
+      .product-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .contact-btn,
+      .primary-btn,
+      .sold-btn,
+      .offer-btn,
+      .edit-btn,
+      .save-btn {
+        min-width: 100%;
+      }
+
+      .modal-box {
+        width: min(100%, 92vw);
+        padding: 20px 16px;
+        max-height: calc(100vh - 24px);
+      }
+      .modal-box.with-fixed-head {
+        padding: 0;
+      }
+      .modal-box.with-fixed-head .modal-head {
+        padding: 16px 16px 10px;
+      }
+      .modal-scroll {
+        padding: 12px 16px 16px;
+      }
+
+      .modal-overlay {
+        padding: 12px;
+      }
+
+      #detailImg {
+        height: 160px !important;
+        font-size: 40px !important;
+      }
+    }
+
+    .mp-header h1,
+    .sidebar-card h4,
+    .card-title,
+    .modal-head h3,
+    #detailTitle {
+      color: var(--color-text);
+    }
+
+    .mp-header .subtitle,
+    .empty-state,
+    .logo-loader,
+    .sidebar-card ul,
+    #detailDesc,
+    #aiResponse {
+      color: var(--color-text-muted);
+    }
+
+    .product-card,
+    .sidebar-card,
+    .modal-box,
+    .cat-pill,
+    .search-bar-row .search-input,
+    .filter-select,
+    .my-listings-toggle,
+    .fav-toggle,
+    .ghost-btn {
+      background: var(--gradient-surface);
+      border-color: var(--color-border);
+      color: var(--color-text);
+      box-shadow: var(--shadow-card);
+    }
+
+    .cat-pill:hover,
+    .cat-pill.active,
+    .post-btn,
+    .contact-btn,
+    .primary-btn,
+    .sold-btn,
+    .ai-refresh-btn,
+    #submitItem {
+      background: var(--gradient-primary) !important;
+      color: #07090f !important;
+      border-color: transparent !important;
+      box-shadow: var(--glow-accent);
+    }
+
+    .offer-btn,
+    .edit-btn,
+    .save-btn,
+    .my-listings-toggle.active,
+    .fav-toggle.active {
+      background: rgba(0, 229, 255, 0.1);
+      border-color: rgba(0, 229, 255, 0.18);
+      color: var(--color-primary);
+    }
+
+    .search-bar-row .search-input:focus,
+    .filter-select:focus,
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+      border-color: rgba(0, 229, 255, 0.28);
+      box-shadow: 0 0 0 3px rgba(0, 229, 255, 0.12);
+      background: rgba(255, 255, 255, 0.03);
+      color: var(--color-text);
+    }
+
+    .card-img,
+    .image-upload-preview,
+    #detailImg {
+      background: rgba(255, 255, 255, 0.04) !important;
+      color: var(--color-text-faint) !important;
+    }
+
+    .card-price,
+    #detailPrice,
+    .image-upload-meta {
+      color: var(--color-primary) !important;
+    }
+
+    .cond-badge {
+      background: rgba(0, 229, 255, 0.1);
+      color: var(--color-primary);
+      border: 1px solid rgba(0, 229, 255, 0.16);
+    }
+
+    .modal-overlay {
+      background: rgba(7, 9, 15, 0.7);
+      backdrop-filter: blur(10px);
+      padding-top: max(24px, calc(var(--page-top-offset) - 12px));
+    }
+
+    .modal-box,
+    .modal-head,
+    .modal-box.with-fixed-head .modal-head,
+    .modal-scroll,
+    .form-group input,
+    .form-group textarea,
+    .form-group select,
+    .image-upload-card,
+    .image-frame-editor,
+    .ghost-btn {
+      background: var(--gradient-surface);
+      border-color: var(--color-border);
+      color: var(--color-text);
+    }
+
+    .modal-head,
+    .modal-box.with-fixed-head .modal-head {
+      border-bottom-color: var(--color-border);
+      box-shadow: none;
+    }
+
+    .modal-head h3,
+    .form-group label,
+    .image-frame-editor-head strong,
+    .image-frame-field label {
+      color: var(--color-text);
+    }
+
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    .form-group input::placeholder,
+    .form-group textarea::placeholder,
+    .image-upload-placeholder,
+    .image-frame-editor-head span {
+      color: var(--color-text-muted);
+    }
+
+    .form-group select option {
+      background: var(--color-surface-solid);
+      color: var(--color-text);
+    }
+
+    .modal-close {
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--color-text-muted);
+    }
+
+    .modal-close:hover {
+      background: rgba(0, 229, 255, 0.12);
+      color: var(--color-primary);
+    }
+
+    .image-upload-card,
+    .image-frame-editor {
+      background: rgba(255, 255, 255, 0.03);
+      box-shadow: none;
+    }
+
+    .image-upload-card:hover {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: var(--color-border-strong);
+    }
+
+    .image-upload-placeholder i,
+    .image-upload-meta,
+    .image-frame-field label span {
+      color: var(--color-primary) !important;
+    }
+
+    .image-frame-field input[type="range"] {
+      accent-color: var(--color-primary);
+    }
+
+    .toast {
+      background: var(--gradient-surface);
+      border: 1px solid var(--color-border);
+      color: var(--color-text);
+      box-shadow: var(--shadow-card);
+    }
+
+    .toast.success {
+      border-left: 3px solid #10b981;
+    }
+
+    .toast.error {
+      border-left: 3px solid #ef4444;
+    }
+  </style>
+</head>
+
+<body class="in-pages">
+  <div class="layout">
+    <div id="navbar-container"></div>
+    <div class="page-content">
+      <div class="mp-wrapper">
+        <div class="mp-main">
+          <div class="mp-header">
+            <div>
+              <h1>🛒 Marketplace</h1>
+              <p class="subtitle">Buy & sell safely on campus</p>
+            </div>
+            <button class="post-btn" id="openPostModal"><i class="fa-solid fa-plus"></i> Post Item</button>
+          </div>
+
+          <div class="cat-pills">
+            <div class="cat-pill active" data-cat="">🏷️ All</div>
+            <div class="cat-pill" data-cat="Books">📚 Books</div>
+            <div class="cat-pill" data-cat="Electronics">💻 Electronics</div>
+            <div class="cat-pill" data-cat="Hostel">🏠 Hostel</div>
+            <div class="cat-pill" data-cat="Stationery">✏️ Stationery</div>
+            <div class="cat-pill" data-cat="Clothing">👕 Clothing</div>
+          </div>
+
+          <div class="search-bar-row">
+            <input type="text" id="searchInput" class="search-input" placeholder="🔍 Search items...">
+            <select id="filterCondition" class="filter-select">
+              <option value="">Any Condition</option>
+              <option value="new">New</option>
+              <option value="used">Used</option>
+            </select>
+            <select id="sortSelect" class="filter-select">
+              <option value="newest">Newest First</option>
+              <option value="price_asc">Price: Low-High</option>
+              <option value="price_desc">Price: High-Low</option>
+            </select>
+            <button class="my-listings-toggle" id="myListingsToggle"><i class="fa-solid fa-user"></i> My Listings</button>
+            <button class="fav-toggle" id="favToggle"><i class="fa-solid fa-heart"></i> Saved</button>
+          </div>
+
+          <div id="productGrid" class="product-grid">
+            <div class="logo-loader" id="marketplaceLoader">
+              <p>Loading listings...</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="mp-sidebar">
+          <div class="sidebar-card ai-panel-card">
+            <h4>✨ AI Insights</h4>
+            <button class="ai-refresh-btn" id="aiRefreshBtn" style="background:#7c3aed; color:#fff; border:none; border-radius:15px; padding:5px; width:100%; cursor:pointer;">Get Tips</button>
+            <div id="aiResponse" style="font-size:12px; color:#94A3B8; margin-top:10px;">Get smart campus feedback.</div>
+          </div>
+          <div class="sidebar-card">
+            <h4>🛡️ Safe Trading Tips</h4>
+            <ul style="padding-left:15px; font-size:12px; line-height:1.6;">
+              <li>Meet in public campus areas</li>
+              <li>Inspect items before payment</li>
+              <li>No advance payments</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast-container"></div>
+
+  <!-- MODALS -->
+  <div class="modal-overlay" id="postModal">
+    <div class="modal-box with-fixed-head">
+      <div class="modal-head">
+        <h3 id="postModalTitle">Post New Listing</h3>
+        <button class="modal-close" id="closePostModal" aria-label="Close modal">×</button>
+      </div>
+      <div class="modal-scroll">
+        <div class="form-group"><label>Title*</label><input id="itemTitle" type="text" placeholder="e.g. Maths Book"></div>
+        <div class="form-group"><label>Price (₹)*</label><input id="itemPrice" type="number" placeholder="0"></div>
+        <div class="form-group"><label>Category</label><select id="itemCategory"><option value="Books">Books</option><option value="Electronics">Electronics</option><option value="Hostel">Hostel</option><option value="Stationery">Stationery</option><option value="Clothing">Clothing</option></select></div>
+        <div class="form-group"><label>Condition</label><select id="itemCondition"><option value="new">New</option><option value="used">Used</option></select></div>
+        <div class="form-group"><label>Description</label><textarea id="itemDescription" placeholder="Optional details..."></textarea></div>
+        <div class="form-group">
+          <label>Image</label>
+          <label class="image-upload-card" for="itemImage">
+            <div class="image-upload-preview">
+              <img id="itemImagePreview" src="" alt="Listing image preview" hidden>
+              <div id="itemImagePlaceholder" class="image-upload-placeholder">
+                <i class="fa-regular fa-image"></i>
+                <span>Click to upload a listing image</span>
+              </div>
+            </div>
+            <span class="image-upload-meta" id="itemImageMeta">PNG, JPG, or WEBP up to 5MB</span>
+            <input id="itemImage" type="file" accept="image/png,image/jpeg,image/webp" hidden>
+          </label>
+          <div class="image-upload-actions">
+            <button class="ghost-btn" id="clearItemImage" type="button" disabled>Clear image</button>
+          </div>
+          <div class="image-frame-editor" id="itemImageFrameEditor" hidden>
+            <div class="image-frame-editor-head">
+              <strong>Adjust image framing</strong>
+              <span>Set how the listing image appears on the card.</span>
+            </div>
+            <div class="image-frame-grid">
+              <div class="image-frame-field">
+                <label for="itemImageZoom"><span>Zoom</span><span id="itemImageZoomValue">100%</span></label>
+                <input id="itemImageZoom" type="range" min="100" max="220" value="100">
+              </div>
+              <div class="image-frame-field">
+                <label for="itemImageX"><span>Horizontal</span><span id="itemImageXValue">50%</span></label>
+                <input id="itemImageX" type="range" min="0" max="100" value="50">
+              </div>
+              <div class="image-frame-field">
+                <label for="itemImageY"><span>Vertical</span><span id="itemImageYValue">50%</span></label>
+                <input id="itemImageY" type="range" min="0" max="100" value="50">
+              </div>
+            </div>
+            <div class="image-upload-actions">
+              <button class="ghost-btn" id="resetItemImageFrame" type="button" disabled>Reset framing</button>
+            </div>
+          </div>
+        </div>
+        <button class="primary-btn" id="submitItem" style="width:100%">Post Listing</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="detailModal">
+    <div class="modal-box">
+      <div class="modal-head">
+        <h3 id="detailTitle"></h3>
+        <button class="modal-close" id="closeDetailModal" aria-label="Close modal">×</button>
+      </div>
+      <div id="detailImg" style="height:200px; background:#f3f4f6; display:flex; align-items:center; justify-content:center; border-radius:12px; margin-bottom:15px; font-size:50px;"></div>
+      <div id="detailPrice" style="font-size:24px; font-weight:800; color:#6a5af9; margin-bottom:10px;"></div>
+      <div id="detailDesc" style="font-size:14px; margin-bottom:20px; color:#4b5563;"></div>
+      <div id="detailActions" class="card-actions"></div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { auth, db, storage } from "../js/firebase.js";
+    import { askGemini } from "../js/ai.js";
+    import {
+      DEFAULT_IMAGE_FRAME,
+      normalizeImageFrame,
+      applyImageFrameToElement,
+      createFramedImageFile
+    } from "../js/image-upload-utils.js";
+    import {
+      collection, onSnapshot, query, orderBy, addDoc, serverTimestamp, doc, getDoc, updateDoc, deleteDoc
+    } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
+    import { ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-storage.js";
+
+    let allDocs = [], currentUser = null, activeCategory = "", myListingsOnly = false, savedOnly = false, unsubscribeProducts = null;
+    let savedListingIds = new Set();
+    const SAVED_LISTINGS_STORAGE_PREFIX = "unix_marketplace_saved_";
+    const itemImageInput = document.getElementById("itemImage");
+    const itemImagePreview = document.getElementById("itemImagePreview");
+    const itemImagePlaceholder = document.getElementById("itemImagePlaceholder");
+    const itemImageMeta = document.getElementById("itemImageMeta");
+    const clearItemImageBtn = document.getElementById("clearItemImage");
+    const itemImageFrameEditor = document.getElementById("itemImageFrameEditor");
+    const itemImageZoomInput = document.getElementById("itemImageZoom");
+    const itemImageXInput = document.getElementById("itemImageX");
+    const itemImageYInput = document.getElementById("itemImageY");
+    const itemImageZoomValue = document.getElementById("itemImageZoomValue");
+    const itemImageXValue = document.getElementById("itemImageXValue");
+    const itemImageYValue = document.getElementById("itemImageYValue");
+    const resetItemImageFrameBtn = document.getElementById("resetItemImageFrame");
+    const postModal = document.getElementById("postModal");
+    const postModalTitle = document.getElementById("postModalTitle");
+    const submitItemBtn = document.getElementById("submitItem");
+    let itemImageObjectUrl = "";
+    let itemImageFrame = { ...DEFAULT_IMAGE_FRAME };
+    let activeListingEditId = "";
+    let activeListingImageUrl = "";
+    let activeListingImageRemoved = false;
+
+    function isEditingListing() {
+      return Boolean(activeListingEditId);
+    }
+
+    function getSavedListingsStorageKey(uid = currentUser?.uid) {
+      const safeUid = String(uid || "").trim();
+      return safeUid ? `${SAVED_LISTINGS_STORAGE_PREFIX}${safeUid}` : "";
+    }
+
+    function updateSavedToggleState() {
+      const favToggleBtn = document.getElementById("favToggle");
+      if (!favToggleBtn) return;
+      favToggleBtn.classList.toggle("active", savedOnly);
+      const countSuffix = savedListingIds.size ? ` (${savedListingIds.size})` : "";
+      favToggleBtn.innerHTML = `<i class="fa-solid fa-heart"></i> Saved${countSuffix}`;
+    }
+
+    function loadSavedListings() {
+      const storageKey = getSavedListingsStorageKey();
+      if (!storageKey) {
+        savedListingIds = new Set();
+        updateSavedToggleState();
+        return;
+      }
+      try {
+        const raw = localStorage.getItem(storageKey);
+        const parsed = raw ? JSON.parse(raw) : [];
+        savedListingIds = new Set(Array.isArray(parsed) ? parsed.map(id => String(id || "").trim()).filter(Boolean) : []);
+      } catch (error) {
+        console.warn("Saved listings cache read failed:", error);
+        savedListingIds = new Set();
+      }
+      updateSavedToggleState();
+    }
+
+    function persistSavedListings() {
+      const storageKey = getSavedListingsStorageKey();
+      if (!storageKey) return;
+      localStorage.setItem(storageKey, JSON.stringify([...savedListingIds]));
+      updateSavedToggleState();
+    }
+
+    function pruneSavedListings() {
+      if (!savedListingIds.size) return;
+      const liveIds = new Set(allDocs.map(docSnap => docSnap.id));
+      let changed = false;
+      savedListingIds.forEach((listingId) => {
+        if (!liveIds.has(listingId)) {
+          savedListingIds.delete(listingId);
+          changed = true;
+        }
+      });
+      if (changed) persistSavedListings();
+    }
+
+    function isListingSaved(listingId) {
+      return savedListingIds.has(String(listingId || "").trim());
+    }
+
+    function toggleSavedListing(listingId) {
+      const safeId = String(listingId || "").trim();
+      if (!safeId) return false;
+      const willSave = !savedListingIds.has(safeId);
+      if (willSave) {
+        savedListingIds.add(safeId);
+      } else {
+        savedListingIds.delete(safeId);
+      }
+      persistSavedListings();
+      renderProducts();
+      toast(willSave ? "Added to Saved." : "Removed from Saved.");
+      return willSave;
+    }
+
+    function toast(msg, type = "success") {
+      const t = document.createElement("div"); t.className = `toast ${type}`; t.textContent = msg;
+      document.getElementById("toast-container").appendChild(t);
+      setTimeout(() => t.remove(), 3000);
+    }
+
+    function setItemImageFrameEditorVisible(isVisible) {
+      if (itemImageFrameEditor) itemImageFrameEditor.hidden = !isVisible;
+    }
+
+    function syncItemImageFrameControls() {
+      const safeFrame = normalizeImageFrame(itemImageFrame);
+      itemImageFrame = safeFrame;
+      if (itemImageZoomInput) itemImageZoomInput.value = String(Math.round(safeFrame.zoom * 100));
+      if (itemImageXInput) itemImageXInput.value = String(Math.round(safeFrame.x));
+      if (itemImageYInput) itemImageYInput.value = String(Math.round(safeFrame.y));
+      if (itemImageZoomValue) itemImageZoomValue.textContent = `${Math.round(safeFrame.zoom * 100)}%`;
+      if (itemImageXValue) itemImageXValue.textContent = `${Math.round(safeFrame.x)}%`;
+      if (itemImageYValue) itemImageYValue.textContent = `${Math.round(safeFrame.y)}%`;
+      if (resetItemImageFrameBtn) resetItemImageFrameBtn.disabled = itemImagePreview?.hidden ?? true;
+    }
+
+    function renderItemImageFrame() {
+      if (itemImagePreview && !itemImagePreview.hidden) {
+        applyImageFrameToElement(itemImagePreview, itemImageFrame);
+      }
+      syncItemImageFrameControls();
+    }
+
+    function resetItemImageFrame() {
+      itemImageFrame = { ...DEFAULT_IMAGE_FRAME };
+      renderItemImageFrame();
+    }
+
+    function resetItemImagePicker() {
+      if (itemImageObjectUrl) {
+        URL.revokeObjectURL(itemImageObjectUrl);
+        itemImageObjectUrl = "";
+      }
+      if (itemImageInput) itemImageInput.value = "";
+      if (itemImagePreview) {
+        itemImagePreview.hidden = true;
+        itemImagePreview.removeAttribute("src");
+        itemImagePreview.style.objectPosition = "50% 50%";
+        itemImagePreview.style.transform = "scale(1)";
+      }
+      if (itemImagePlaceholder) itemImagePlaceholder.hidden = false;
+      if (itemImageMeta) itemImageMeta.textContent = "PNG, JPG, or WEBP up to 5MB";
+      if (clearItemImageBtn) clearItemImageBtn.disabled = true;
+      setItemImageFrameEditorVisible(false);
+      resetItemImageFrame();
+    }
+
+    function showExistingItemImage(imageUrl) {
+      if (!itemImagePreview || !itemImagePlaceholder) return;
+      if (itemImageObjectUrl) {
+        URL.revokeObjectURL(itemImageObjectUrl);
+        itemImageObjectUrl = "";
+      }
+      if (itemImageInput) itemImageInput.value = "";
+      itemImagePreview.src = imageUrl;
+      itemImagePreview.hidden = false;
+      itemImagePlaceholder.hidden = true;
+      if (itemImageMeta) itemImageMeta.textContent = "Current image. Upload a new one to replace it, or clear it to remove.";
+      if (clearItemImageBtn) clearItemImageBtn.disabled = false;
+      setItemImageFrameEditorVisible(false);
+      resetItemImageFrame();
+    }
+
+    function resetListingFormState() {
+      activeListingEditId = "";
+      activeListingImageUrl = "";
+      activeListingImageRemoved = false;
+      if (postModalTitle) postModalTitle.textContent = "Post New Listing";
+      if (submitItemBtn) submitItemBtn.textContent = "Post Listing";
+      document.getElementById("itemTitle").value = "";
+      document.getElementById("itemPrice").value = "";
+      document.getElementById("itemDescription").value = "";
+      document.getElementById("itemCategory").value = "Books";
+      document.getElementById("itemCondition").value = "new";
+      resetItemImagePicker();
+    }
+
+    function openCreateListingModal() {
+      resetListingFormState();
+      postModal.classList.add("open");
+    }
+
+    function closePostListingModal() {
+      postModal.classList.remove("open");
+      resetListingFormState();
+    }
+
+    function openEditListingModal(docSnap) {
+      const data = docSnap.data();
+      activeListingEditId = docSnap.id;
+      activeListingImageUrl = String(data.imageUrl || "").trim();
+      activeListingImageRemoved = false;
+      if (postModalTitle) postModalTitle.textContent = "Edit Listing";
+      if (submitItemBtn) submitItemBtn.textContent = "Save Changes";
+      document.getElementById("itemTitle").value = data.title || "";
+      document.getElementById("itemPrice").value = data.price || "";
+      document.getElementById("itemDescription").value = data.description || "";
+      document.getElementById("itemCategory").value = data.category || "Books";
+      document.getElementById("itemCondition").value = data.condition || "new";
+      resetItemImagePicker();
+      if (activeListingImageUrl) {
+        showExistingItemImage(activeListingImageUrl);
+      }
+      document.getElementById("detailModal").classList.remove("open");
+      postModal.classList.add("open");
+    }
+
+    function validateImageFile(file) {
+      if (!file) return true;
+      if (!file.type.startsWith("image/")) {
+        toast("Please choose a valid image file.", "error");
+        return false;
+      }
+      if (file.size > 5 * 1024 * 1024) {
+        toast("Image must be 5MB or smaller.", "error");
+        return false;
+      }
+      return true;
+    }
+
+    async function uploadMarketplaceImage(file, frame = DEFAULT_IMAGE_FRAME) {
+      if (!file) return "";
+      const previewStage = itemImagePreview?.closest(".image-upload-preview");
+      const uploadFile = await createFramedImageFile(file, frame, {
+        outputWidth: previewStage?.clientWidth || 320,
+        outputHeight: previewStage?.clientHeight || 180,
+        maxWidth: 1600,
+        maxHeight: 1600,
+        quality: 0.82
+      });
+      const safeName = String(uploadFile.name || file.name || "listing").replace(/\s+/g, "_");
+      const storageRef = ref(storage, `marketplace/${currentUser.uid}_${Date.now()}_${safeName}`);
+      const uploadSnapshot = await uploadBytes(storageRef, uploadFile);
+      return getDownloadURL(uploadSnapshot.ref);
+    }
+
+    onAuthStateChanged(auth, async user => {
+      if (!user) { window.location.href = "../login.html"; return; }
+      currentUser = user;
+      loadSavedListings();
+      loadProducts();
+    });
+
+    if (itemImageInput) {
+      itemImageInput.addEventListener("change", (event) => {
+        const file = event.target.files && event.target.files[0] ? event.target.files[0] : null;
+        if (!file) {
+          resetItemImagePicker();
+          return;
+        }
+        if (!validateImageFile(file)) {
+          resetItemImagePicker();
+          return;
+        }
+        if (itemImageObjectUrl) {
+          URL.revokeObjectURL(itemImageObjectUrl);
+        }
+        activeListingImageRemoved = false;
+        itemImageObjectUrl = URL.createObjectURL(file);
+        itemImagePreview.src = itemImageObjectUrl;
+        itemImagePreview.hidden = false;
+        itemImagePlaceholder.hidden = true;
+        itemImageMeta.textContent = `Selected: ${file.name}. Adjust framing if needed.`;
+        clearItemImageBtn.disabled = false;
+        setItemImageFrameEditorVisible(true);
+        resetItemImageFrame();
+      });
+    }
+
+    [
+      [itemImageZoomInput, "zoom"],
+      [itemImageXInput, "x"],
+      [itemImageYInput, "y"]
+    ].forEach(([input, key]) => {
+      if (!input) return;
+      input.addEventListener("input", () => {
+        itemImageFrame = normalizeImageFrame({
+          ...itemImageFrame,
+          [key]: key === "zoom" ? Number(input.value) / 100 : Number(input.value)
+        });
+        renderItemImageFrame();
+      });
+    });
+
+    if (resetItemImageFrameBtn) {
+      resetItemImageFrameBtn.addEventListener("click", () => {
+        resetItemImageFrame();
+      });
+    }
+
+    if (clearItemImageBtn) {
+      clearItemImageBtn.addEventListener("click", () => {
+        if (isEditingListing()) {
+          activeListingImageRemoved = true;
+          activeListingImageUrl = "";
+        }
+        resetItemImagePicker();
+      });
+    }
+
+    function loadProducts() {
+      if (unsubscribeProducts) unsubscribeProducts();
+      const q = query(collection(db, "marketplace"), orderBy("createdAt", "desc"));
+      unsubscribeProducts = onSnapshot(q, snap => {
+        allDocs = snap.docs;
+        pruneSavedListings();
+        renderProducts();
+        document.getElementById("marketplaceLoader").style.display = "none";
+      }, err => { console.error(err); toast("Error loading products", "error"); });
+    }
+
+    function renderProducts() {
+      const grid = document.getElementById("productGrid");
+      const search = document.getElementById("searchInput").value.toLowerCase();
+      const selectedCondition = document.getElementById("filterCondition").value;
+      const sortValue = document.getElementById("sortSelect").value;
+      let filtered = allDocs.filter(d => {
+        const data = d.data();
+        const matchSearch = !search || data.title?.toLowerCase().includes(search);
+        const matchCat = !activeCategory || data.category === activeCategory;
+        const matchMine = !myListingsOnly || data.sellerId === currentUser?.uid;
+        const matchSaved = !savedOnly || isListingSaved(d.id);
+        const matchCondition = !selectedCondition || data.condition === selectedCondition;
+        return matchSearch && matchCat && matchMine && matchSaved && matchCondition;
+      });
+
+      filtered = filtered.slice().sort((a, b) => {
+        const aData = a.data();
+        const bData = b.data();
+        if (sortValue === "price_asc") return Number(aData.price || 0) - Number(bData.price || 0);
+        if (sortValue === "price_desc") return Number(bData.price || 0) - Number(aData.price || 0);
+        const aTime = aData.createdAt?.toMillis?.() || 0;
+        const bTime = bData.createdAt?.toMillis?.() || 0;
+        return bTime - aTime;
+      });
+
+      if (!filtered.length) {
+        const emptyMessage = savedOnly
+          ? "No saved listings yet."
+          : myListingsOnly
+            ? "You have not posted any listings yet."
+            : "No listings found.";
+        grid.innerHTML = `<div class="empty-state"><i class="fa-solid fa-box-open"></i><p>${emptyMessage}</p></div>`;
+        return;
+      }
+
+      grid.innerHTML = "";
+      filtered.forEach(docSnap => {
+        const data = docSnap.data();
+        const isOwner = data.sellerId === currentUser?.uid;
+        const isSaved = isListingSaved(docSnap.id);
+        const card = document.createElement("div");
+        card.className = "product-card";
+        card.innerHTML = `
+          <div class="card-img">📦</div>
+          <div class="card-body">
+            <div class="card-title">${data.title}</div>
+            <div class="card-price">₹ ${data.price}</div>
+            <div class="card-meta"><span class="cond-badge">${data.condition}</span></div>
+            <div class="card-actions">
+              ${isOwner
+                ? `<button class="edit-btn" type="button">Edit</button>`
+                : `<button class="contact-btn" type="button">Chat</button>
+                   <button class="save-btn${isSaved ? ` active` : ``}" type="button" aria-pressed="${isSaved}">
+                     <i class="fa-${isSaved ? "solid" : "regular"} fa-heart"></i> ${isSaved ? "Saved" : "Save"}
+                   </button>`}
+            </div>
+          </div>
+        `;
+        const cardImage = card.querySelector(".card-img");
+        if (cardImage) {
+          cardImage.innerHTML = data.imageUrl
+            ? `<img src="${data.imageUrl}" alt="Listing image">`
+            : `<i class="fa-solid fa-box-open"></i>`;
+        }
+        const chatCardBtn = card.querySelector(".contact-btn");
+        const editCardBtn = card.querySelector(".edit-btn");
+        if (chatCardBtn) {
+          chatCardBtn.onclick = (event) => {
+            event.stopPropagation();
+            window.chatWithSeller(data.sellerId, data.title);
+          };
+        }
+        if (editCardBtn) {
+          editCardBtn.onclick = (event) => {
+            event.stopPropagation();
+            openEditListingModal(docSnap);
+          };
+        }
+        const saveCardBtn = card.querySelector(".save-btn");
+        if (saveCardBtn) {
+          saveCardBtn.onclick = (event) => {
+            event.stopPropagation();
+            toggleSavedListing(docSnap.id);
+          };
+        }
+        card.onclick = () => openDetailModal(docSnap);
+        grid.appendChild(card);
+      });
+    }
+
+    function openDetailModal(docSnap) {
+      const data = docSnap.data();
+      const id = docSnap.id;
+      const isOwner = data.sellerId === currentUser?.uid;
+      const isSold = data.status === "sold";
+
+      document.getElementById("detailTitle").textContent = data.title;
+      document.getElementById("detailPrice").textContent = `₹ ${data.price?.toLocaleString()}`;
+      document.getElementById("detailDesc").textContent = data.description || "No description provided.";
+      document.getElementById("detailImg").textContent = "📦"; 
+
+      const detailImg = document.getElementById("detailImg");
+      detailImg.innerHTML = "";
+      if (data.imageUrl) {
+        const img = document.createElement("img");
+        img.src = data.imageUrl;
+        img.alt = "Listing image";
+        img.style.width = "100%";
+        img.style.height = "100%";
+        img.style.objectFit = "cover";
+        img.style.borderRadius = "12px";
+        detailImg.appendChild(img);
+      } else {
+        detailImg.innerHTML = '<i class="fa-solid fa-box-open" style="color:#9ca3af;"></i>';
+      }
+
+      const actions = document.getElementById("detailActions");
+      actions.innerHTML = "";
+      if (isOwner) {
+        const editBtn = document.createElement("button");
+        editBtn.className = "edit-btn";
+        editBtn.textContent = "Edit Details";
+        editBtn.onclick = () => openEditListingModal(docSnap);
+        actions.appendChild(editBtn);
+        if (!isSold) {
+          const soldBtn = document.createElement("button");
+          soldBtn.className = "sold-btn";
+          soldBtn.textContent = "Mark Sold";
+          soldBtn.onclick = () => window.markSold(id);
+          actions.appendChild(soldBtn);
+        }
+        const delBtn = document.createElement("button");
+        delBtn.className = "remove-btn primary-btn";
+        delBtn.textContent = "Remove Listing";
+        delBtn.style.background = "#ef4444";
+        delBtn.onclick = () => window.deleteListing(id);
+        actions.appendChild(delBtn);
+      } else {
+        const isSaved = isListingSaved(id);
+        const chatBtn = document.createElement("button");
+        chatBtn.className = "contact-btn primary-btn";
+        chatBtn.textContent = "Chat with Seller";
+        chatBtn.onclick = () => window.chatWithSeller(data.sellerId, data.title);
+        actions.appendChild(chatBtn);
+
+        const saveBtn = document.createElement("button");
+        saveBtn.className = `save-btn${isSaved ? " active" : ""}`;
+        saveBtn.setAttribute("type", "button");
+        saveBtn.setAttribute("aria-pressed", String(isSaved));
+        saveBtn.innerHTML = `<i class="fa-${isSaved ? "solid" : "regular"} fa-heart"></i> ${isSaved ? "Saved" : "Save"}`;
+        saveBtn.onclick = () => {
+          const nowSaved = toggleSavedListing(id);
+          if (savedOnly && !nowSaved) {
+            document.getElementById("detailModal").classList.remove("open");
+            return;
+          }
+          openDetailModal(docSnap);
+        };
+        actions.appendChild(saveBtn);
+      }
+      document.getElementById("detailModal").classList.add("open");
+    }
+
+    window.markSold = async id => {
+      await updateDoc(doc(db, "marketplace", id), { status: "sold" });
+      document.getElementById("detailModal").classList.remove("open");
+      toast("✅ Item marked as sold!");
+    };
+
+    window.deleteListing = async id => {
+      if (confirm("Permanently delete this item?")) {
+        await deleteDoc(doc(db, "marketplace", id));
+        document.getElementById("detailModal").classList.remove("open");
+        toast("🗑️ Item removed.");
+      }
+    };
+
+    window.chatWithSeller = (sellerId, itemTitle) => {
+      const safeSellerId = String(sellerId || "").trim();
+      if (!safeSellerId) {
+        toast("Seller chat is unavailable for this listing right now.", "error");
+        return;
+      }
+
+      if (!currentUser) {
+        toast("Please sign in to chat with the seller.", "error");
+        return;
+      }
+
+      document.getElementById("detailModal").classList.remove("open");
+      window.location.href = `chat.html?uid=${encodeURIComponent(safeSellerId)}&item=${encodeURIComponent(itemTitle || "")}`;
+    };
+
+    document.getElementById("openPostModal").onclick = () => openCreateListingModal();
+    document.getElementById("closePostModal").onclick = () => closePostListingModal();
+    document.getElementById("closeDetailModal").onclick = () => document.getElementById("detailModal").classList.remove("open");
+
+    document.getElementById("submitItem").onclick = async () => {
+      const title = document.getElementById("itemTitle").value;
+      const price = Number(document.getElementById("itemPrice").value);
+      const imageFile = itemImageInput && itemImageInput.files ? itemImageInput.files[0] : null;
+      if (!title || price <= 0) { toast("Valid Title & Price required", "error"); return; }
+      if (imageFile && !validateImageFile(imageFile)) return;
+      
+      const btn = document.getElementById("submitItem");
+      btn.disabled = true; btn.textContent = "Posting...";
+      try {
+
+      let imageUrl = "";
+      if (imageFile) {
+        btn.textContent = "Preparing image...";
+        imageUrl = await uploadMarketplaceImage(imageFile, itemImageFrame);
+        btn.textContent = "Posting...";
+      }
+      
+      await addDoc(collection(db, "marketplace"), {
+        title, price, 
+        description: document.getElementById("itemDescription").value,
+        category: document.getElementById("itemCategory").value,
+        condition: document.getElementById("itemCondition").value,
+        imageUrl,
+        sellerId: currentUser.uid,
+        createdAt: serverTimestamp()
+      });
+      
+      document.getElementById("postModal").classList.remove("open");
+      btn.disabled = false; btn.textContent = "Post Listing";
+      toast("🎉 Listing posted!");
+      // Reset form
+      document.getElementById("itemTitle").value = "";
+      document.getElementById("itemPrice").value = "";
+      document.getElementById("itemDescription").value = "";
+      resetItemImagePicker();
+      } catch (error) {
+        console.error(error);
+        toast("Failed to post listing", "error");
+      } finally {
+        btn.disabled = false;
+        btn.textContent = "Post Listing";
+      }
+    };
+
+    document.getElementById("submitItem").onclick = async () => {
+      const title = document.getElementById("itemTitle").value;
+      const price = Number(document.getElementById("itemPrice").value);
+      const imageFile = itemImageInput && itemImageInput.files ? itemImageInput.files[0] : null;
+      if (!title || price <= 0) { toast("Valid Title & Price required", "error"); return; }
+      if (imageFile && !validateImageFile(imageFile)) return;
+
+      const btn = document.getElementById("submitItem");
+      const isEditMode = isEditingListing();
+      btn.disabled = true;
+      btn.textContent = isEditMode ? "Saving..." : "Posting...";
+
+      try {
+        let imageUrl = activeListingImageRemoved ? "" : activeListingImageUrl;
+        if (imageFile) {
+          btn.textContent = "Preparing image...";
+          imageUrl = await uploadMarketplaceImage(imageFile, itemImageFrame);
+          btn.textContent = isEditMode ? "Saving..." : "Posting...";
+        }
+
+        const listingPayload = {
+          title,
+          price,
+          description: document.getElementById("itemDescription").value,
+          category: document.getElementById("itemCategory").value,
+          condition: document.getElementById("itemCondition").value,
+          imageUrl
+        };
+
+        if (isEditMode) {
+          await updateDoc(doc(db, "marketplace", activeListingEditId), {
+            ...listingPayload,
+            updatedAt: serverTimestamp()
+          });
+          toast("Listing updated!");
+        } else {
+          await addDoc(collection(db, "marketplace"), {
+            ...listingPayload,
+            sellerId: currentUser.uid,
+            createdAt: serverTimestamp()
+          });
+          toast("Listing posted!");
+        }
+
+        closePostListingModal();
+      } catch (error) {
+        console.error(error);
+        toast(isEditMode ? "Failed to update listing" : "Failed to post listing", "error");
+      } finally {
+        btn.disabled = false;
+        btn.textContent = isEditingListing() ? "Save Changes" : "Post Listing";
+      }
+    };
+
+    document.getElementById("searchInput").oninput = renderProducts;
+    document.getElementById("filterCondition").onchange = renderProducts;
+    document.getElementById("sortSelect").onchange = renderProducts;
+    document.querySelectorAll(".cat-pill").forEach(p => {
+      p.onclick = () => {
+        document.querySelectorAll(".cat-pill").forEach(c => c.classList.remove("active"));
+        p.classList.add("active");
+        activeCategory = p.dataset.cat;
+        renderProducts();
+      };
+    });
+    
+    document.getElementById("myListingsToggle").onclick = () => {
+      myListingsOnly = !myListingsOnly;
+      document.getElementById("myListingsToggle").classList.toggle("active");
+      renderProducts();
+    };
+
+    document.getElementById("favToggle").onclick = () => {
+      savedOnly = !savedOnly;
+      updateSavedToggleState();
+      renderProducts();
+    };
+
+    document.getElementById("aiRefreshBtn").onclick = async () => {
+      const res = document.getElementById("aiResponse");
+      res.textContent = "Analyzing...";
+      const titles = allDocs.slice(0,3).map(d => d.data().title).join(", ");
+      try {
+        const text = await askGemini(`Give a 1-sentence campus selling tip for: ${titles}`);
+        res.textContent = text;
+      } catch (e) { res.textContent = "AI tips offline."; }
+    };
+  </script>
+  <script type="module" src="../js/nav-loader.js"></script>
+</body>
+</html>
