@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>UniX - Browse Courses</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="../../css/theme.css">
+  <link rel="stylesheet" href="../../css/navbar.css">
+  <style>
+    /* Tutoring Browse Styles - Theme Variables UI */
+    .tutoring-browse-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      color: var(--color-text);
+      font-family: 'Inter', sans-serif;
+    }
+
+    .tutoring-header {
+      margin-bottom: 2.5rem;
+    }
+
+    .page-eyebrow {
+      margin: 0 0 0.6rem;
+      color: var(--color-primary);
+      font-size: 0.85rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .discover-title {
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: var(--color-text);
+      margin-bottom: 0.25rem;
+      letter-spacing: -0.02em;
+    }
+
+    .discover-subtitle {
+      color: var(--color-text-muted);
+      font-size: 1rem;
+      font-weight: 400;
+    }
+
+    .tutoring-controls-container {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+      margin-bottom: 3.5rem;
+    }
+
+    .recommendations-section {
+      margin-bottom: 3rem;
+      padding: 1.75rem;
+      border: 1px solid rgba(14, 165, 233, 0.18);
+      border-radius: var(--radius-lg, 20px);
+      background:
+        radial-gradient(circle at top left, rgba(16, 185, 129, 0.12), transparent 32%),
+        radial-gradient(circle at top right, rgba(14, 165, 233, 0.12), transparent 28%),
+        var(--color-surface);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .featured-section {
+      margin-bottom: 2rem;
+      padding: 1.75rem;
+      border: 1px solid rgba(245, 158, 11, 0.18);
+      border-radius: var(--radius-lg, 20px);
+      background:
+        radial-gradient(circle at top left, rgba(251, 191, 36, 0.14), transparent 30%),
+        radial-gradient(circle at bottom right, rgba(249, 115, 22, 0.12), transparent 24%),
+        var(--color-surface);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .featured-section[hidden] {
+      display: none !important;
+    }
+
+    .featured-header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .featured-copy {
+      max-width: 680px;
+    }
+
+    .featured-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      margin: 0 0 0.6rem;
+      color: #b45309;
+      font-size: 0.82rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .featured-title {
+      margin: 0 0 0.35rem;
+      font-size: 1.55rem;
+      font-weight: 700;
+      color: var(--color-text);
+      letter-spacing: -0.02em;
+    }
+
+    .featured-subtitle {
+      margin: 0;
+      font-size: 0.96rem;
+      color: var(--color-text-muted);
+      line-height: 1.6;
+    }
+
+    .featured-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.7rem 1rem;
+      border-radius: 999px;
+      background: rgba(245, 158, 11, 0.1);
+      border: 1px solid rgba(245, 158, 11, 0.16);
+      color: #b45309;
+      font-size: 0.88rem;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .featured-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .recommendations-section[hidden] {
+      display: none !important;
+    }
+
+    .recommendations-header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .recommendations-copy {
+      max-width: 680px;
+    }
+
+    .recommendations-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      margin: 0 0 0.6rem;
+      color: #0f766e;
+      font-size: 0.82rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .recommendations-title {
+      margin: 0 0 0.35rem;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--color-text);
+      letter-spacing: -0.02em;
+    }
+
+    .recommendations-subtitle {
+      margin: 0;
+      font-size: 0.96rem;
+      color: var(--color-text-muted);
+      line-height: 1.6;
+    }
+
+    .recommendations-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.7rem 1rem;
+      border-radius: 999px;
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.18);
+      color: #047857;
+      font-size: 0.88rem;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .recommended-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .course-card.is-featured-card {
+      border-color: rgba(245, 158, 11, 0.28);
+      box-shadow: 0 14px 28px rgba(245, 158, 11, 0.12);
+    }
+
+    .course-card.is-featured-card:hover {
+      border-color: rgba(245, 158, 11, 0.4);
+      box-shadow: 0 18px 32px rgba(245, 158, 11, 0.16);
+    }
+
+    .course-featured-badge {
+      position: absolute;
+      left: 1rem;
+      bottom: 1rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.4rem 0.75rem;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.78);
+      color: #f8fafc;
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      backdrop-filter: blur(4px);
+      box-shadow: var(--shadow-sm);
+      z-index: 1;
+    }
+
+    .course-card.is-free-card {
+      border-color: rgba(16, 185, 129, 0.24);
+      box-shadow: 0 14px 28px rgba(16, 185, 129, 0.1);
+    }
+
+    .course-card.is-free-card:hover {
+      border-color: rgba(16, 185, 129, 0.38);
+      box-shadow: 0 18px 32px rgba(16, 185, 129, 0.15);
+    }
+
+    .course-free-badge {
+      position: absolute;
+      right: 1rem;
+      bottom: 1rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.4rem 0.78rem;
+      border-radius: 999px;
+      background: rgba(16, 185, 129, 0.92);
+      color: #ffffff;
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      box-shadow: var(--shadow-sm);
+      z-index: 1;
+    }
+
+    .search-bar-full {
+      position: relative;
+      width: 100%;
+    }
+
+    .search-emoji {
+      position: absolute;
+      left: 1.25rem;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 1.25rem;
+    }
+
+    .search-input-full {
+      width: 100%;
+      padding: 1.1rem 1rem 1.1rem 3.5rem;
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: 3rem;
+      color: var(--color-text);
+      font-family: inherit;
+      font-size: 0.98rem;
+      transition: all 0.2s ease;
+      box-sizing: border-box;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .search-input-full:focus {
+      outline: none;
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 3px var(--color-primary-light);
+    }
+
+    .filters-row {
+      display: flex;
+      gap: 2.5rem;
+      flex-wrap: wrap;
+    }
+
+    .filter-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      min-width: 160px;
+    }
+
+    .filter-label {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--color-text);
+    }
+
+    .filter-select {
+      padding: 0.8rem 2.5rem 0.8rem 1.2rem;
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md, 12px);
+      color: var(--color-text);
+      font-family: inherit;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      outline: none;
+      box-shadow: var(--shadow-sm);
+      appearance: none;
+      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231e293b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+      background-repeat: no-repeat;
+      background-position: right 1rem center;
+      background-size: 1em;
+    }
+
+    html[data-theme="dark"] .filter-select,
+    html[data-theme="galaxy"] .filter-select {
+      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23f1f5f9' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    }
+
+    .filter-select:hover {
+      border-color: var(--color-primary);
+    }
+
+    .filter-select:focus {
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 3px var(--color-primary-light);
+    }
+
+    .tutoring-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 1.5rem;
+      position: relative;
+    }
+
+    .in-pages {
+      background-color: var(--color-bg);
+    }
+    
+    /* --- Modal Injection --- */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(4px);
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .modal-overlay.active {
+      opacity: 1; pointer-events: all;
+    }
+
+    .modal-content {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg, 20px);
+      width: 90%; max-width: 480px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+      transform: translateY(20px);
+      transition: transform 0.3s ease;
+      display: flex; flex-direction: column;
+    }
+
+    .modal-overlay.active .modal-content {
+      transform: translateY(0);
+    }
+
+    .modal-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.5rem 2rem; border-bottom: 1px solid var(--color-border);
+    }
+
+    .modal-title { font-size: 1.15rem; font-weight: 700; margin: 0; color: var(--color-text); }
+    .modal-close { background: transparent; border: none; color: var(--color-text-muted); font-size: 1.25rem; cursor: pointer; }
+    .modal-close:hover { color: #ef4444; }
+
+    .modal-body { padding: 2rem; overflow-y: auto; max-height: 75vh; }
+    .modal-desc { font-size: 0.9rem; color: var(--color-text-muted); line-height: 1.5; margin-bottom: 1.5rem; text-align: center; }
+
+    .qr-container {
+      display: flex; flex-direction: column; align-items: center;
+      background: var(--color-bg); padding: 1.5rem; border-radius: 12px;
+      border: 1px dashed var(--color-border); margin-bottom: 2rem;
+    }
+    .qr-image { width: 180px; height: 180px; object-fit: cover; background: #fff; padding: 0.5rem; border-radius: 8px; margin-bottom: 1rem; }
+    .qr-label { font-size: 0.9rem; font-weight: 600; text-transform: uppercase; color: var(--color-text); }
+
+    .upload-box {
+      border: 2px dashed var(--color-border); border-radius: 16px; padding: 1.5rem;
+      text-align: center; background: var(--color-bg); cursor: pointer;
+      display: flex; flex-direction: column; align-items: center; gap: 0.4rem;
+    }
+    .upload-box:hover { border-color: var(--color-primary); background: var(--color-surface); }
+    .upload-icon { font-size: 2.25rem; opacity: 0.9; color: #10b981; }
+    .upload-text { font-size: 0.94rem; font-weight: 500; color: var(--color-text); }
+    .upload-subtext { font-size: 0.85rem; color: var(--color-text-muted); }
+    .form-group-label { display: block; font-weight: 600; margin-bottom: 0.75rem; color: var(--color-text); }
+
+    .btn-primary-full {
+      width: 100%;
+      background: var(--color-primary);
+      color: #ffffff;
+      border: none;
+      padding: 0.95rem 1rem;
+      border-radius: var(--radius-md, 12px);
+      font-weight: 600;
+      font-size: 0.92rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .btn-primary-full:hover {
+      background: var(--color-primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(var(--color-primary-rgb), 0.3);
+    }
+    /* ----------------------- */
+
+    .course-card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg, 20px);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      text-decoration: none;
+      color: inherit;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+      height: 100%;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .course-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-card);
+      border-color: var(--color-primary);
+    }
+
+    .card-banner {
+      height: 140px;
+      position: relative;
+      border-bottom: 1px solid var(--color-border);
+      background-size: cover;
+      background-position: center;
+    }
+
+    .course-banner-image {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 1;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .card-banner::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(15, 23, 42, 0.08), rgba(15, 23, 42, 0.34));
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .status-badge {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: rgba(16, 185, 129, 0.9);
+      color: #ffffff;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 0.35rem 0.75rem;
+      border-radius: 2rem;
+      letter-spacing: 0.05em;
+      backdrop-filter: blur(4px);
+      box-shadow: var(--shadow-sm);
+      z-index: 1;
+    }
+
+    .course-certified-badge {
+      position: absolute;
+      top: 1rem;
+      left: 1rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      background: rgba(14, 165, 233, 0.92);
+      color: #ffffff;
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 0.35rem 0.7rem;
+      border-radius: 999px;
+      letter-spacing: 0.04em;
+      backdrop-filter: blur(4px);
+      box-shadow: var(--shadow-sm);
+      z-index: 1;
+    }
+
+    .star-rating {
+      --rating-fill: 0%;
+      position: relative;
+      display: inline-flex;
+      line-height: 1;
+    }
+
+    .star-rating-base,
+    .star-rating-fill {
+      display: inline-flex;
+      gap: 0.18rem;
+    }
+
+    .star-rating-base {
+      color: #d1d5db;
+    }
+
+    .star-rating-fill {
+      position: absolute;
+      inset: 0 auto 0 0;
+      overflow: hidden;
+      width: var(--rating-fill);
+      color: #f59e0b;
+      white-space: nowrap;
+      pointer-events: none;
+    }
+
+    .star-rating.small i {
+      font-size: 0.82rem;
+    }
+
+    .card-content {
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+
+    .course-title {
+      font-size: 1.12rem;
+      font-weight: 600;
+      color: var(--color-text);
+      margin-bottom: 0.5rem;
+      line-height: 1.4;
+    }
+
+    .course-desc {
+      font-size: 0.95rem;
+      color: var(--color-text-muted);
+      margin-bottom: 1.5rem;
+      line-height: 1.5;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .course-rating-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+      padding: 0.8rem 0.9rem;
+      border-radius: 14px;
+      background: rgba(15, 23, 42, 0.04);
+      border: 1px solid rgba(148, 163, 184, 0.18);
+    }
+
+    .course-rating-row.is-empty {
+      background: rgba(148, 163, 184, 0.08);
+    }
+
+    .course-rating-inline {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.55rem;
+      min-width: 0;
+    }
+
+    .course-rating-score {
+      font-size: 0.94rem;
+      font-weight: 700;
+      color: var(--color-text);
+    }
+
+    .course-rating-meta {
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--color-text-muted);
+      text-align: right;
+    }
+
+    .card-info-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.25rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .tutor-id {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--color-text-muted);
+      font-weight: 500;
+      font-size: 0.9rem;
+    }
+
+    .tutor-id i {
+      color: var(--color-primary);
+      font-size: 1rem;
+    }
+
+    .price {
+      font-weight: 700;
+      color: var(--color-primary);
+      font-size: 1.02rem;
+    }
+
+    .price.is-free {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      color: #047857;
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.22);
+      padding: 0.38rem 0.68rem;
+      border-radius: 999px;
+      line-height: 1;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45);
+    }
+
+    .card-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .seats-info,
+    .session-info {
+      font-size: 0.85rem;
+      color: var(--color-text-muted);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 500;
+    }
+
+    .seats-info i,
+    .session-info i {
+      color: var(--color-text-muted);
+    }
+
+    .card-actions {
+      display: flex;
+      gap: 0.75rem;
+      margin-top: auto;
+    }
+
+    .btn-book {
+      flex: 1;
+      background: var(--color-primary);
+      color: #ffffff;
+      border: none;
+      padding: 0.7rem 0.95rem;
+      border-radius: var(--radius-md, 12px);
+      font-weight: 600;
+      font-size: 0.88rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-align: center;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.45rem;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .btn-book:hover {
+      background: var(--color-primary-dark);
+      box-shadow: var(--shadow-md);
+    }
+
+    .btn-manage-course {
+      background: linear-gradient(135deg, #0f766e, #14b8a6);
+    }
+
+    .btn-manage-course:hover {
+      background: linear-gradient(135deg, #115e59, #0f766e);
+      box-shadow: var(--shadow-md);
+    }
+
+    .btn-chat {
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--color-primary-light);
+      color: var(--color-primary);
+      border: none;
+      border-radius: var(--radius-md, 12px);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-size: 1.1rem;
+    }
+
+    .btn-chat:hover {
+      background: var(--color-primary);
+      color: #ffffff;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .empty-state {
+      display: none;
+      text-align: center;
+      padding: 4rem 1rem;
+      color: var(--color-text-muted);
+      grid-column: 1 / -1;
+      background: var(--color-surface);
+      border-radius: var(--radius-lg, 20px);
+      border: 1px dashed var(--color-border);
+    }
+
+    .empty-state i {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      color: var(--color-primary-light);
+    }
+
+    .empty-state h3 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--color-text);
+      margin-bottom: 0.5rem;
+    }
+
+    @media (max-width: 768px) {
+      .filters-row {
+        gap: 1.5rem;
+      }
+      .filter-group {
+        flex: 1;
+        min-width: 40%;
+      }
+    }
+
+    .page-eyebrow,
+    .featured-eyebrow,
+    .recommendations-eyebrow,
+    .price,
+    .price.is-free,
+    .btn-chat,
+    .course-certified-badge {
+      color: var(--color-primary);
+    }
+
+    .discover-title,
+    .featured-title,
+    .recommendations-title,
+    .course-title,
+    .modal-title,
+    .filter-label {
+      color: var(--color-text);
+    }
+
+    .discover-subtitle,
+    .featured-subtitle,
+    .recommendations-subtitle,
+    .course-desc,
+    .course-rating-meta,
+    .seats-info,
+    .session-info,
+    .modal-desc,
+    .upload-subtext {
+      color: var(--color-text-muted);
+    }
+
+    .featured-section,
+    .recommendations-section,
+    .course-card,
+    .empty-state,
+    .modal-content,
+    .search-input-full,
+    .filter-select,
+    .upload-box {
+      background: var(--gradient-surface);
+      border-color: var(--color-border);
+      box-shadow: var(--shadow-card);
+    }
+
+    .search-input-full:focus,
+    .filter-select:focus {
+      border-color: rgba(0, 229, 255, 0.28);
+      box-shadow: 0 0 0 3px rgba(0, 229, 255, 0.12);
+    }
+
+    .featured-badge,
+    .recommendations-badge,
+    .status-badge,
+    .course-free-badge,
+    .btn-primary-full,
+    .btn-book {
+      background: var(--gradient-primary);
+      color: #07090f;
+      border-color: transparent;
+      box-shadow: var(--glow-accent);
+    }
+
+    .btn-chat,
+    .course-rating-row,
+    .upload-box,
+    .price.is-free {
+      background: rgba(0, 229, 255, 0.1);
+      border-color: rgba(0, 229, 255, 0.16);
+    }
+
+    .card-banner::after {
+      background: linear-gradient(180deg, rgba(7, 9, 15, 0.08), rgba(7, 9, 15, 0.46));
+    }
+  </style>
+</head>
+<body class="in-pages">
+  <div class="layout">
+    <div id="navbar-container"></div>
+    <div class="page-content">
+      <div class="tutoring-browse-container">
+        
+        <!-- Header -->
+        <div class="tutoring-header">
+          <p class="page-eyebrow">Course Discovery</p>
+          <h1 class="discover-title">Discover Courses</h1>
+          <p class="discover-subtitle">Find the perfect course to advance your skills</p>
+        </div>
+
+        <section class="featured-section" id="featuredCoursesSection" hidden>
+          <div class="featured-header">
+            <div class="featured-copy">
+              <p class="featured-eyebrow"><i class="fa-solid fa-bullhorn"></i> Featured Courses</p>
+              <h2 class="featured-title">Spotlight Courses</h2>
+              <p class="featured-subtitle">A small hand-picked set of highlighted courses appears here so the browse page stays focused and clean.</p>
+            </div>
+            <span class="featured-badge"><i class="fa-solid fa-star"></i> Limited showcase</span>
+          </div>
+
+          <div class="featured-grid" id="featuredCourseGrid"></div>
+        </section>
+
+        <section class="recommendations-section" id="recommendedCoursesSection" hidden>
+          <div class="recommendations-header">
+            <div class="recommendations-copy">
+              <p class="recommendations-eyebrow"><i class="fa-solid fa-sparkles"></i> Recommended</p>
+              <h2 class="recommendations-title">Recommended for you</h2>
+              <p class="recommendations-subtitle">A simple mix of popular and recently added courses, ranked by filled seats first and latest creation date as the tie-breaker.</p>
+            </div>
+            <span class="recommendations-badge"><i class="fa-solid fa-ranking-star"></i> Popular now</span>
+          </div>
+
+          <div class="recommended-grid" id="recommendedCourseGrid"></div>
+        </section>
+
+        <!-- Controls -->
+        <div class="tutoring-controls-container">
+          <div class="search-bar-full">
+            <span class="search-emoji">🔍</span>
+            <input type="text" id="courseSearchInput" class="search-input-full" placeholder="Search courses...">
+          </div>
+
+          <div class="filters-row">
+            <div class="filter-group">
+              <label class="filter-label" for="statusFilter">Status</label>
+              <select id="statusFilter" class="filter-select">
+                <option value="all">All Statuses</option>
+                <option value="open">Open</option>
+                <option value="closed">Closed</option>
+              </select>
+            </div>
+            <div class="filter-group">
+              <label class="filter-label" for="priceFilter">Price Range</label>
+              <select id="priceFilter" class="filter-select">
+                <option value="all">All Prices</option>
+                <option value="free">Free</option>
+                <option value="under_500">Under ₹500</option>
+                <option value="over_500">₹500+</option>
+              </select>
+            </div>
+            <div class="filter-group">
+              <label class="filter-label" for="sortFilter">Sort By</label>
+              <select id="sortFilter" class="filter-select">
+                <option value="recent">Most Recent</option>
+                <option value="price_low">Price: Low to High</option>
+                <option value="price_high">Price: High to Low</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Course Grid -->
+        <div class="tutoring-grid" id="courseGrid">
+          
+          <div id="noCoursesMessage" class="empty-state" style="display:none;">
+            <i class="fa-solid fa-folder-open"></i>
+            <h3>No courses found</h3>
+            <p>Try adjusting your search or filters.</p>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Booking Payment Modal -->
+  <div class="modal-overlay" id="paymentModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title" id="paymentModalTitle">Complete Your Booking</h3>
+        <button class="modal-close" id="closeModalBtn"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <div class="modal-body">
+        <p class="modal-desc" id="paymentModalDesc">Please scan the tutor's QR code to pay the course fee. Then, upload your payment screenshot to verify enrollment.</p>
+
+        <div class="qr-container" id="paymentQrContainer">
+          <img src="" alt="Tutor QR Code" id="tutorQrImage" class="qr-image" hidden />
+          <p class="qr-label" id="tutorQrLabel">Tutor QR code will appear when available.</p>
+        </div>
+
+        <div style="margin-bottom: 2rem;" id="paymentProofField">
+          <span class="form-group-label">Payment Proof <span style="color:#ef4444;">*</span></span>
+          <div class="upload-box" onclick="document.getElementById('proofUpload').click()">
+            <i class="fa-solid fa-file-invoice-dollar upload-icon"></i>
+            <div class="upload-text" id="proofUploadText">Click or drag to upload screenshot</div>
+            <div class="upload-subtext">PNG, JPG up to 5MB</div>
+            <input type="file" id="proofUpload" accept="image/png, image/jpeg" style="display: none;">
+          </div>
+        </div>
+
+        <button class="btn-primary-full" id="submitProofBtn">Submit Payment Proof</button>
+      </div>
+    </div>
+  </div>
+  <script type="module" src="../../js/nav-loader.js"></script>
+  <script type="module" src="../../js/tutoring.js"></script>
+
+  <script>
+    // Pure UI functionality for Booking Modal Toggle Globally
+    document.addEventListener("DOMContentLoaded", () => {
+      const modal = document.getElementById("paymentModal");
+      const closeBtn = document.getElementById("closeModalBtn");
+      const uploadInput = document.getElementById("proofUpload");
+      const uploadText = document.getElementById("proofUploadText");
+
+      if (closeBtn && modal) {
+        closeBtn.addEventListener("click", () => modal.classList.remove("active"));
+      }
+
+      window.addEventListener("click", (e) => {
+        if (e.target === modal) modal.classList.remove("active");
+      });
+
+      if (uploadInput && uploadText) {
+        uploadInput.addEventListener("change", (e) => {
+          if (e.target.files && e.target.files.length > 0) {
+            uploadText.textContent = e.target.files[0].name;
+            uploadText.style.color = "var(--color-primary)";
+          } else {
+            uploadText.textContent = "Click or drag to upload screenshot";
+            uploadText.style.color = "";
+          }
+        });
+      }
+    });
+  </script>
+</body>
+</html>

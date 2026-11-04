@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UniX About Us</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <link rel="stylesheet" href="../css/theme.css">
+    <link rel="stylesheet" href="../css/navbar.css">
+    <style>
+        .about-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        .about-header h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #6a5af9, #7c3aed);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .about-hero {
+            margin-bottom: 50px;
+        }
+
+        .about-hero p {
+            font-size: 1.2rem;
+            color: #6b7280;
+            line-height: 1.6;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            color: #6a5af9;
+            margin-bottom: 20px;
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: #1f2937;
+        }
+
+        .feature-card p {
+            color: #6b7280;
+            line-height: 1.5;
+        }
+
+        .mission-section {
+            margin-top: 80px;
+            background: white;
+            padding: 50px;
+            border-radius: 24px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+        }
+
+        .mission-section h2 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: #1f2937;
+        }
+
+        .mission-section p {
+            font-size: 1.1rem;
+            color: #4b5563;
+            max-width: 700px;
+            margin: 0 auto;
+            line-height: 1.7;
+        }
+
+        @media (max-width: 768px) {
+            .about-container {
+                padding: 24px 0 32px;
+            }
+
+            .about-header h1 {
+                font-size: 2.3rem;
+            }
+
+            .about-hero p {
+                font-size: 1rem;
+            }
+
+            .features-grid {
+                gap: 20px;
+                margin-top: 36px;
+            }
+
+            .feature-card,
+            .mission-section {
+                padding: 24px;
+            }
+
+            .mission-section {
+                margin-top: 48px;
+            }
+
+            .mission-section h2 {
+                font-size: 1.7rem;
+            }
+
+            .mission-section p {
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .about-header h1 {
+                font-size: 1.9rem;
+            }
+
+            .feature-card {
+                padding: 20px;
+            }
+
+            .feature-card h3 {
+                font-size: 1.25rem;
+            }
+
+            .mission-section {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body class="in-pages">
+    <div class="layout">
+        <div id="navbar-container"></div>
+
+        <div class="page-content">
+            <div class="about-container">
+                <header class="about-header">
+                    <div class="about-hero">
+                        <h1>Unified Campus Platform</h1>
+                        <p>Welcome to UniX, the all-in-one ecosystem designed exclusively for our campus community. We
+                            believe in the power of connection, collaboration, and mutual support.</p>
+                    </div>
+                </header>
+
+                <section class="features-grid">
+                    <div class="feature-card">
+                        <i class="fa-solid fa-user-group feature-icon"></i>
+                        <h3>Skill Exchange</h3>
+                        <p>Share your knowledge and learn from your peers. Trade skills, earn points, and build a
+                            stronger academic network.</p>
+                    </div>
+
+                    <div class="feature-card">
+                        <i class="fa-solid fa-shop feature-icon"></i>
+                        <h3>Marketplace</h3>
+                        <p>Buy and sell study materials, hostel essentials, and gadgets within the trusted circle of
+                            your fellow students.</p>
+                    </div>
+
+                    <div class="feature-card">
+                        <i class="fa-solid fa-magnifying-glass feature-icon"></i>
+                        <h3>Lost & Found</h3>
+                        <p>Never lose hope! Post about lost items or return found belongings to their rightful owners
+                            easily.</p>
+                    </div>
+                </section>
+
+                <section class="mission-section">
+                    <h2>Our Mission</h2>
+                    <p>UniX was created to bridge the gap between students, making campus life more rewarding and
+                        efficient. By rewarding helpfulness through our points system, we foster a culture of giving and
+                        shared success.</p>
+                </section>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="../js/nav-loader.js"></script>
+   </body>
+
+</html>

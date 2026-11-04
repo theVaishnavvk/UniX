@@ -1,0 +1,1397 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UniX - Lost &amp; Found</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/theme.css">
+    <link rel="stylesheet" href="../css/navbar.css">
+    <style>
+        /* ─── Page Layout Override ──────────────────────── */
+        .page-content.lf-page {
+            padding: var(--page-top-offset) 0 0;
+        }
+
+        /* ─── Lost & Found Container ────────────────────── */
+        .lostfound-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 28px 24px 60px;
+        }
+
+        /* ─── Hero / Action Row ─────────────────────────── */
+        .lf-hero {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin-bottom: 22px;
+        }
+
+        .lf-hero-text h1 {
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: #111827;
+            margin: 0 0 4px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .lf-hero-text h1 i {
+            color: #7c3aed;
+            font-size: 1.4rem;
+        }
+
+        .lf-hero-text p {
+            font-size: 14px;
+            color: #6b7280;
+            margin: 0;
+        }
+
+        .lf-report-btn {
+            background: linear-gradient(135deg, #6a5af9, #7c3aed);
+            color: #fff;
+            border: none;
+            padding: 11px 20px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 8px 20px rgba(106, 90, 249, 0.28);
+            transition: opacity 0.2s, transform 0.2s;
+            white-space: nowrap;
+            font-family: inherit;
+        }
+
+        .lf-report-btn:hover {
+            opacity: 0.92;
+            transform: translateY(-1px);
+        }
+
+        /* ─── Search Bar ────────────────────────────────── */
+        .lf-search-bar {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+
+        .lf-search-wrapper {
+            position: relative;
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .lf-search-wrapper i {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9ca3af;
+            font-size: 14px;
+            pointer-events: none;
+        }
+
+        .lf-search-input {
+            width: 100%;
+            height: 42px;
+            padding: 0 14px 0 38px;
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            background: #fff;
+            font-size: 14px;
+            font-family: inherit;
+            color: #111827;
+            outline: none;
+            box-sizing: border-box;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .lf-search-input:focus {
+            border-color: #c7cdf7;
+            box-shadow: 0 0 0 3px rgba(106, 90, 249, 0.12);
+        }
+
+        /* ─── Tabs ──────────────────────────────────────── */
+        .lf-tabs {
+            display: inline-flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            background: #edf1fa;
+            border-radius: 999px;
+            padding: 6px;
+            margin-bottom: 24px;
+        }
+
+        .lf-tab-btn {
+            border: 0;
+            border-radius: 999px;
+            background: transparent;
+            color: #475569;
+            padding: 8px 16px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: inherit;
+            transition: background 0.2s, color 0.2s;
+            white-space: nowrap;
+        }
+
+        .lf-tab-btn.active {
+            color: #fff;
+            background: linear-gradient(135deg, #6a5af9, #7c3aed);
+            box-shadow: 0 4px 12px rgba(106, 90, 249, 0.25);
+        }
+
+        /* ─── Items Grid ────────────────────────────────── */
+        .item-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 20px;
+        }
+
+        /* ─── Item Card ─────────────────────────────────── */
+        .item-card {
+            background: #fff;
+            border: 1px solid #e5e7eb;
+            border-radius: 18px;
+            padding: 20px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .item-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 14px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .item-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            align-self: flex-start;
+            padding: 4px 10px;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+        }
+
+        .status-lost {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        .status-found {
+            background: #e0f2fe;
+            color: #0369a1;
+        }
+
+        .status-claimed {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .item-image {
+            width: 100%;
+            height: 156px;
+            background: linear-gradient(135deg, #f3f4f6, #e9ecf2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+            color: #9ca3af;
+            font-size: 44px;
+            flex-shrink: 0;
+        }
+
+        .item-image i {
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.07));
+        }
+
+        .item-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 12px;
+        }
+
+        .item-category-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: #eef2ff;
+            color: #4338ca;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 999px;
+            margin-bottom: 8px;
+        }
+
+        .item-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #111827;
+            margin: 0 0 7px;
+            line-height: 1.3;
+        }
+
+        .item-desc {
+            font-size: 13px;
+            color: #6b7280;
+            margin: 0 0 14px;
+            line-height: 1.55;
+            flex: 1;
+        }
+
+        .item-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+            color: #9ca3af;
+            gap: 6px;
+            flex-wrap: wrap;
+            padding-top: 12px;
+            border-top: 1px solid #f3f4f6;
+        }
+
+        .item-meta span {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .item-meta i {
+            color: #7c3aed;
+        }
+
+        .card-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 14px;
+        }
+
+        .card-actions .contact-btn,
+        .card-actions .delete-btn {
+            width: 100%;
+            padding: 10px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 700;
+            font-family: inherit;
+            cursor: pointer;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: opacity 0.2s, transform 0.15s;
+        }
+
+        .card-actions .contact-btn {
+            background: linear-gradient(135deg, #6a5af9, #7c3aed);
+            color: #fff;
+            box-shadow: 0 4px 12px rgba(106, 90, 249, 0.2);
+        }
+
+        .card-actions .delete-btn {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        .card-actions .contact-btn:hover,
+        .card-actions .delete-btn:hover {
+            opacity: 0.88;
+            transform: translateY(-1px);
+        }
+
+        /* ─── Empty State ───────────────────────────────── */
+        .lf-empty {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 60px 20px;
+            color: #9ca3af;
+        }
+
+        .lf-empty i {
+            font-size: 3rem;
+            display: block;
+            margin-bottom: 14px;
+            opacity: 0.35;
+        }
+
+        .lf-empty p {
+            font-size: 15px;
+            font-weight: 500;
+        }
+
+        /* ─── Modal Overlay ─────────────────────────────── */
+        .lf-modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.52);
+            display: none;
+            align-items: flex-start;
+            justify-content: center;
+            z-index: 1400;
+            padding: 24px 16px;
+            overflow-y: auto;
+            backdrop-filter: blur(2px);
+            box-sizing: border-box;
+        }
+
+        /* ─── Modal Box ─────────────────────────────────── */
+        .lf-modal-box {
+            width: min(520px, calc(100vw - 32px));
+            max-height: calc(100vh - 48px);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            background: #fff;
+            border-radius: 20px;
+            border: 1px solid #e6eaf2;
+            box-shadow: 0 20px 50px rgba(15, 23, 42, 0.22);
+            animation: lfFadeIn 0.25s ease;
+            box-sizing: border-box;
+        }
+
+        @keyframes lfFadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.96) translateY(8px);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        .lf-modal-scroll {
+            flex: 1 1 auto;
+            min-height: 0;
+            overflow-y: auto;
+            padding: 18px 24px 24px;
+        }
+
+        .lf-modal-scroll::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .lf-modal-scroll::-webkit-scrollbar-thumb {
+            background: #c7d2fe;
+            border-radius: 999px;
+        }
+
+        .lf-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 0;
+            padding: 24px 24px 14px;
+            border-bottom: 1px solid #f3f4f6;
+            background: #fff;
+            flex-shrink: 0;
+        }
+
+        .lf-modal-header h3 {
+            margin: 0;
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: #111827;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .lf-modal-header h3 i {
+            color: #7c3aed;
+        }
+
+        .lf-close-btn {
+            width: 32px;
+            height: 32px;
+            border: none;
+            border-radius: 50%;
+            background: #f3f4f6;
+            color: #374151;
+            font-size: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: background 0.2s, transform 0.2s;
+            line-height: 1;
+        }
+
+        .lf-close-btn:hover {
+            background: #e5e7eb;
+            transform: scale(1.08);
+        }
+
+        .lf-modal-box label {
+            display: block;
+            font-size: 13px;
+            font-weight: 700;
+            color: #374151;
+            margin-top: 14px;
+            margin-bottom: 5px;
+        }
+
+        .lf-modal-box input,
+        .lf-modal-box select,
+        .lf-modal-box textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            font-size: 14px;
+            font-family: inherit;
+            color: #111827;
+            background: #fafafa;
+            outline: none;
+            box-sizing: border-box;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .lf-modal-box textarea {
+            height: 100px;
+            resize: vertical;
+        }
+
+        .lf-modal-box input:focus,
+        .lf-modal-box select:focus,
+        .lf-modal-box textarea:focus {
+            border-color: #a5b4fc;
+            box-shadow: 0 0 0 3px rgba(106, 90, 249, 0.12);
+            background: #fff;
+        }
+
+        .lf-upload-card {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding: 14px;
+            border: 1.5px dashed #d1d5db;
+            border-radius: 16px;
+            background: #fafafa;
+            cursor: pointer;
+            transition: border-color 0.2s, background 0.2s;
+            margin-top: 14px;
+        }
+
+        .lf-upload-card:hover {
+            border-color: #a78bfa;
+            background: #f5f3ff;
+        }
+
+        .lf-upload-preview {
+            width: 100%;
+            height: 180px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, #f3f4f6, #e9ecf2);
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .lf-upload-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transform: scale(1);
+            transform-origin: center center;
+            transition: transform 0.18s ease, object-position 0.18s ease;
+        }
+
+        .lf-upload-placeholder {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-align: center;
+            color: #94a3b8;
+            font-size: 13px;
+            font-weight: 600;
+            padding: 16px;
+        }
+
+        .lf-upload-placeholder i {
+            font-size: 34px;
+            color: #7c3aed;
+        }
+
+        .lf-upload-meta {
+            color: #6a5af9;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .lf-upload-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .lf-frame-editor {
+            margin-top: 14px;
+            padding: 14px;
+            border-radius: 16px;
+            border: 1px solid #e5e7eb;
+            background: #fff;
+        }
+
+        .lf-frame-editor[hidden] {
+            display: none;
+        }
+
+        .lf-frame-editor-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .lf-frame-editor-head strong {
+            font-size: 13px;
+            color: #111827;
+        }
+
+        .lf-frame-editor-head span {
+            font-size: 12px;
+            color: #6b7280;
+        }
+
+        .lf-frame-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 12px;
+        }
+
+        .lf-frame-field {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .lf-frame-field label {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            font-size: 12px;
+            font-weight: 700;
+            color: #374151;
+        }
+
+        .lf-frame-field input[type="range"] {
+            width: 100%;
+            accent-color: #6a5af9;
+        }
+
+        .lf-ghost-btn {
+            background: #fff;
+            color: #374151;
+            border: 1px solid #e5e7eb;
+            padding: 10px 14px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 700;
+            font-family: inherit;
+            cursor: pointer;
+            transition: border-color 0.2s, color 0.2s;
+        }
+
+        .lf-ghost-btn:hover:not(:disabled) {
+            border-color: #c4b5fd;
+            color: #6a5af9;
+        }
+
+        .lf-ghost-btn:disabled {
+            opacity: 0.55;
+            cursor: not-allowed;
+        }
+
+        .lf-modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+            padding-top: 14px;
+            border-top: 1px solid #f3f4f6;
+        }
+
+        .lf-modal-actions .lf-submit-btn {
+            background: linear-gradient(135deg, #6a5af9, #7c3aed);
+            color: #fff;
+            border: none;
+            padding: 11px 22px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 700;
+            font-family: inherit;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(106, 90, 249, 0.22);
+            transition: opacity 0.2s, transform 0.15s;
+        }
+
+        .lf-modal-actions .lf-cancel-btn {
+            background: #f3f4f6;
+            color: #374151;
+            border: none;
+            padding: 11px 18px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            font-family: inherit;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .lf-modal-actions .lf-submit-btn:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+
+        .lf-modal-actions .lf-cancel-btn:hover {
+            background: #e9ebee;
+        }
+
+        /* ─── Responsive: 768px ─────────────────────────── */
+        @media (max-width: 768px) {
+            .lostfound-container {
+                padding: 18px 14px 40px;
+            }
+
+            .lf-hero {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 14px;
+            }
+
+            .lf-search-bar {
+                align-items: stretch;
+            }
+
+            .lf-search-wrapper {
+                width: 100%;
+            }
+
+            .lf-report-btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .lf-tabs {
+                width: 100%;
+                border-radius: 14px;
+                justify-content: center;
+            }
+
+            .lf-tab-btn {
+                flex: 1;
+                text-align: center;
+                padding: 8px 10px;
+                font-size: 13px;
+            }
+
+            .lf-modal-actions {
+                flex-direction: column-reverse;
+            }
+
+            .lf-modal-actions .lf-submit-btn,
+            .lf-modal-actions .lf-cancel-btn {
+                width: 100%;
+                text-align: center;
+                justify-content: center;
+            }
+        }
+
+        /* ─── Responsive: 480px ─────────────────────────── */
+        @media (max-width: 480px) {
+            .item-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .lf-hero-text h1 {
+                font-size: 1.35rem;
+            }
+
+            .lf-tabs {
+                flex-wrap: wrap;
+                border-radius: 14px;
+            }
+
+            .lf-tab-btn {
+                flex: 1 0 40%;
+            }
+
+            .lf-modal-box {
+                width: min(100%, calc(100vw - 24px));
+                max-height: calc(100vh - 24px);
+            }
+
+            .lf-modal-overlay {
+                padding: 12px;
+            }
+
+            .lf-modal-header {
+                padding: 18px 16px 12px;
+            }
+
+            .lf-modal-scroll {
+                padding: 14px 16px 18px;
+            }
+        }
+
+        .lf-hero-text h1,
+        .item-title,
+        .lf-modal-header h3 {
+            color: var(--color-text);
+        }
+
+        .lf-hero-text p,
+        .item-desc,
+        .lf-empty,
+        .item-meta {
+            color: var(--color-text-muted);
+        }
+
+        .item-card,
+        .lf-modal-box,
+        .lf-modal-header,
+        .lf-tabs,
+        .lf-search-input,
+        .lf-modal-box input,
+        .lf-modal-box select,
+        .lf-modal-box textarea,
+        .lf-upload-card,
+        .lf-ghost-btn {
+            background: var(--gradient-surface);
+            border-color: var(--color-border);
+            color: var(--color-text);
+            box-shadow: var(--shadow-card);
+        }
+
+        .lf-report-btn,
+        .lf-tab-btn.active,
+        .card-actions .contact-btn,
+        .lf-modal-actions .lf-submit-btn {
+            background: var(--gradient-primary);
+            color: #07090f;
+            box-shadow: var(--glow-accent);
+        }
+
+        .item-category-tag,
+        .status-found {
+            background: rgba(0, 229, 255, 0.1);
+            color: var(--color-primary);
+        }
+
+        .status-lost {
+            background: rgba(239, 68, 68, 0.14);
+            color: #fca5a5;
+        }
+
+        .status-claimed {
+            background: rgba(0, 255, 127, 0.14);
+            color: var(--color-accent);
+        }
+
+        .lf-search-input:focus,
+        .lf-modal-box input:focus,
+        .lf-modal-box select:focus,
+        .lf-modal-box textarea:focus {
+            border-color: rgba(0, 229, 255, 0.28);
+            box-shadow: 0 0 0 3px rgba(0, 229, 255, 0.12);
+            background: rgba(255, 255, 255, 0.04);
+        }
+
+        .lf-modal-overlay {
+            background: rgba(7, 9, 15, 0.78);
+            backdrop-filter: blur(10px);
+            padding-top: max(24px, calc(var(--page-top-offset) - 12px));
+        }
+
+        .lf-modal-header {
+            border-bottom-color: var(--color-border);
+            box-shadow: none;
+        }
+
+        .lf-hero-text h1,
+        .item-title,
+        .lf-modal-header h3,
+        .lf-modal-box label,
+        .lf-frame-editor-head strong,
+        .lf-frame-field label {
+            color: var(--color-text);
+        }
+
+        .lf-hero-text p,
+        .item-desc,
+        .lf-upload-placeholder,
+        .lf-modal-box input::placeholder,
+        .lf-modal-box textarea::placeholder,
+        .lf-frame-editor-head span {
+            color: var(--color-text-muted);
+        }
+
+        .lf-modal-box input,
+        .lf-modal-box select,
+        .lf-modal-box textarea,
+        .lf-upload-card,
+        .lf-frame-editor,
+        .lf-ghost-btn,
+        .lf-modal-actions .lf-cancel-btn {
+            background: rgba(255, 255, 255, 0.04);
+            border-color: var(--color-border);
+            color: var(--color-text);
+            box-shadow: none;
+        }
+
+        .lf-modal-box select option {
+            background: var(--color-surface-solid);
+            color: var(--color-text);
+        }
+
+        .lf-close-btn {
+            background: rgba(255, 255, 255, 0.06);
+            color: var(--color-text-muted);
+        }
+
+        .lf-close-btn:hover {
+            background: rgba(0, 229, 255, 0.12);
+            color: var(--color-primary);
+        }
+
+        .lf-upload-card:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: var(--color-border-strong);
+        }
+
+        .lf-upload-preview {
+            background: rgba(255, 255, 255, 0.04);
+        }
+
+        .lf-upload-placeholder i,
+        .lf-upload-meta,
+        .lf-frame-field label span {
+            color: var(--color-primary);
+        }
+
+        .lf-frame-field input[type="range"] {
+            accent-color: var(--color-primary);
+        }
+    </style>
+</head>
+
+<body class="in-pages">
+    <div class="layout">
+        <div id="navbar-container"></div>
+        <div class="page-content lf-page">
+            <div class="lostfound-container">
+
+                <!-- Hero / Action Row -->
+                <div class="lf-hero">
+                    <div class="lf-hero-text">
+                        <h1><i class="fa-solid fa-magnifying-glass"></i> Lost &amp; Found</h1>
+                        <p>Report lost items or help others reclaim theirs</p>
+                    </div>
+                    <button class="lf-report-btn" id="openReportModal">
+                        <i class="fa-solid fa-plus"></i> Report Item
+                    </button>
+                </div>
+
+                <!-- Search Bar -->
+                <div class="lf-search-bar">
+                    <div class="lf-search-wrapper">
+                        <i class="fa-solid fa-search"></i>
+                        <input type="text" id="lfSearchInput" class="lf-search-input"
+                            placeholder="Search items by name or location…">
+                    </div>
+                </div>
+
+                <!-- Filter Tabs -->
+                <div class="lf-tabs">
+                    <button class="lf-tab-btn active" data-tab="all">All Items</button>
+                    <button class="lf-tab-btn" data-tab="lost">Lost</button>
+                    <button class="lf-tab-btn" data-tab="found">Found</button>
+                    <button class="lf-tab-btn" data-tab="my">My Reports</button>
+                </div>
+
+                <!-- Items Grid -->
+                <div id="itemsGrid" class="item-grid"></div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Report Item Modal -->
+    <div class="lf-modal-overlay" id="reportModal">
+        <div class="lf-modal-box">
+            <div class="lf-modal-header">
+                <h3><i class="fa-solid fa-flag"></i> Report Item</h3>
+                <button class="lf-close-btn" id="closeReportModal" aria-label="Close modal">&times;</button>
+            </div>
+            <div class="lf-modal-scroll">
+                <label>Item Name</label>
+                <input type="text" id="itemName" placeholder="e.g. Blue Backpack">
+
+                <label>Description</label>
+                <textarea id="itemDesc" placeholder="Describe the item, location where lost/found, etc."></textarea>
+
+                <label>Category</label>
+                <select id="itemCategory">
+                    <option value="Electronics">Electronics</option>
+                    <option value="Documents">Documents</option>
+                    <option value="Keys">Keys</option>
+                    <option value="Accessories">Accessories</option>
+                    <option value="Other">Other</option>
+                </select>
+
+                <label>Status</label>
+                <select id="itemStatus">
+                    <option value="lost">I lost this</option>
+                    <option value="found">I found this</option>
+                </select>
+
+                <label>Location</label>
+                <input type="text" id="itemLocation" placeholder="e.g. Science Block, Room 204">
+
+                <label>Image</label>
+                <label class="lf-upload-card" for="itemImageUpload">
+                    <div class="lf-upload-preview">
+                        <img id="itemImageUploadPreview" src="" alt="Reported item preview" hidden>
+                        <div id="itemImageUploadPlaceholder" class="lf-upload-placeholder">
+                            <i class="fa-regular fa-image"></i>
+                            <span>Click to upload an item image</span>
+                        </div>
+                    </div>
+                    <span class="lf-upload-meta" id="itemImageUploadMeta">PNG, JPG, or WEBP up to 5MB</span>
+                    <input type="file" id="itemImageUpload" accept="image/png,image/jpeg,image/webp" hidden>
+                </label>
+                <div class="lf-upload-actions">
+                    <button class="lf-ghost-btn" id="clearItemImageUpload" type="button" disabled>Clear image</button>
+                </div>
+                <div class="lf-frame-editor" id="itemImageUploadFrameEditor" hidden>
+                    <div class="lf-frame-editor-head">
+                        <strong>Adjust image framing</strong>
+                        <span>Set how the item image appears before upload.</span>
+                    </div>
+                    <div class="lf-frame-grid">
+                        <div class="lf-frame-field">
+                            <label for="itemImageUploadZoom"><span>Zoom</span><span id="itemImageUploadZoomValue">100%</span></label>
+                            <input id="itemImageUploadZoom" type="range" min="100" max="220" value="100">
+                        </div>
+                        <div class="lf-frame-field">
+                            <label for="itemImageUploadX"><span>Horizontal</span><span id="itemImageUploadXValue">50%</span></label>
+                            <input id="itemImageUploadX" type="range" min="0" max="100" value="50">
+                        </div>
+                        <div class="lf-frame-field">
+                            <label for="itemImageUploadY"><span>Vertical</span><span id="itemImageUploadYValue">50%</span></label>
+                            <input id="itemImageUploadY" type="range" min="0" max="100" value="50">
+                        </div>
+                    </div>
+                    <div class="lf-upload-actions">
+                        <button class="lf-ghost-btn" id="resetItemImageUploadFrame" type="button" disabled>Reset framing</button>
+                    </div>
+                </div>
+
+                <div class="lf-modal-actions">
+                    <button class="lf-cancel-btn" id="cancelReport">Cancel</button>
+                    <button class="lf-submit-btn" id="submitReport">Submit Report</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { auth, db, storage } from "../js/firebase.js";
+        import {
+            DEFAULT_IMAGE_FRAME,
+            normalizeImageFrame,
+            applyImageFrameToElement,
+            createFramedImageFile
+        } from "../js/image-upload-utils.js";
+        import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
+        import { collection, addDoc, onSnapshot, query, orderBy, doc, getDoc, getDocs, serverTimestamp, deleteDoc } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
+        import { ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-storage.js";
+
+        // ----- Modal Controls -----
+        const reportModal = document.getElementById("reportModal");
+        const openReportModal = document.getElementById("openReportModal");
+        const cancelReport = document.getElementById("cancelReport");
+        const closeReportModal = document.getElementById("closeReportModal");
+        const submitReport = document.getElementById("submitReport");
+        const itemsGrid = document.getElementById("itemsGrid");
+        const tabs = document.querySelectorAll(".lf-tab-btn");
+        const searchInput = document.getElementById("lfSearchInput");
+        const itemImageUpload = document.getElementById("itemImageUpload");
+        const itemImageUploadPreview = document.getElementById("itemImageUploadPreview");
+        const itemImageUploadPlaceholder = document.getElementById("itemImageUploadPlaceholder");
+        const itemImageUploadMeta = document.getElementById("itemImageUploadMeta");
+        const clearItemImageUpload = document.getElementById("clearItemImageUpload");
+        const itemImageUploadFrameEditor = document.getElementById("itemImageUploadFrameEditor");
+        const itemImageUploadZoomInput = document.getElementById("itemImageUploadZoom");
+        const itemImageUploadXInput = document.getElementById("itemImageUploadX");
+        const itemImageUploadYInput = document.getElementById("itemImageUploadY");
+        const itemImageUploadZoomValue = document.getElementById("itemImageUploadZoomValue");
+        const itemImageUploadXValue = document.getElementById("itemImageUploadXValue");
+        const itemImageUploadYValue = document.getElementById("itemImageUploadYValue");
+        const resetItemImageUploadFrame = document.getElementById("resetItemImageUploadFrame");
+        let reportImageObjectUrl = "";
+        let reportImageFrame = { ...DEFAULT_IMAGE_FRAME };
+
+        function setReportFrameEditorVisible(isVisible) {
+            if (itemImageUploadFrameEditor) itemImageUploadFrameEditor.hidden = !isVisible;
+        }
+
+        function syncReportFrameControls() {
+            const safeFrame = normalizeImageFrame(reportImageFrame);
+            reportImageFrame = safeFrame;
+            if (itemImageUploadZoomInput) itemImageUploadZoomInput.value = String(Math.round(safeFrame.zoom * 100));
+            if (itemImageUploadXInput) itemImageUploadXInput.value = String(Math.round(safeFrame.x));
+            if (itemImageUploadYInput) itemImageUploadYInput.value = String(Math.round(safeFrame.y));
+            if (itemImageUploadZoomValue) itemImageUploadZoomValue.textContent = `${Math.round(safeFrame.zoom * 100)}%`;
+            if (itemImageUploadXValue) itemImageUploadXValue.textContent = `${Math.round(safeFrame.x)}%`;
+            if (itemImageUploadYValue) itemImageUploadYValue.textContent = `${Math.round(safeFrame.y)}%`;
+            if (resetItemImageUploadFrame) resetItemImageUploadFrame.disabled = itemImageUploadPreview?.hidden ?? true;
+        }
+
+        function renderReportImageFrame() {
+            if (itemImageUploadPreview && !itemImageUploadPreview.hidden) {
+                applyImageFrameToElement(itemImageUploadPreview, reportImageFrame);
+            }
+            syncReportFrameControls();
+        }
+
+        function resetReportImageFrame() {
+            reportImageFrame = { ...DEFAULT_IMAGE_FRAME };
+            renderReportImageFrame();
+        }
+
+        function openModal() { reportModal.style.display = "flex"; }
+        function closeModal() { reportModal.style.display = "none"; }
+
+        function resetReportImagePicker() {
+            if (reportImageObjectUrl) {
+                URL.revokeObjectURL(reportImageObjectUrl);
+                reportImageObjectUrl = "";
+            }
+            if (itemImageUpload) itemImageUpload.value = "";
+            if (itemImageUploadPreview) {
+                itemImageUploadPreview.hidden = true;
+                itemImageUploadPreview.removeAttribute("src");
+                itemImageUploadPreview.style.objectPosition = "50% 50%";
+                itemImageUploadPreview.style.transform = "scale(1)";
+            }
+            if (itemImageUploadPlaceholder) itemImageUploadPlaceholder.hidden = false;
+            if (itemImageUploadMeta) itemImageUploadMeta.textContent = "PNG, JPG, or WEBP up to 5MB";
+            if (clearItemImageUpload) clearItemImageUpload.disabled = true;
+            setReportFrameEditorVisible(false);
+            resetReportImageFrame();
+        }
+
+        function validateReportImageFile(file) {
+            if (!file) return true;
+            if (!file.type.startsWith("image/")) {
+                alert("Please choose a valid image file.");
+                return false;
+            }
+            if (file.size > 5 * 1024 * 1024) {
+                alert("Image must be 5MB or smaller.");
+                return false;
+            }
+            return true;
+        }
+
+        async function uploadLostFoundImage(file, userId) {
+            if (!file) return "";
+            const previewStage = itemImageUploadPreview?.closest(".lf-upload-preview");
+            const uploadFile = await createFramedImageFile(file, reportImageFrame, {
+                outputWidth: previewStage?.clientWidth || 320,
+                outputHeight: previewStage?.clientHeight || 180,
+                maxWidth: 1600,
+                maxHeight: 1600,
+                quality: 0.82
+            });
+            const safeName = String(uploadFile.name || file.name || "item").replace(/\s+/g, "_");
+            const storageRef = ref(storage, `lostfound/${userId}_${Date.now()}_${safeName}`);
+            const uploadSnapshot = await uploadBytes(storageRef, uploadFile);
+            return getDownloadURL(uploadSnapshot.ref);
+        }
+
+        openReportModal.onclick = openModal;
+        cancelReport.onclick = closeModal;
+        closeReportModal.onclick = closeModal;
+
+        if (itemImageUpload) {
+            itemImageUpload.addEventListener("change", (event) => {
+                const file = event.target.files && event.target.files[0] ? event.target.files[0] : null;
+                if (!file) {
+                    resetReportImagePicker();
+                    return;
+                }
+                if (!validateReportImageFile(file)) {
+                    resetReportImagePicker();
+                    return;
+                }
+                if (reportImageObjectUrl) {
+                    URL.revokeObjectURL(reportImageObjectUrl);
+                }
+                reportImageObjectUrl = URL.createObjectURL(file);
+                itemImageUploadPreview.src = reportImageObjectUrl;
+                itemImageUploadPreview.hidden = false;
+                itemImageUploadPlaceholder.hidden = true;
+                itemImageUploadMeta.textContent = `Selected: ${file.name}. Adjust framing if needed.`;
+                clearItemImageUpload.disabled = false;
+                setReportFrameEditorVisible(true);
+                resetReportImageFrame();
+            });
+        }
+
+        [
+            [itemImageUploadZoomInput, "zoom"],
+            [itemImageUploadXInput, "x"],
+            [itemImageUploadYInput, "y"]
+        ].forEach(([input, key]) => {
+            if (!input) return;
+            input.addEventListener("input", () => {
+                reportImageFrame = normalizeImageFrame({
+                    ...reportImageFrame,
+                    [key]: key === "zoom" ? Number(input.value) / 100 : Number(input.value)
+                });
+                renderReportImageFrame();
+            });
+        });
+
+        if (resetItemImageUploadFrame) {
+            resetItemImageUploadFrame.addEventListener("click", () => {
+                resetReportImageFrame();
+            });
+        }
+
+        if (clearItemImageUpload) {
+            clearItemImageUpload.addEventListener("click", () => {
+                resetReportImagePicker();
+            });
+        }
+
+        // Close when clicking backdrop
+        reportModal.addEventListener("click", (e) => {
+            if (e.target === reportModal) closeModal();
+        });
+
+        let currentTab = "all";
+        let allDocs = [];
+
+        onAuthStateChanged(auth, (user) => {
+            if (!user) {
+                window.location.href = "../login.html";
+                return;
+            }
+            loadItems();
+
+            // Update navbar data
+            const fetchInfo = async () => {
+                const userRef = doc(db, "users", user.uid);
+                const userSnap = await getDoc(userRef);
+                if (userSnap.exists()) {
+                    const userData = userSnap.data();
+                    if (document.getElementById("usernameValue"))
+                        document.getElementById("usernameValue").innerText = userData.name || "User";
+                    if (document.getElementById("navPointsValue"))
+                        document.getElementById("navPointsValue").innerText = userData.points || 0;
+                }
+            };
+            fetchInfo();
+        });
+
+        submitReport.onclick = async () => {
+            const user = auth.currentUser;
+            if (!user) return;
+
+            const name = document.getElementById("itemName").value.trim();
+            const desc = document.getElementById("itemDesc").value.trim();
+            const category = document.getElementById("itemCategory").value;
+            const status = document.getElementById("itemStatus").value;
+            const location = document.getElementById("itemLocation").value.trim();
+            const imageFile = itemImageUpload && itemImageUpload.files ? itemImageUpload.files[0] : null;
+
+            if (!name || !desc || !location) {
+                alert("Please fill all fields");
+                return;
+            }
+            if (imageFile && !validateReportImageFile(imageFile)) {
+                return;
+            }
+
+            submitReport.disabled = true;
+            submitReport.textContent = "Submitting\u2026";
+
+            try {
+                let imageUrl = "";
+                if (imageFile) {
+                    submitReport.textContent = "Preparing image...";
+                    imageUrl = await uploadLostFoundImage(imageFile, user.uid);
+                    submitReport.textContent = "Submitting\u2026";
+                }
+
+                await Promise.all([
+                    addDoc(collection(db, "lostItems"), {
+                        name, desc, category, status, location,
+                        imageUrl,
+                        createdBy: user.uid,
+                        createdAt: serverTimestamp(),
+                        userName: user.displayName || "Anonymous"
+                    }),
+                    addDoc(collection(db, "transactions"), {
+                        userId: user.uid,
+                        title: `Reported ${status}: ${name}`,
+                        category: "lostfound",
+                        createdAt: serverTimestamp()
+                    })
+                ]);
+
+                closeModal();
+                // Clear fields
+                document.getElementById("itemName").value = "";
+                document.getElementById("itemDesc").value = "";
+                document.getElementById("itemLocation").value = "";
+                resetReportImagePicker();
+            } catch (error) {
+                console.error("Error adding document: ", error);
+                alert("Failed to submit. Please try again.");
+            } finally {
+                submitReport.disabled = false;
+                submitReport.textContent = "Submit Report";
+            }
+        };
+
+        let unsubscribeItems = null;
+
+        function loadItems() {
+            if (unsubscribeItems) unsubscribeItems();
+            const q = query(collection(db, "lostItems"), orderBy("createdAt", "desc"));
+            unsubscribeItems = onSnapshot(q, (snapshot) => {
+                allDocs = snapshot.docs;
+                renderItems();
+            });
+        }
+
+        function renderItems() {
+            itemsGrid.innerHTML = "";
+            const user = auth.currentUser;
+            const keyword = (searchInput?.value || "").toLowerCase();
+
+            let filtered = allDocs.filter(d => {
+                const data = d.data();
+                const matchKeyword = data.name.toLowerCase().includes(keyword) ||
+                    data.location.toLowerCase().includes(keyword) ||
+                    data.desc.toLowerCase().includes(keyword);
+
+                if (currentTab === "all") return matchKeyword;
+                if (currentTab === "lost") return matchKeyword && data.status === "lost";
+                if (currentTab === "found") return matchKeyword && data.status === "found";
+                if (currentTab === "my") return matchKeyword && data.createdBy === user.uid;
+                return false;
+            });
+
+            if (filtered.length === 0) {
+                itemsGrid.innerHTML = `
+                    <div class="lf-empty">
+                        <i class="fa-solid fa-folder-open"></i>
+                        <p>No items found ${keyword ? "matching your search" : "in this category"}.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            filtered.forEach(d => {
+                const data = d.data();
+                const card = document.createElement("div");
+                card.className = "item-card";
+
+                const isOwner = user && data.createdBy === user.uid;
+                const statusClass = `status-${data.status}`;
+
+                card.innerHTML = `
+                    <div class="item-status ${statusClass}">${data.status}</div>
+                    <div class="item-image">${data.imageUrl ? `<img src="${data.imageUrl}" alt="Reported item image">` : `<i class="fa-solid fa-box-archive"></i>`}</div>
+                    <div class="item-category-tag">${data.category}</div>
+                    <h3 class="item-title">${data.name}</h3>
+                    <p class="item-desc">${data.desc}</p>
+                    <div class="item-meta">
+                        <span><i class="fa-solid fa-location-dot"></i> ${data.location}</span>
+                        <span><i class="fa-solid fa-user"></i> ${data.userName || "Anonymous"}</span>
+                    </div>
+                    <div class="card-actions">
+                        ${!isOwner ? `<button class="contact-btn" data-uid="${data.createdBy}"><i class="fa-solid fa-comment"></i> Contact</button>` : ""}
+                        ${isOwner ? `<button class="delete-btn" data-id="${d.id}"><i class="fa-solid fa-trash"></i> Remove Report</button>` : ""}
+                    </div>
+                `;
+
+                // Contact logic
+                const contactBtn = card.querySelector(".contact-btn");
+                if (contactBtn) {
+                    contactBtn.onclick = () => {
+                        window.location.href = `chat.html?uid=${data.createdBy}`;
+                    };
+                }
+
+                // Delete logic
+                const deleteBtn = card.querySelector(".delete-btn");
+                if (deleteBtn) {
+                    deleteBtn.onclick = async () => {
+                        if (confirm("Are you sure you want to remove this report?")) {
+                            await deleteDoc(doc(db, "lostItems", d.id));
+                        }
+                    };
+                }
+
+                itemsGrid.appendChild(card);
+            });
+        }
+
+        // Tab switching
+        tabs.forEach(tab => {
+            tab.onclick = () => {
+                tabs.forEach(t => t.classList.remove("active"));
+                tab.classList.add("active");
+                currentTab = tab.dataset.tab;
+                renderItems();
+            };
+        });
+
+        // Search
+        if (searchInput) {
+            searchInput.addEventListener("input", renderItems);
+        }
+
+    </script>
+<script type="module" src="../js/nav-loader.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>UniX - Join Campus Community</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script type="module" src="js/theme.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/theme.css">
+  <link rel="stylesheet" href="css/auth.css">
+</head>
+
+<body class="auth-page">
+  <div class="auth-container">
+    <div class="auth-card">
+      <div class="auth-header">
+        <a class="auth-logo" href="index.html" aria-label="Go to UniX home">
+          <span class="auth-logo-image" aria-hidden="true"></span>
+          <span class="auth-logo-word">UniX</span>
+        </a>
+        <h2>Create Account</h2>
+        <p class="auth-subtext">Join your campus network</p>
+      </div>
+
+      <div id="message" aria-live="polite"></div>
+
+      <form id="registerForm">
+        <div class="form-group">
+          <label for="name">Full Name</label>
+          <input type="text" id="name" name="name" placeholder="John Doe" required>
+        </div>
+
+        <div class="form-group">
+          <label for="email">Verified Email</label>
+          <input type="email" id="email" name="email" placeholder="name@gmail.com" required>
+        </div>
+
+        <div class="form-group">
+          <label for="role">Your Role</label>
+          <select id="role" required>
+            <option value="">Select Role</option>
+            <option value="Student">Student</option>
+            <option value="Faculty">Faculty</option>
+            <option value="Admin">Admin</option>
+          </select>
+        </div>
+
+        <div id="adminField" class="form-group" style="display: none;">
+          <label for="adminCode">Admin Access Code</label>
+          <input type="password" id="adminCode" placeholder="Enter secret code">
+        </div>
+
+        <div id="dynamicField" class="form-group" style="display: none;">
+          <label for="regNo">Register Number</label>
+          <input type="text" id="regNo" placeholder="CEC22CS001">
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" placeholder="Min 8 characters" required>
+        </div>
+
+        <div class="form-group">
+          <label for="confirmPassword">Confirm Password</label>
+          <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm password" required>
+        </div>
+
+        <button class="primary-btn" type="submit" id="registerBtn">Create UniX Account</button>
+      </form>
+
+      <div class="auth-footer">
+        Already have an account? <a href="login.html">Sign in</a>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { auth, db } from "./js/firebase.js";
+    import { doc, setDoc, serverTimestamp, query, collection, where, getDocs } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
+    import { createUserWithEmailAndPassword, sendEmailVerification } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
+
+    const form = document.getElementById("registerForm");
+    const roleSelect = document.getElementById("role");
+    const dynamicField = document.getElementById("dynamicField");
+    const regNoInput = document.getElementById("regNo");
+    const message = document.getElementById("message");
+    const registerBtn = document.getElementById("registerBtn");
+
+    const adminField = document.getElementById("adminField");
+    const adminCodeInput = document.getElementById("adminCode");
+
+    roleSelect.addEventListener("change", function () {
+      dynamicField.style.display = this.value === "Student" ? "flex" : "none";
+      regNoInput.required = this.value === "Student";
+      
+      adminField.style.display = this.value === "Admin" ? "flex" : "none";
+      adminCodeInput.required = this.value === "Admin";
+      
+      if (this.value !== "Student") {
+        regNoInput.value = "";
+      }
+      if (this.value !== "Admin") {
+        adminCodeInput.value = "";
+      }
+    });
+
+    function showMessage(text, type = "error") {
+      message.innerText = text;
+      message.className = "is-visible " + (type === "success" ? "message-success" : "message-error");
+      if (!text) message.classList.remove("is-visible");
+    }
+
+    form.addEventListener("submit", async function (e) {
+      e.preventDefault();
+      showMessage("");
+
+      const password = document.getElementById("password").value;
+      const confirmPassword = document.getElementById("confirmPassword").value;
+
+      if (password !== confirmPassword) {
+        showMessage("Passwords do not match.");
+        return;
+      }
+
+      const role = roleSelect.value;
+      const adminCode = adminCodeInput.value.trim();
+
+      if (role === "Admin" && adminCode !== "UNIXADMIN2026") {
+        showMessage("Invalid Admin Access Code.");
+        registerBtn.disabled = false;
+        registerBtn.innerText = "Create UniX Account";
+        return;
+      }
+
+      if (password.length < 8) {
+        showMessage("Password must be at least 8 characters.");
+        return;
+      }
+
+      registerBtn.disabled = true;
+      registerBtn.innerText = "Processing...";
+
+      try {
+        const email = document.getElementById("email").value.trim();
+        const role = roleSelect.value;
+        const regNo = regNoInput.value.trim().toUpperCase();
+
+        // Check RegNo uniqueness if student
+        if (role === "Student") {
+          const q = query(collection(db, "users"), where("regNo", "==", regNo));
+          const snap = await getDocs(q);
+          if (!snap.empty) {
+            showMessage("Register Number already in use.");
+            registerBtn.disabled = false;
+            registerBtn.innerText = "Create UniX Account";
+            return;
+          }
+        }
+
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+
+        const userPayload = {
+          name: document.getElementById("name").value.trim(),
+          email: email,
+          role: role,
+          regNo: role === "Student" ? regNo : null,
+          points: 100, // Starting bonus
+          createdAt: serverTimestamp(),
+          status: "Offline"
+        };
+
+        await setDoc(doc(db, "users", user.uid), userPayload);
+        await setDoc(doc(db, "publicUsers", user.uid), {
+          name: userPayload.name,
+          online: false,
+          points: 100
+        });
+
+        await sendEmailVerification(user);
+        showMessage("Account created! Check email for verification link.", "success");
+
+        setTimeout(() => window.location.href = "login.html", 3000);
+      } catch (error) {
+        const errors = {
+          "auth/email-already-in-use": "Email already registered.",
+          "auth/invalid-email": "Invalid email address."
+        };
+        showMessage(errors[error.code] || "Registration failed. Try again.");
+        registerBtn.disabled = false;
+        registerBtn.innerText = "Create UniX Account";
+      }
+    });
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UniX - Your Campus. Unified.</title>
+  <script type="module" src="js/theme.js"></script>
+
+  <!-- Phosphor Icons -->
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/home.css">
+</head>
+
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <a href="index.html" class="brand">
+      <span class="brand-wordmark" aria-label="UniX logo">
+        <span class="brand-logo-image" aria-hidden="true"></span>
+        <span class="brand-logo-word">UniX</span>
+      </span>
+    </a>
+
+    <div class="nav-links">
+      <a href="#about">About</a>
+      <a href="#features">Features</a>
+      <a href="#how-it-works">How it works</a>
+      <button class="theme-toggle" type="button" data-theme-toggle aria-label="Toggle light theme" aria-pressed="false">
+        <span class="theme-toggle-track">
+          <span class="theme-toggle-thumb"><i class="ph ph-sun"></i></span>
+        </span>
+        <span class="theme-toggle-text" data-theme-toggle-label>Light Mode</span>
+      </button>
+      <a href="login.html" class="btn btn-ghost">Login</a>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-content">
+      <h1 class="hero-title">UniX. <br><span class="text-gradient">Your Campus Unified.</span></h1>
+      <p class="hero-subtitle">Skill sharing, tutoring, trading, and lost & found — all in one place, exclusively for
+        your campus community.</p>
+
+      <div class="hero-cta">
+        <a href="signup.html" class="btn btn-primary">
+          Get Started for Free <i class="ph ph-arrow-right"></i>
+        </a>
+      </div>
+    </div>
+
+    <div class="scroll-indicator">
+      <span>Scroll</span>
+      <i class="ph ph-caret-down"></i>
+    </div>
+  </section>
+
+  <!-- About / Introduction Section -->
+  <section id="about" class="section">
+    <div class="section-header">
+      <h2 class="section-title">Unified Campus Platform</h2>
+      <p class="section-subtitle">Welcome to UniX, the all-in-one ecosystem designed exclusively for our campus
+        community. We believe in the power of connection, collaboration, and mutual support.</p>
+    </div>
+
+    <div class="intro-grid">
+      <div class="card intro-card">
+        <div class="icon-wrapper">
+          <i class="ph ph-brain"></i>
+        </div>
+        <h3>Skill Sharing</h3>
+        <p>Exchange knowledge, solve doubts, and earn XP points by helping out your peers.</p>
+      </div>
+
+      <div class="card intro-card">
+        <div class="icon-wrapper">
+          <i class="ph ph-graduation-cap"></i>
+        </div>
+        <h3>Tutoring</h3>
+        <p>Book micro-courses or host your own tutoring sessions safely and anonymously.</p>
+      </div>
+
+      <div class="card intro-card">
+        <div class="icon-wrapper">
+          <i class="ph ph-shopping-cart"></i>
+        </div>
+        <h3>Marketplace</h3>
+        <p>Buy and sell college essentials, from textbooks to dorm supplies, within the campus.</p>
+      </div>
+
+      <div class="card intro-card">
+        <div class="icon-wrapper">
+          <i class="ph ph-magnifying-glass"></i>
+        </div>
+        <h3>Lost & Found</h3>
+        <p>Did you lose something? Found an item? Rely on our AI to match and recover campus goods.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Mission Section -->
+  <section class="section mission-section">
+    <div class="mission-content">
+      <h2 class="section-title" style="margin-bottom: 2rem;">Our Mission</h2>
+      <p class="mission-text">
+        "UniX was created to bridge the gap between students, making campus life more rewarding and efficient. By
+        rewarding helpfulness through our points system, we foster a culture of giving and shared success."
+      </p>
+
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number" data-target="500">500+</span>
+          <span class="stat-label">Students</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number" data-target="200">200+</span>
+          <span class="stat-label">Skills Shared</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number" data-target="150">150+</span>
+          <span class="stat-label">Items Traded</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number" data-target="50">50+</span>
+          <span class="stat-label">Lost Items Recovered</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Highlight Section -->
+  <section id="features" class="section">
+    <div class="section-header">
+      <h2 class="section-title">Everything You Need</h2>
+      <p class="section-subtitle">A digital toolkit designed for modern campus life.</p>
+    </div>
+
+    <div class="features-grid">
+      <div class="card feature-tile">
+        <div class="icon-wrapper">
+          <i class="ph ph-hands-clapping"></i>
+        </div>
+        <div class="feature-content">
+          <h3>Skill Exchange</h3>
+          <p>Get help with assignments and projects while earning points in return.</p>
+        </div>
+      </div>
+
+      <div class="card feature-tile">
+        <div class="icon-wrapper">
+          <i class="ph ph-chalkboard-teacher"></i>
+        </div>
+        <div class="feature-content">
+          <h3>Campus Tutoring</h3>
+          <p>Discover classes taught by seniors and verified peers.</p>
+        </div>
+      </div>
+
+      <div class="card feature-tile">
+        <div class="icon-wrapper">
+          <i class="ph ph-storefront"></i>
+        </div>
+        <div class="feature-content">
+          <h3>Second-Hand Market</h3>
+          <p>Find great deals on pre-owned items directly from your college mates.</p>
+        </div>
+      </div>
+
+      <div class="card feature-tile">
+        <div class="icon-wrapper">
+          <i class="ph ph-radar"></i>
+        </div>
+        <div class="feature-content">
+          <h3>Lost & Found Tracker</h3>
+          <p>AI-assisted matching to connect you instantly with found items.</p>
+        </div>
+      </div>
+
+      <div class="card feature-tile">
+        <div class="icon-wrapper">
+          <i class="ph ph-robot"></i>
+        </div>
+        <div class="feature-content">
+          <h3>AI-Powered Chatbot</h3>
+          <p>Got questions about campus? Get answers instantly using the Gemini AI Assistant.</p>
+        </div>
+      </div>
+
+      <div class="card feature-tile">
+        <div class="icon-wrapper">
+          <i class="ph ph-trophy"></i>
+        </div>
+        <div class="feature-content">
+          <h3>Achievements & Badges</h3>
+          <p>Earn XP and collect unique achievements for your profile.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works Section -->
+  <section id="how-it-works" class="section">
+    <div class="section-header">
+      <h2 class="section-title">How It Works</h2>
+      <p class="section-subtitle">Getting started with UniX is quick and easy.</p>
+    </div>
+
+    <div class="steps-container">
+      <div class="step-item">
+        <div class="step-number">1</div>
+        <div class="step-content">
+          <h3>Sign Up</h3>
+          <p>Create an account using your authorized college ID to ensure a verified community.</p>
+        </div>
+      </div>
+
+      <div class="step-item">
+        <div class="step-number">2</div>
+        <div class="step-content">
+          <h3>Explore</h3>
+          <p>Browse modules: search for tutors, seek skill assistance, or scroll the marketplace.</p>
+        </div>
+      </div>
+
+      <div class="step-item">
+        <div class="step-number">3</div>
+        <div class="step-content">
+          <h3>Contribute & Earn</h3>
+          <p>Help others to earn XP points, build a trusted reputation, and unlock achievements.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-brand">
+        <a href="index.html" class="brand">
+          <span class="brand-wordmark" aria-label="UniX logo">
+            <span class="brand-logo-image" aria-hidden="true"></span>
+            <span class="brand-logo-word">UniX</span>
+          </span>
+        </a>
+        <p>Your Campus. Unified. Exclusively designed for our college community.</p>
+
+        <div class="footer-socials">
+          <a href="#"><i class="ph ph-instagram-logo"></i></a>
+          <a href="#"><i class="ph ph-twitter-logo"></i></a>
+          <a href="#"><i class="ph ph-linkedin-logo"></i></a>
+        </div>
+      </div>
+
+      <div class="footer-links">
+        <h4>Modules</h4>
+        <ul>
+          <li><a href="skillshare.html">Skill Share</a></li>
+          <li><a href="tutoring.html">Tutoring</a></li>
+          <li><a href="marketplace.html">Marketplace</a></li>
+          <li><a href="lostandfound.html">Lost & Found</a></li>
+          <li><a href="chat.html">AI Chat</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-links">
+        <h4>Platform</h4>
+        <ul>
+          <li><a href="#about">About</a></li>
+          <li><a href="#features">Features</a></li>
+          <li><a href="login.html">Login</a></li>
+          <li><a href="signup.html">Sign Up</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-links">
+        <h4>Support</h4>
+        <ul>
+          <li><a href="#">Help Center</a></li>
+          <li><a href="#">Safety Guidelines</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Terms of Service</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>&copy; 2026 UniX Platform. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- Script for basic interactions (counters) -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      // Counter animation logic 
+      const counters = document.querySelectorAll('.stat-number');
+
+      const animateCounters = () => {
+        counters.forEach(counter => {
+          const target = +counter.getAttribute('data-target');
+          let current = 0;
+          const increment = target / 50;
+
+          const updateCounter = () => {
+            current += increment;
+            if (current < target) {
+              counter.innerText = Math.ceil(current) + "+";
+              setTimeout(updateCounter, 30);
+            } else {
+              counter.innerText = target + "+";
+            }
+          };
+          updateCounter();
+        });
+      };
+
+      // triggering animation when stats section is in view
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            animateCounters();
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.5 });
+
+      const missionSection = document.querySelector('.mission-section');
+      if (missionSection) observer.observe(missionSection);
+    });
+  </script>
+</body>
+
+</html>
