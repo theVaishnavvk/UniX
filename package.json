@@ -1,0 +1,28 @@
+{
+  "name": "unix",
+  "version": "1.0.0",
+  "description": "A unified digital campus ecosystem for students.",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "test:rules": "node --test tests/firestore.rules.test.cjs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/theVaishnavvk/UniX.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/theVaishnavvk/UniX/issues"
+  },
+  "homepage": "https://github.com/theVaishnavvk/UniX#readme",
+  "devDependencies": {
+    "@firebase/rules-unit-testing": "^6.0.0",
+    "firebase": "^13.2.0"
+  },
+  "overrides": {
+    "@grpc/grpc-js": "1.14.7"
+  }
+}

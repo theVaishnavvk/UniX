@@ -9,16 +9,32 @@ service-account*.json
 
 # Dependencies
 node_modules/
+functions/node_modules/
 
 # Logs
 *.log
 npm-debug.log*
+firestore-debug.log
+ui-debug.log
+firebase-debug.log
 
 # Operating system files
 .DS_Store
 Thumbs.db
 desktop.ini
 
-# Temporary files
+# Temporary and backup files
 *.tmp
 *.temp
+*.backup
+*.before-*
+*.pre-*
+
+# Firebase local emulators & runtime cache
+.firebase/
+.firebaserc.local
+
+# Agent tools and local IDE caches
+.agents/
+.claude/
+skills-lock.json

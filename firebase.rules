@@ -1,41 +1,34 @@
+
 rules_version = '2';
+
 service cloud.firestore {
   match /databases/{database}/documents {
+
+    // ==========================================
+    // HELPER FUNCTIONS
+    // ==========================================
+
     function signedIn() {
       return request.auth != null;
     }
 
-    function userDocPath(uid) {
+    function isOwner(uid) {
+      return signedIn() && request.auth.uid == uid;
+    }
+
+    function userPath(uid) {
       return /databases/$(database)/documents/users/$(uid);
     }
 
-    function requestDocPath(requestId) {
-      return /databases/$(database)/documents/requests/$(requestId);
-    }
-
-    function courseDocPath(courseId) {
-      return /databases/$(database)/documents/courses/$(courseId);
-    }
-
-    function currentUserData() {
-      return get(userDocPath(request.auth.uid)).data;
-    }
-
+    // Admin status comes from an existing user document.
+    // Normal users cannot change their own role or isAdmin field.
     function isAdmin() {
-      return signedIn() && (
-        request.auth.token.email in ["admin@unix.com", "vaishnav@unix.com"] ||
-        (
-          exists(userDocPath(request.auth.uid)) &&
-          (
-            currentUserData().isAdmin == true ||
-            currentUserData().role == "Admin"
-          )
-        )
-      );
-    }
-
-    function isOwner(uid) {
-      return signedIn() && request.auth.uid == uid;
+      return signedIn()
+        && exists(userPath(request.auth.uid))
+        && (
+          get(userPath(request.auth.uid)).data.role == "Admin"
+          || get(userPath(request.auth.uid)).data.isAdmin == true
+        );
     }
 
     function hasOnlyKeys(data, allowed) {
@@ -43,431 +36,489 @@ service cloud.firestore {
     }
 
     function affectsOnly(allowed) {
-      return request.resource.data.diff(resource.data).affectedKeys().hasOnly(allowed);
+      return request.resource.data
+        .diff(resource.data)
+        .affectedKeys()
+        .hasOnly(allowed);
     }
 
-    function isValidChatParticipant(chatId) {
-      return signedIn() && (
-        chatId.matches('^' + request.auth.uid + '_.*$') ||
-        chatId.matches('^.*_' + request.auth.uid + '$')
-      );
+    function requestPath(requestId) {
+      return /databases/$(database)/documents/requests/$(requestId);
+    }
+
+    function coursePath(courseId) {
+      return /databases/$(database)/documents/courses/$(courseId);
     }
 
     function ownsRequest(requestId) {
-      return signedIn() &&
-        exists(requestDocPath(requestId)) &&
-        get(requestDocPath(requestId)).data.userId == request.auth.uid;
+      return signedIn()
+        && exists(requestPath(requestId))
+        && get(requestPath(requestId)).data.userId == request.auth.uid;
     }
 
     function ownsCourse(courseId) {
-      return signedIn() &&
-        exists(courseDocPath(courseId)) &&
-        get(courseDocPath(courseId)).data.tutorId == request.auth.uid;
-    }
-
-    function canReadEnrollment() {
-      return signedIn() && (
-        resource.data.studentId == request.auth.uid ||
-        ownsCourse(resource.data.courseId) ||
-        isAdmin()
-      );
+      return signedIn()
+        && exists(coursePath(courseId))
+        && get(coursePath(courseId)).data.tutorId == request.auth.uid;
     }
 
     function canReadApplication() {
-      return signedIn() && (
-        resource.data.applicantId == request.auth.uid ||
-        ownsRequest(resource.data.requestId) ||
-        isAdmin()
-      );
+      return signedIn()
+        && (
+          resource.data.applicantId == request.auth.uid
+          || ownsRequest(resource.data.requestId)
+          || isAdmin()
+        );
     }
 
-    function isFirstDashboardBonusUpdate(uid) {
-      return isOwner(uid) &&
-        affectsOnly(["points", "firstDashboardBonusAwarded", "firstDashboardBonusAwardedAt"]) &&
-        (resource.data.firstDashboardBonusAwarded != true) &&
-        request.resource.data.firstDashboardBonusAwarded == true &&
-        request.resource.data.points == (resource.data.points + 1000) &&
-        request.resource.data.email == resource.data.email &&
-        request.resource.data.createdAt == resource.data.createdAt &&
-        request.resource.data.regNo == resource.data.regNo &&
-        request.resource.data.isAdmin == resource.data.isAdmin;
+    function canReadEnrollment() {
+      return signedIn()
+        && (
+          resource.data.studentId == request.auth.uid
+          || ownsCourse(resource.data.courseId)
+          || isAdmin()
+        );
     }
+
+    function validChatParticipant(chatId) {
+      return signedIn()
+        && request.auth.uid in chatId.split("_");
+    }
+
+    // ==========================================
+    // USERS
+    // ==========================================
 
     match /users/{uid} {
-      allow read: if signedIn();
 
-      allow create: if isOwner(uid) &&
-        !exists(userDocPath(uid)) &&
-        hasOnlyKeys(
-          request.resource.data,
-          [
-            "name", "email", "role", "regNo", "points", "createdAt",
-            "skills", "photoURL", "tagline", "bio", "coverGradient",
-            "socials", "online", "status", "xp", "streak",
-            "tutorDisplayId", "firstDashboardBonusAwarded",
-            "firstDashboardBonusAwardedAt"
-          ]
-        ) &&
-        request.resource.data.email == request.auth.token.email &&
-        request.resource.data.points == 100 &&
-        !(request.resource.data.isAdmin == true);
+      // Private profile: owner or admin only.
+      allow get: if isOwner(uid) || isAdmin();
+      allow list: if isAdmin();
 
-      allow update: if isAdmin() ||
-        (
-          isOwner(uid) &&
-          (
-            (
-              affectsOnly([
-                "name", "role", "skills", "photoURL", "tagline", "bio",
-                "coverGradient", "socials", "online", "status",
-                "tutorDisplayId"
-              ]) &&
-              request.resource.data.email == resource.data.email &&
-              request.resource.data.createdAt == resource.data.createdAt &&
-              request.resource.data.points == resource.data.points &&
-              request.resource.data.regNo == resource.data.regNo &&
-              request.resource.data.isAdmin == resource.data.isAdmin
-            ) ||
-            isFirstDashboardBonusUpdate(uid)
-          )
+      // Users cannot create themselves as administrators.
+      allow create: if isOwner(uid)
+        && hasOnlyKeys(request.resource.data, [
+          "name", "email", "role", "regNo", "points",
+          "createdAt", "skills", "photoURL", "tagline",
+          "bio", "coverGradient", "socials", "online",
+          "status", "xp", "streak", "tutorDisplayId",
+          "firstDashboardBonusAwarded",
+          "firstDashboardBonusAwardedAt"
+        ])
+        && request.resource.data.email == request.auth.token.email
+        && request.resource.data.role in ["Student", "Organizer"]
+        && request.resource.data.points == 100;
+
+      // Users may edit profile fields, not roles,
+      // administrator status, points, or account identity.
+      allow update: if isAdmin()
+        || (
+          isOwner(uid)
+          && affectsOnly([
+            "name", "skills", "photoURL", "tagline",
+            "bio", "coverGradient", "socials",
+            "online", "status", "tutorDisplayId"
+          ])
+          && request.resource.data.email == resource.data.email
+          && request.resource.data.role == resource.data.role
+          && request.resource.data.isAdmin == resource.data.isAdmin
+          && request.resource.data.points == resource.data.points
+          && request.resource.data.regNo == resource.data.regNo
+          && request.resource.data.createdAt == resource.data.createdAt
         );
 
       allow delete: if isAdmin();
 
+      // Private nested notifications.
       match /notifications/{notificationId} {
         allow read: if isOwner(uid) || isAdmin();
 
-        allow create: if signedIn() &&
-          hasOnlyKeys(
-            request.resource.data,
-            [
-              "message", "read", "createdAt", "type", "amount", "source",
-              "requestId", "actorId", "actorName", "courseId",
-              "enrollmentId", "title", "userId"
-            ]
-          ) &&
-          (
-            isOwner(uid) ||
-            request.resource.data.actorId == request.auth.uid ||
-            request.resource.data.userId == uid
-          );
+        allow create: if signedIn()
+          && request.resource.data.userId == uid
+          && request.resource.data.actorId == request.auth.uid
+          && hasOnlyKeys(request.resource.data, [
+            "message", "read", "createdAt", "type",
+            "amount", "source", "requestId", "actorId",
+            "actorName", "courseId", "enrollmentId",
+            "title", "userId"
+          ]);
 
-        allow update: if (isOwner(uid) || isAdmin()) &&
-          affectsOnly(["read"]);
+        allow update: if (isOwner(uid) || isAdmin())
+          && affectsOnly(["read"]);
 
         allow delete: if isOwner(uid) || isAdmin();
       }
     }
 
+    // ==========================================
+    // PUBLIC USER PROFILES
+    // ==========================================
+
     match /publicUsers/{uid} {
-      allow read: if true;
+      allow read: if signedIn();
 
-      allow create: if isAdmin() ||
-        (
-          isOwner(uid) &&
-          hasOnlyKeys(request.resource.data, ["name", "online", "points", "photoURL", "tagline", "role"]) &&
-          request.resource.data.points == 100
-        );
+      allow create: if isOwner(uid)
+        && hasOnlyKeys(request.resource.data, [
+          "name", "online", "points", "photoURL",
+          "tagline", "role"
+        ])
+        && request.resource.data.role in ["Student", "Organizer"]
+        && request.resource.data.points == 100;
 
-      allow update: if isAdmin() ||
-        (
-          isOwner(uid) &&
-          affectsOnly([
-            "name", "online", "photoURL", "tagline", "role"
-          ]) &&
-          request.resource.data.points == resource.data.points
+      allow update: if isAdmin()
+        || (
+          isOwner(uid)
+          && affectsOnly([
+            "name", "online", "photoURL", "tagline"
+          ])
+          && request.resource.data.role == resource.data.role
+          && request.resource.data.points == resource.data.points
         );
 
       allow delete: if isAdmin();
     }
+
+    // ==========================================
+    // SKILL EXCHANGE REQUESTS
+    // ==========================================
 
     match /requests/{requestId} {
       allow read: if signedIn();
 
-      allow create: if signedIn() &&
-        request.resource.data.userId == request.auth.uid &&
-        hasOnlyKeys(
-          request.resource.data,
-          [
-            "title", "desc", "category", "difficulty", "urgency",
-            "deadline", "points", "userId", "requesterName",
-            "requesterEmail", "status", "createdAt", "updatedAt"
-          ]
-        ) &&
-        request.resource.data.status == "open";
+      allow create: if signedIn()
+        && request.resource.data.userId == request.auth.uid
+        && request.resource.data.status == "open"
+        && hasOnlyKeys(request.resource.data, [
+          "title", "desc", "category", "difficulty",
+          "urgency", "deadline", "points", "userId",
+          "requesterName", "requesterEmail", "status",
+          "createdAt", "updatedAt"
+        ]);
 
-      allow update: if isAdmin() ||
-        (
-          signedIn() &&
-          resource.data.userId == request.auth.uid &&
-          request.resource.data.userId == resource.data.userId &&
-          affectsOnly([
-            "title", "desc", "category", "difficulty", "urgency",
-            "deadline", "points", "status", "updatedAt",
-            "helperId", "helperName", "helperApplicationId",
-            "helperAssignedAt", "completedAt"
+      allow update: if isAdmin()
+        || (
+          signedIn()
+          && resource.data.userId == request.auth.uid
+          && request.resource.data.userId == resource.data.userId
+          && affectsOnly([
+            "title", "desc", "category", "difficulty",
+            "urgency", "deadline", "points", "status",
+            "updatedAt", "helperId", "helperName",
+            "helperApplicationId", "helperAssignedAt",
+            "completedAt"
           ])
         );
 
-      allow delete: if isAdmin() ||
-        (signedIn() && resource.data.userId == request.auth.uid);
+      allow delete: if isAdmin()
+        || (signedIn() && resource.data.userId == request.auth.uid);
     }
+
+    // ==========================================
+    // APPLICATIONS
+    // ==========================================
 
     match /applications/{applicationId} {
       allow read: if canReadApplication();
 
-      allow create: if signedIn() &&
-        request.resource.data.applicantId == request.auth.uid &&
-        hasOnlyKeys(
-          request.resource.data,
-          [
-            "requestId", "applicantId", "applicantName",
-            "requestTitle", "status", "appliedAt", "reviewedAt"
-          ]
-        ) &&
-        request.resource.data.status == "pending" &&
-        exists(requestDocPath(request.resource.data.requestId)) &&
-        get(requestDocPath(request.resource.data.requestId)).data.userId != request.auth.uid &&
-        get(requestDocPath(request.resource.data.requestId)).data.status == "open";
+      allow create: if signedIn()
+        && request.resource.data.applicantId == request.auth.uid
+        && request.resource.data.status == "pending"
+        && hasOnlyKeys(request.resource.data, [
+          "requestId", "applicantId", "applicantName",
+          "requestTitle", "status", "appliedAt", "reviewedAt"
+        ])
+        && exists(requestPath(request.resource.data.requestId))
+        && get(requestPath(request.resource.data.requestId)).data.userId
+          != request.auth.uid
+        && get(requestPath(request.resource.data.requestId)).data.status
+          == "open";
 
-      allow update: if isAdmin() ||
-        (
-          signedIn() &&
-          ownsRequest(resource.data.requestId) &&
-          affectsOnly(["status", "reviewedAt"]) &&
-          resource.data.status == "pending" &&
-          request.resource.data.status in ["accepted", "rejected"]
+      // Only the owner of the original request or an admin
+      // can accept or reject an application.
+      allow update: if isAdmin()
+        || (
+          ownsRequest(resource.data.requestId)
+          && affectsOnly(["status", "reviewedAt"])
+          && resource.data.status == "pending"
+          && request.resource.data.status in ["accepted", "rejected"]
         );
 
-      allow delete: if isAdmin() ||
-        (
-          signedIn() &&
-          (
-            resource.data.applicantId == request.auth.uid ||
-            ownsRequest(resource.data.requestId)
+      allow delete: if isAdmin()
+        || (
+          signedIn()
+          && (
+            resource.data.applicantId == request.auth.uid
+            || ownsRequest(resource.data.requestId)
           )
         );
     }
+
+    // ==========================================
+    // MARKETPLACE
+    // ==========================================
 
     match /marketplace/{listingId} {
       allow read: if signedIn();
 
-      allow create: if signedIn() &&
-        request.resource.data.sellerId == request.auth.uid &&
-        hasOnlyKeys(
-          request.resource.data,
-          [
-            "title", "description", "price", "category", "condition",
-            "status", "sellerId", "sellerName", "imageUrl", "createdAt"
-          ]
-        );
+      allow create: if signedIn()
+        && request.resource.data.sellerId == request.auth.uid
+        && hasOnlyKeys(request.resource.data, [
+          "title", "description", "price", "category",
+          "condition", "status", "sellerId", "sellerName",
+          "imageUrl", "createdAt"
+        ]);
 
-      allow update: if isAdmin() ||
-        (
-          signedIn() &&
-          resource.data.sellerId == request.auth.uid &&
-          request.resource.data.sellerId == resource.data.sellerId &&
-          affectsOnly([
-            "title", "description", "price", "category",
-            "condition", "status", "imageUrl"
+      allow update: if isAdmin()
+        || (
+          signedIn()
+          && resource.data.sellerId == request.auth.uid
+          && request.resource.data.sellerId == resource.data.sellerId
+          && affectsOnly([
+            "title", "description", "price",
+            "category", "condition", "status", "imageUrl"
           ])
         );
 
-      allow delete: if isAdmin() ||
-        (signedIn() && resource.data.sellerId == request.auth.uid);
+      allow delete: if isAdmin()
+        || (signedIn() && resource.data.sellerId == request.auth.uid);
     }
+
+    // ==========================================
+    // LOST AND FOUND
+    // ==========================================
 
     match /lostItems/{itemId} {
       allow read: if signedIn();
 
-      allow create: if signedIn() &&
-        request.resource.data.createdBy == request.auth.uid &&
-        hasOnlyKeys(
-          request.resource.data,
-          [
-            "name", "desc", "category", "status", "location",
-            "imageUrl", "createdBy", "createdAt", "userName"
-          ]
-        );
+      allow create: if signedIn()
+        && request.resource.data.createdBy == request.auth.uid
+        && hasOnlyKeys(request.resource.data, [
+          "name", "desc", "category", "status",
+          "location", "imageUrl", "createdBy",
+          "createdAt", "userName"
+        ]);
 
-      allow update: if isAdmin() ||
-        (
-          signedIn() &&
-          resource.data.createdBy == request.auth.uid &&
-          request.resource.data.createdBy == resource.data.createdBy &&
-          affectsOnly([
-            "name", "desc", "category", "status", "location", "imageUrl"
+      allow update: if isAdmin()
+        || (
+          signedIn()
+          && resource.data.createdBy == request.auth.uid
+          && request.resource.data.createdBy == resource.data.createdBy
+          && affectsOnly([
+            "name", "desc", "category", "status",
+            "location", "imageUrl"
           ])
         );
 
-      allow delete: if isAdmin() ||
-        (signedIn() && resource.data.createdBy == request.auth.uid);
+      allow delete: if isAdmin()
+        || (signedIn() && resource.data.createdBy == request.auth.uid);
     }
+
+    // ==========================================
+    // COURSES / TUTORING
+    // ==========================================
 
     match /courses/{courseId} {
       allow read: if signedIn();
 
-      allow create: if signedIn() &&
-        request.resource.data.tutorId == request.auth.uid &&
-        hasOnlyKeys(
-          request.resource.data,
-          [
-            "title", "description", "price", "totalSeats", "seatsFilled",
-            "totalSessions", "startDate", "studentSequence", "status",
-            "isCertified", "isFeatured", "tutorId", "tutorDisplayId",
-            "image", "imageUrl", "coverImage", "thumbnailUrl",
-            "thumbnail", "qrCode", "outcomes", "createdAt", "updatedAt"
-          ]
-        ) &&
-        request.resource.data.seatsFilled == 0;
+      allow create: if signedIn()
+        && request.resource.data.tutorId == request.auth.uid
+        && request.resource.data.seatsFilled == 0
+        && hasOnlyKeys(request.resource.data, [
+          "title", "description", "price", "totalSeats",
+          "seatsFilled", "totalSessions", "startDate",
+          "studentSequence", "status", "isCertified",
+          "isFeatured", "tutorId", "tutorDisplayId",
+          "image", "imageUrl", "coverImage", "thumbnailUrl",
+          "thumbnail", "qrCode", "outcomes",
+          "createdAt", "updatedAt"
+        ]);
 
-      allow update: if isAdmin() ||
-        (
-          signedIn() &&
-          resource.data.tutorId == request.auth.uid &&
-          request.resource.data.tutorId == resource.data.tutorId &&
-          affectsOnly([
-            "title", "description", "price", "totalSeats", "seatsFilled",
-            "totalSessions", "startDate", "status", "isCertified",
-            "isFeatured", "image", "imageUrl", "coverImage",
-            "thumbnailUrl", "thumbnail", "qrCode", "outcomes",
+      allow update: if isAdmin()
+        || (
+          signedIn()
+          && resource.data.tutorId == request.auth.uid
+          && request.resource.data.tutorId == resource.data.tutorId
+          && affectsOnly([
+            "title", "description", "price", "totalSeats",
+            "seatsFilled", "totalSessions", "startDate",
+            "status", "isCertified", "isFeatured",
+            "image", "imageUrl", "coverImage", "thumbnailUrl",
+            "thumbnail", "qrCode", "outcomes",
             "updatedAt", "studentSequence"
           ])
         );
 
-      allow delete: if isAdmin() ||
-        (signedIn() && resource.data.tutorId == request.auth.uid);
+      allow delete: if isAdmin()
+        || (signedIn() && resource.data.tutorId == request.auth.uid);
     }
+
+    match /tutoringSessions/{sessionId} {
+      allow read: if signedIn();
+
+      // Kept admin-only until the session document's
+      // actual owner field and host workflow are verified.
+      allow create, update, delete: if isAdmin();
+    }
+
+    // ==========================================
+    // ENROLLMENTS
+    // ==========================================
 
     match /enrollments/{enrollmentId} {
       allow read: if canReadEnrollment();
 
-      allow create: if signedIn() &&
-        request.resource.data.studentId == request.auth.uid &&
-        hasOnlyKeys(
-          request.resource.data,
-          [
-            "courseId", "studentId", "studentDisplayId",
-            "attendanceCount", "status", "paymentProof",
-            "enrolledAt", "reviewedAt", "lastAttendanceMarkedAt"
-          ]
-        ) &&
-        request.resource.data.attendanceCount == 0 &&
-        request.resource.data.status == "pending" &&
-        exists(courseDocPath(request.resource.data.courseId)) &&
-        get(courseDocPath(request.resource.data.courseId)).data.tutorId != request.auth.uid;
+      allow create: if signedIn()
+        && request.resource.data.studentId == request.auth.uid
+        && request.resource.data.attendanceCount == 0
+        && request.resource.data.status == "pending"
+        && hasOnlyKeys(request.resource.data, [
+          "courseId", "studentId", "studentDisplayId",
+          "attendanceCount", "status", "paymentProof",
+          "enrolledAt", "reviewedAt", "lastAttendanceMarkedAt"
+        ])
+        && exists(coursePath(request.resource.data.courseId))
+        && get(coursePath(request.resource.data.courseId)).data.tutorId
+          != request.auth.uid;
 
-      allow update: if isAdmin() ||
-        (
-          signedIn() &&
-          ownsCourse(resource.data.courseId) &&
-          (
+      allow update: if isAdmin()
+        || (
+          ownsCourse(resource.data.courseId)
+          && (
             (
-              affectsOnly(["status", "reviewedAt"]) &&
-              resource.data.status == "pending" &&
-              request.resource.data.status in ["approved", "rejected"] &&
-              request.resource.data.attendanceCount == resource.data.attendanceCount
-            ) ||
+              affectsOnly(["status", "reviewedAt"])
+              && resource.data.status == "pending"
+              && request.resource.data.status in ["approved", "rejected"]
+              && request.resource.data.attendanceCount
+                == resource.data.attendanceCount
+            )
+            ||
             (
-              affectsOnly(["attendanceCount", "lastAttendanceMarkedAt"]) &&
-              resource.data.status == "approved" &&
-              request.resource.data.status == resource.data.status &&
-              request.resource.data.attendanceCount >= resource.data.attendanceCount
+              affectsOnly(["attendanceCount", "lastAttendanceMarkedAt"])
+              && resource.data.status == "approved"
+              && request.resource.data.status == resource.data.status
+              && request.resource.data.attendanceCount
+                >= resource.data.attendanceCount
             )
           )
         );
 
-      allow delete: if isAdmin() ||
-        (signedIn() && resource.data.studentId == request.auth.uid);
+      allow delete: if isAdmin()
+        || (signedIn() && resource.data.studentId == request.auth.uid);
     }
+
+    // ==========================================
+    // REVIEWS
+    // ==========================================
 
     match /reviews/{reviewId} {
       allow read: if signedIn();
 
-      allow create: if signedIn() &&
-        request.resource.data.studentId == request.auth.uid &&
-        hasOnlyKeys(
-          request.resource.data,
-          ["courseId", "studentId", "rating", "comment", "createdAt"]
-        ) &&
-        exists(courseDocPath(request.resource.data.courseId));
+      allow create: if signedIn()
+        && request.resource.data.studentId == request.auth.uid
+        && request.resource.data.rating is number
+        && request.resource.data.rating >= 1
+        && request.resource.data.rating <= 5
+        && hasOnlyKeys(request.resource.data, [
+          "courseId", "studentId", "rating",
+          "comment", "createdAt"
+        ])
+        && exists(coursePath(request.resource.data.courseId));
 
       allow update, delete: if isAdmin();
     }
+
+    // ==========================================
+    // TRANSACTIONS
+    // ==========================================
 
     match /transactions/{transactionId} {
-      allow read: if signedIn() &&
-        (resource.data.userId == request.auth.uid || isAdmin());
+      allow read: if signedIn()
+        && (resource.data.userId == request.auth.uid || isAdmin());
 
-      allow create: if isAdmin() ||
-        (
-          signedIn() &&
-          request.resource.data.userId == request.auth.uid &&
-          hasOnlyKeys(
-            request.resource.data,
-            [
-              "userId", "title", "category", "points", "pointsChange",
-              "amount", "source", "type", "createdAt", "requestId",
-              "requestTitle", "courseId", "courseTitle", "enrollmentId",
-              "senderId", "receiverId", "sender", "receiver"
-            ]
-          )
-        );
+      allow create: if signedIn()
+        && request.resource.data.userId == request.auth.uid
+        && hasOnlyKeys(request.resource.data, [
+          "userId", "title", "category", "points",
+          "pointsChange", "amount", "source", "type",
+          "createdAt", "requestId", "requestTitle",
+          "courseId", "courseTitle", "enrollmentId",
+          "senderId", "receiverId", "sender", "receiver"
+        ]);
 
       allow update, delete: if isAdmin();
     }
 
+    // ==========================================
+    // TOP-LEVEL NOTIFICATIONS
+    // ==========================================
+
     match /notifications/{notificationId} {
-      allow read: if signedIn() &&
-        (resource.data.userId == request.auth.uid || isAdmin());
+      allow read: if signedIn()
+        && (resource.data.userId == request.auth.uid || isAdmin());
 
-      allow create: if signedIn() &&
-        hasOnlyKeys(
-          request.resource.data,
-          [
-            "userId", "message", "read", "createdAt", "source",
-            "type", "courseId", "enrollmentId", "requestId",
-            "actorId", "actorName", "amount"
-          ]
-        ) &&
-        (
-          request.resource.data.userId == request.auth.uid ||
-          request.resource.data.actorId == request.auth.uid ||
-          isAdmin()
-        );
+      allow create: if signedIn()
+        && request.resource.data.actorId == request.auth.uid
+        && hasOnlyKeys(request.resource.data, [
+          "userId", "message", "read", "createdAt",
+          "source", "type", "courseId", "enrollmentId",
+          "requestId", "actorId", "actorName", "amount"
+        ]);
 
-      allow update: if isAdmin() ||
-        (
-          signedIn() &&
-          resource.data.userId == request.auth.uid &&
-          affectsOnly(["read"])
+      allow update: if isAdmin()
+        || (
+          signedIn()
+          && resource.data.userId == request.auth.uid
+          && affectsOnly(["read"])
         );
 
       allow delete: if isAdmin();
     }
 
+    // ==========================================
+    // XP LOGS
+    // ==========================================
+
     match /xpLogs/{logId} {
-      allow read: if signedIn() &&
-        (resource.data.userId == request.auth.uid || isAdmin());
-      allow create: if signedIn() &&
-        hasOnlyKeys(request.resource.data, ["userId", "amount", "createdAt"]);
+      allow read: if signedIn()
+        && (resource.data.userId == request.auth.uid || isAdmin());
+
+      allow create: if signedIn()
+        && request.resource.data.userId == request.auth.uid
+        && request.resource.data.amount is number
+        && request.resource.data.amount > 0
+        && hasOnlyKeys(request.resource.data, [
+          "userId", "amount", "createdAt"
+        ]);
+
       allow update, delete: if isAdmin();
     }
 
-    match /tutoringSessions/{sessionId} {
-      allow read: if signedIn();
-      allow create, update, delete: if isAdmin();
+    // ==========================================
+    // CHATS
+    // ==========================================
+
+    match /chats/{chatId} {
+      allow read: if validChatParticipant(chatId);
+
+      match /messages/{messageId} {
+        allow read: if validChatParticipant(chatId);
+
+        allow create: if validChatParticipant(chatId)
+          && request.resource.data.senderId == request.auth.uid
+          && request.resource.data.text is string
+          && request.resource.data.text.size() > 0
+          && request.resource.data.text.size() <= 5000
+          && hasOnlyKeys(request.resource.data, [
+            "senderId", "text", "timestamp"
+          ]);
+
+        allow update, delete: if false;
+      }
     }
 
-    match /chats/{chatId}/messages/{messageId} {
-      allow read: if isValidChatParticipant(chatId);
-
-      allow create: if isValidChatParticipant(chatId) &&
-        request.resource.data.senderId == request.auth.uid &&
-        hasOnlyKeys(request.resource.data, ["senderId", "text", "timestamp"]);
-
-      allow update, delete: if false;
-    }
+    // ==========================================
+    // DEFAULT DENY
+    // ==========================================
 
     match /{document=**} {
       allow read, write: if false;
